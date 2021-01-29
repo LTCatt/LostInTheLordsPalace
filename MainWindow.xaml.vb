@@ -2,7 +2,7 @@
 Public Class MainWindow
 
     '初始化
-    Private Const WindowMargin = 60
+    Private Const WindowMargin = 50
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
         'UI 初始化

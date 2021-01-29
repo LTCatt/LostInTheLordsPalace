@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Black">
+        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Black" Cursor="None">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="1" />
