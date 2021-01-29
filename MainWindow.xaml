@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="Black">
     <Grid>
-        <TextBlock FontSize="20" FontFamily="SimSun" Name="t" >
-            <Run Text="＜ＡＴＫ＞" Foreground="Yellow" /><Run Text="攻击５／５１２＋－ｆｆｈＲＴ&#xa;＜ＡＴＫ＞攻击５／５１" Foreground="White" />
-        </TextBlock>
+        <TextBlock FontSize="20" FontFamily="SimSun" Name="t" />
+        <TextBlock FontSize="20" FontFamily="SimSun" Name="TextInput" VerticalAlignment="Bottom" Tag="" />
     </Grid>
 </Window>
