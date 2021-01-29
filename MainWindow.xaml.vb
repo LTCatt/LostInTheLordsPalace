@@ -5,10 +5,11 @@ Public Class MainWindow
     Private Const WindowMargin = 50
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
+        AniStartRun()
         'UI 初始化
         SetText(TextBottomLine, "\DARKGRAY".PadRight(PanMain.Width + 5, "-"))
         SetText(TextInputResult, " \DARKGRAY等待玩家输入指令。")
-        TextInput.Tag = ""
+        TextInputBox.Tag = ""
         '窗口自适应
         Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width))
         TransScale.ScaleX = Size
@@ -33,17 +34,17 @@ Public Class MainWindow
         If e.Key = Key.Escape Then
             Process.GetCurrentProcess.Kill()
         ElseIf e.Key = Key.Back Then
-            If TextInput.Tag.ToString.Length > 0 Then TextInput.Tag = TextInput.Tag.ToString.Substring(0, TextInput.Tag.ToString.Length - 1)
+            If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
         ElseIf e.Key = Key.Enter Then
-            SetText(TextInputResult, " \DARKGRAY" & If(Enter(TextInput.Tag), "\DARKRED指令未知或无效。"))
-            TextInput.Tag = ""
+            SetText(TextInputResult, " \DARKGRAY" & If(Enter(TextInputBox.Tag), "\DARKRED指令未知或无效。"))
+            TextInputBox.Tag = ""
         ElseIf Not DisabledKey.Contains(RealKey) AndAlso RealKey.Length = 1 Then
-            TextInput.Tag = (TextInput.Tag.ToString & RealKey).Substring(0, Math.Min(TextInput.Tag.ToString.Length + 1, 47))
+            TextInputBox.Tag = (TextInputBox.Tag.ToString & RealKey).Substring(0, Math.Min(TextInputBox.Tag.ToString.Length + 1, 47))
         End If
         RefreshInputBox()
     End Sub
     Private Sub RefreshInputBox() Handles Me.Loaded
-        SetText(TextInput, ">" & TextInput.Tag)
+        SetText(TextInputBox, ">" & TextInputBox.Tag)
     End Sub
 
 End Class

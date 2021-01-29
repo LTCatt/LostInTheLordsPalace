@@ -33,7 +33,7 @@
             <TextBlock Name="TextBottomLine" Grid.Row="1" />
             <TextBlock Name="TextStatus" Grid.Row="2" />
             <!-- 输入框 -->
-            <TextBlock Name="TextInput" Grid.Row="3" />
+            <TextBlock Name="TextInputBox" Grid.Row="3" />
             <TextBlock Name="TextInputResult" Grid.Row="4" />
         </Grid>
     </Grid>
