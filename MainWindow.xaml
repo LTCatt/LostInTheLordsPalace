@@ -13,15 +13,28 @@
         </Style>
     </Window.Resources>
     <Grid x:Name="PanBack">
-        <Grid.Effect>
+        <!--<Grid.Effect>
             <DropShadowEffect Color="White" Opacity="0.5" ShadowDepth="1" BlurRadius="3" />
-        </Grid.Effect>
+        </Grid.Effect>-->
         <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
             <Grid.RenderTransform>
                 <ScaleTransform x:Name="TransScale" />
             </Grid.RenderTransform>
-            <TextBlock Name="t" />
-            <TextBlock Name="TextInput" VerticalAlignment="Bottom" Tag="" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="3" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="1" />
+            </Grid.RowDefinitions>
+            <!-- 上半部分 -->
+            <TextBlock Name="TextInfo" Grid.Row="0" />
+            <!-- 状态栏 -->
+            <TextBlock Name="TextBottomLine" Grid.Row="1" />
+            <TextBlock Name="TextStatus" Grid.Row="2" />
+            <!-- 输入框 -->
+            <TextBlock Name="TextInput" Grid.Row="3" />
+            <TextBlock Name="TextInputResult" Grid.Row="4" />
         </Grid>
     </Grid>
 </Window>

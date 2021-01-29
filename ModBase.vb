@@ -23,9 +23,15 @@
             ElseIf Inline.StartsWith("WHITE") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
                 Delta = 5
+            ElseIf Inline.StartsWith("AQUA") Then
+                TargetColor = New SolidColorBrush(Color.FromRgb(0, 255, 255))
+                Delta = 4
             ElseIf Inline.StartsWith("RED") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 0, 0))
                 Delta = 3
+            ElseIf Inline.StartsWith("DARKRED") Then
+                TargetColor = New SolidColorBrush(Color.FromRgb(100, 0, 0))
+                Delta = 7
             ElseIf Inline.StartsWith("YELLOW") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
                 Delta = 6
@@ -36,8 +42,11 @@
                 TargetColor = New SolidColorBrush(Color.FromRgb(0, 0, 255))
                 Delta = 4
             ElseIf Inline.StartsWith("GRAY") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(128, 128, 128))
+                TargetColor = New SolidColorBrush(Color.FromRgb(160, 160, 160))
                 Delta = 4
+            ElseIf Inline.StartsWith("DARKGRAY") Then
+                TargetColor = New SolidColorBrush(Color.FromRgb(60, 60, 60))
+                Delta = 8
             Else
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
                 Inline += "未知的颜色"
