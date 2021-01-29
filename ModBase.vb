@@ -1,55 +1,56 @@
 ﻿Public Module ModBase
 
-    '半角转全角
-    Public Function ToSBC(input As String) As String
-        Dim c As Char() = input.ToCharArray()
-        For i As Integer = 0 To c.Length - 1
-            If Strings.Asc(c(i)) = 32 Then
-                c(i) = ChrW(12288)
-                Continue For
-            End If
-            If Strings.Asc(c(i)) < 127 AndAlso Strings.Asc(c(i)) >= 33 Then c(i) = ChrW(Strings.Asc(c(i)) + 65248)
-        Next
-        Return New String(c)
-    End Function
-
     '修改目标 TextBlock 中的文本
     Public Sub SetText(Target As TextBlock, RawText As String)
-        '预处理文本
-        RawText = ToSBC(RawText).Replace("＼ｎ", vbCrLf)
+        RawText = RawText.Replace("\n", vbCrLf)
         '将文本按颜色分段，保证每段开头均为颜色标记
-        If Not RawText.StartsWith("＼") Then RawText = "ＷＨＩＴＥ" & RawText
-        Dim RawTexts As String() = RawText.Split("＼")
+        If Not RawText.StartsWith("\") Then RawText = "WHITE" & RawText
+        Dim RawTexts As String() = RawText.Split("\")
         '修改目标显示
         Target.Inlines.Clear()
         For Each Inline In RawTexts
             If Inline = "" Then Continue For
             Dim TargetColor As SolidColorBrush
             Dim Delta As Integer = 0
-            If Inline.StartsWith("ＷＨＩＴＥ") Then
+            If Inline.StartsWith("KEY") Then
+                '特殊：根据字符是否解锁自动使用黄色和暗黄色
+                If DisabledKey.Contains(Inline.Substring(3, 1)) Then
+                    TargetColor = New SolidColorBrush(Color.FromRgb(100, 100, 0))
+                Else
+                    TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
+                End If
+                Delta = 3
+            ElseIf Inline.StartsWith("WHITE") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
                 Delta = 5
-            ElseIf Inline.StartsWith("ＲＥＤ") Then
+            ElseIf Inline.StartsWith("RED") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 0, 0))
                 Delta = 3
-            ElseIf Inline.StartsWith("ＹＥＬＬＯＷ") Then
+            ElseIf Inline.StartsWith("YELLOW") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
                 Delta = 6
-            ElseIf Inline.StartsWith("ＧＲＥＥＮ") Then
+            ElseIf Inline.StartsWith("GREEN") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(0, 255, 0))
                 Delta = 5
-            ElseIf Inline.StartsWith("ＢＬＵＥ") Then
+            ElseIf Inline.StartsWith("BLUE") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(0, 0, 255))
                 Delta = 4
-            ElseIf Inline.StartsWith("ＧＲＡＹ") Then
+            ElseIf Inline.StartsWith("GRAY") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(128, 128, 128))
                 Delta = 4
             Else
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
                 Inline += "未知的颜色"
             End If
-            Target.Inlines.Add(New Run(Inline.Substring(Delta)) With {.Foreground = TargetColor})
+            Target.Inlines.Add(New Run(StrConv(Inline.Substring(Delta), VbStrConv.Wide)) With {.Foreground = TargetColor})
         Next
     End Sub
+    Public Function GetKeyText(Key As String) As String
+        Dim Letters As New List(Of String)
+        For Each Letter In Key
+            Letters.Add("\KEY" & Letter)
+        Next
+        Return "\YELLOW<" & Join(Letters.ToArray, "") & "\YELLOW>\WHITE"
+    End Function
 
 End Module

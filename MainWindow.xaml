@@ -5,9 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GGJ2021"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="Black">
-    <Grid>
-        <TextBlock FontSize="20" FontFamily="SimSun" Name="t" />
-        <TextBlock FontSize="20" FontFamily="SimSun" Name="TextInput" VerticalAlignment="Bottom" Tag="" />
+        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="DarkGray">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="25" x:Name="SetterSize" />
+            <Setter Property="FontFamily" Value="SimSun" />
+        </Style>
+    </Window.Resources>
+    <Grid Background="Black" x:Name="PanMain">
+        <Grid.Effect>
+            <DropShadowEffect Color="White" Opacity="0.5" ShadowDepth="1" BlurRadius="3" />
+        </Grid.Effect>
+        <TextBlock Name="t" />
+        <TextBlock Name="TextInput" VerticalAlignment="Bottom" Tag="" />
     </Grid>
 </Window>
