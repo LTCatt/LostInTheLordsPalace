@@ -3,20 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GGJ2021"
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="DarkGray">
+        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Black">
     <Window.Resources>
         <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="25" x:Name="SetterSize" />
+            <Setter Property="FontSize" Value="1" />
             <Setter Property="FontFamily" Value="SimSun" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
     </Window.Resources>
-    <Grid Background="Black" x:Name="PanMain">
+    <Grid x:Name="PanBack">
         <Grid.Effect>
             <DropShadowEffect Color="White" Opacity="0.5" ShadowDepth="1" BlurRadius="3" />
         </Grid.Effect>
-        <TextBlock Name="t" />
-        <TextBlock Name="TextInput" VerticalAlignment="Bottom" Tag="" />
+        <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <ScaleTransform x:Name="TransScale" />
+            </Grid.RenderTransform>
+            <TextBlock Name="t" />
+            <TextBlock Name="TextInput" VerticalAlignment="Bottom" Tag="" />
+        </Grid>
     </Grid>
 </Window>

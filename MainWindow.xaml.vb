@@ -1,14 +1,13 @@
 ﻿Public Class MainWindow
 
     '初始化
-    Private WidthText = 16 * 3
-    Private HeightText = 9 * 3
+    Private Const WindowMargin = 30
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
         '窗口自适应
-        Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - 40) / HeightText, (ActualWidth - 40) / WidthText)) - 1
-        PanMain.Width = Size * WidthText + 40
-        PanMain.Height = Size * HeightText + 40
+        Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width)) - 1
+        TransScale.ScaleX = Size
+        TransScale.ScaleY = Size
     End Sub
 
     '文本输入
@@ -26,7 +25,7 @@
             TriggerEvent(TextInput.Tag)
             TextInput.Tag = ""
         ElseIf Not DisabledKey.Contains(RealKey) AndAlso RealKey.Length = 1 Then
-            TextInput.Tag = (TextInput.Tag.ToString & RealKey).Substring(0, Math.Min(TextInput.Tag.ToString.Length + 1, 50))
+            TextInput.Tag = (TextInput.Tag.ToString & RealKey).Substring(0, Math.Min(TextInput.Tag.ToString.Length + 1, 47))
         End If
         RefreshInputBox()
     End Sub
