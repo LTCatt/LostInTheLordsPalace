@@ -113,7 +113,7 @@
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If EquipArmor = Input OrElse EquipWeapon = Input Then
-                                    SetText(FrmMain.TextInputResult, " \RED你已装备该物品。")
+                                    SetText(FrmMain.TextInputResult, " \RED你已装备该物品！")
                                 Else
                                     If GetEquipIsWeapon(Input) Then
                                         EquipWeapon = Input
@@ -129,18 +129,32 @@
                         End Select
                     Case Screens.Item
                         Select Case Input
+                            Case "1", "2", "3", "4", "5", "6", "7"
+                                If ItemCount(Input) = 0 Then
+                                    SetText(FrmMain.TextInputResult, " \RED该物品槽位为空！")
+                                Else
+                                    UseItem(Input)
+                                End If
+                                Exit Sub
                             Case "BAC"
                                 Screen = Screens.Combat
                                 Exit Sub
                         End Select
                     Case Screens.Magic
                         Select Case Input
+                            Case "1", "2", "3", "4", "5", "6", "7"
+                                If Mp < GetMagicCost(Input) Then
+                                    SetText(FrmMain.TextInputResult, " \RED你的魔力值不足！")
+                                Else
+                                    UseMagic(Input)
+                                End If
+                                Exit Sub
                             Case "BAC"
                                 Screen = Screens.Combat
                                 Exit Sub
                         End Select
                 End Select
-                SetText(FrmMain.TextInputResult, " \RED指令未知或无效，请输入屏幕上以黄色显示的指令。")
+                SetText(FrmMain.TextInputResult, " \RED指令未知或无效，请输入屏幕上以黄色显示的指令！")
             Case Else
                 SetText(FrmMain.TextInputResult, " \RED未知的输入状态！")
         End Select
@@ -148,7 +162,7 @@
 
     '对话框
     Private ChatContents As New List(Of String)
-    Private Sub StartChat(Contents As String(), RequireEnsure As Boolean)
+    Public Sub StartChat(Contents As String(), RequireEnsure As Boolean)
         ChatContents = New List(Of String)(Contents)
         If RequireEnsure Then
             EnterStatus = EnterStatuses.Chat

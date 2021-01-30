@@ -55,6 +55,20 @@
                 Return 900
         End Select
     End Function
+    Public Sub UseMagic(Id As Integer)
+        Mp -= GetMagicCost(Id)
+        Dim RawText As String = "* 你施展了" & GetMagicTitle(Id) & "！"
+        Select Case Id
+            Case 1
+            Case 2
+            Case 3
+            Case 4
+            Case 5
+            Case 6
+            Case 7
+        End Select
+        StartChat({RawText}, True)
+    End Sub
 
     '道具
     Public Function GetItemTitle(Id As Integer) As String
@@ -93,6 +107,20 @@
                 Return "道具7描述"
         End Select
     End Function
+    Public Sub UseItem(Id As Integer)
+        ItemCount(Id) -= 1
+        Dim RawText As String = "* 你使用了" & GetItemTitle(Id) & "！"
+        Select Case Id
+            Case 1
+            Case 2
+            Case 3
+            Case 4
+            Case 5
+            Case 6
+            Case 7
+        End Select
+        StartChat({RawText}, True)
+    End Sub
 
     '装备
     Public Function GetEquipTitle(Id As Integer) As String

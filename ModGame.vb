@@ -6,7 +6,7 @@
     Public Hp As Integer = 3258, HpMax As Integer = 3652
     Public Mp As Integer = 568, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, BaseDef As Integer = 276
-    Public ItemCount As Integer() = {0, 999, 999, 999, 999, 999, 999, 999}
+    Public ItemCount As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Location As String = "玩家位置"
 
@@ -81,9 +81,13 @@
     Public Function ItemInfo() As String
         Dim Info As New List(Of String)
         For i = 1 To 7
-            Info.Add(GetItemText(i,
-                                 GetItemTitle(i).PadRight(8, " ") & "\GRAYx" & ItemCount(i).ToString.PadLeft(3, " "),
-                                 "\DARKGRAY" & GetItemDesc(i)))
+            If ItemCount(i) = 0 Then
+                Info.Add(GetItemText(i, "\GRAY无物品", ""))
+            Else
+                Info.Add(GetItemText(i,
+                                     GetItemTitle(i).PadRight(8, " ") & "\GRAYx" & ItemCount(i),
+                                     "\DARKGRAY" & GetItemDesc(i)))
+            End If
         Next
         Return Join(Info.ToArray, vbCrLf)
     End Function
