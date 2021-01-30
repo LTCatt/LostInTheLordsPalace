@@ -7,7 +7,7 @@
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, ExtraAtk As Integer = 0
     Public BaseDef As Integer = 276, ExtraDef As Integer = 0
-    Public ItemCount As Integer() = {0, 1, 2, 5, 99, 99, 89, 999}
+    Public ItemCount As Integer() = {0, 1, 2, 5, 62, 99, 89, 999}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 1
 
@@ -138,7 +138,8 @@
     End Sub
 
     '当前屏幕
-    Public Screen As Screens = Screens.Magic
+    Public Screen As Screens = Screens.Empty
+    Public ScreenReturn As Screens = Screens.Magic '用于选取对象
     Public ScreenData As String = "" '用于选取对象
     Public ScreenTitle As String = "" '用于选取对象
     Public Enum Screens
@@ -179,6 +180,9 @@
                 Dim Damage As Integer = Math.Max(1, GetRealAtk() - GetMonsterDef(MonsterType(Id)))
                 HurtMonster(Id, Damage)
                 StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  造成了" & Damage & "点伤害！", "/TURNEND"}, True)
+            Case "ITEM4"
+                '飞刀
+                PerformItem(4, Id)
         End Select
     End Sub
 

@@ -84,7 +84,7 @@
             Case 3
                 Return "解毒药"
             Case 4
-                Return "道具4"
+                Return "飞刀"
             Case 5
                 Return "道具5"
             Case 6
@@ -102,7 +102,7 @@
             Case 3
                 Return "可解除中毒状态的蓝色药剂。"
             Case 4
-                Return "道具4描述"
+                Return "对单个敌人造成25点伤害。"
             Case 5
                 Return "道具5描述"
             Case 6
@@ -112,6 +112,16 @@
         End Select
     End Function
     Public Sub UseItem(Id As Integer)
+        If Id = 4 Then
+            ScreenReturn = Screen
+            Screen = Screens.Select
+            ScreenData = "ITEM4"
+            ScreenTitle = "飞刀的"
+        Else
+            PerformItem(Id, 0)
+        End If
+    End Sub
+    Public Sub PerformItem(Id As Integer, Target As Integer)
         Screen = Screens.Combat
         ItemCount(Id) -= 1
         Dim RawText As String = "* 你使用了" & GetItemTitle(Id) & "！\n"
@@ -125,6 +135,9 @@
             Case 3
                 RawText += "  但你目前并没有中毒。"
             Case 4
+                Screen = Screens.Combat
+                HurtMonster(Target, 25)
+                RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  造成了25点伤害！"
             Case 5
             Case 6
                 Hp = Math.Min(Hp + 500, HpMax)
@@ -246,7 +259,7 @@
             Case "骷髅2"
                 Return 720
             Case "苦力怕"
-                Return 2000
+                Return 2050
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -331,6 +344,8 @@
                 Return "测试关卡2"
             Case 3
                 Return "测试关卡3"
+            Case 4
+                Return "测试关卡4"
         End Select
     End Function
     Public Function GetLevelIntro(Id As Integer) As String()
@@ -341,6 +356,8 @@
                 Return {"* 更多的骷髅来袭！"}
             Case 3
                 Return {"* 移动的坟墓正在靠近……"}
+            Case 4
+                Return {"* 比一只更可怕的无疑是一群。"}
         End Select
     End Function
     Public Function GetLevelIntro2(Id As Integer) As String()
@@ -351,6 +368,8 @@
                 Return {"* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。"}
             Case 3
                 Return {"* 爆炸，硝烟，艺术！"}
+            Case 4
+                Return {"* 空洞的眼窝正面对着你。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
@@ -361,6 +380,8 @@
                 Return {"骷髅2", "骷髅2", "骷髅1"}
             Case 3
                 Return {"苦力怕", "骷髅2"}
+            Case 4
+                Return {"苦力怕", "苦力怕", "苦力怕", "骷髅2"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -371,6 +392,8 @@
                 Return {"粗骨骷髅士兵", "粗骨骷髅卫士", "骷髅守卫"}
             Case 3
                 Return {"爬行冢", "粗骨骷髅战士"}
+            Case 4
+                Return {"爬行坟", "爬行冢", "爬行墓", "粗骨骷髅战士"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
@@ -382,13 +405,16 @@
         Select Case Id
             Case 1
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKD", "* 你找回了D按键！", "* 即将进入下一关……", "/LEVEL2"}, True)
+                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKD", "* 你找回了按键D！", "* 即将进入下一关……", "/LEVEL2"}, True)
             Case 2
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "* 即将进入下一关……", "/LEVEL3"}, True)
+                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了按键R！", "* 即将进入下一关……", "/LEVEL3"}, True)
             Case 3
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了860XP！", "/UNLOCKR", "* 你找回了I按键！", "* 即将进入下一关……", "/LEVEL4"}, True)
+                StartChat({"* 恭喜获胜！你获得了860XP！", "/UNLOCKI", "* 你找回了按键I！", "* 即将进入下一关……", "/LEVEL4"}, True)
+            Case 4
+                Screen = Screens.Empty
+                StartChat({"* 恭喜获胜！你获得了1755XP！", "/UNLOCK4", "* 你找回了按键4！", "* 即将进入下一关……", "/LEVEL4"}, True)
         End Select
     End Sub
 

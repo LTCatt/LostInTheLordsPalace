@@ -124,6 +124,7 @@ Public Module ModMain
                     Case Screens.Combat
                         Select Case Input
                             Case "ATK"
+                                ScreenReturn = Screen
                                 Screen = Screens.Select
                                 ScreenData = "ATK"
                                 ScreenTitle = "攻击"
@@ -156,7 +157,7 @@ Public Module ModMain
                                     Exit Sub
                                 End If
                             Case "ESC"
-                                Screen = Screens.Combat
+                                Screen = ScreenReturn
                                 Exit Sub
                         End Select
                     Case Screens.Equip
