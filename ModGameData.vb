@@ -106,7 +106,7 @@
             Case 5
                 Return "获得5回合冷冻伤害抗性。"
             Case 6
-                Return "可回复700HP的秘制草药。"
+                Return "可回复750HP的秘制草药。"
             Case 7
                 Return "能让你提升到下一等级的珍贵药剂。"
         End Select
@@ -141,8 +141,8 @@
             Case 5
                 RawText += "  一股暖流浸润着你的五脏六腑。"
             Case 6
-                Hp = Math.Min(Hp + 700, HpMax)
-                RawText += "  你的HP恢复了700点！"
+                Hp = Math.Min(Hp + 750, HpMax)
+                RawText += "  你的HP恢复了750点！"
             Case 7
                 RawText += "  你目前已经到达了最高等级。"
         End Select
@@ -265,7 +265,7 @@
             Case "骷髅1"
                 Return 720
             Case "骷髅2"
-                Return 750
+                Return 800
             Case "骑士1"
                 Return 2000
             Case "魔王"
@@ -492,7 +492,7 @@
             Case 4
                 Return {"苦力怕2", "苦力怕1", "苦力怕1"}
             Case 5
-                Return {"苦力怕1", "苦力怕2", "苦力怕2", "苦力怕2"}
+                Return {"苦力怕1", "苦力怕2", "苦力怕2", "苦力怕2", "苦力怕1"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -512,7 +512,7 @@
             Case 4
                 Return {"闪电爬行冢", "爬行墓", "爬行冢"}
             Case 5
-                Return {"爬行冢", "高压爬行冢", "闪电爬行冢", "雷电爬行冢"}
+                Return {"爬行冢", "闪电爬行冢", "雷电爬行冢", "高压爬行冢", "爬行墓"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)

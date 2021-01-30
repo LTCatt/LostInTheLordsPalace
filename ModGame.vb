@@ -22,7 +22,7 @@
         Hp = Math.Max(0, Hp - Damage)
         '受伤动画
         If Damage = 1 Then Exit Sub
-        Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 2)
+        Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 4)
         FrmMain.RectHurt.Opacity = DeltaOpacity
         AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, DeltaOpacity * 2000, DeltaOpacity * 700, Ease:=New AniEaseOutFluent), "Hurt Player")
     End Sub
