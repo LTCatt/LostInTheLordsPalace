@@ -86,11 +86,11 @@
             Case 4
                 Return "飞刀"
             Case 5
-                Return "道具5"
+                Return "热饮"
             Case 6
-                Return "回复药"
+                Return "回复药·G"
             Case 7
-                Return "道具7"
+                Return "营养剂·G"
         End Select
     End Function
     Public Function GetItemDesc(Id As Integer) As String
@@ -104,11 +104,11 @@
             Case 4
                 Return "对单个敌人造成15点伤害。"
             Case 5
-                Return "道具5描述"
+                Return "获得5回合冷冻伤害抗性。"
             Case 6
-                Return "可回复700HP的草药。"
+                Return "可回复700HP的秘制草药。"
             Case 7
-                Return "道具7描述"
+                Return "能让你提升到下一等级的珍贵药剂。"
         End Select
     End Function
     Public Sub UseItem(Id As Integer)
@@ -139,10 +139,12 @@
                 HurtMonster(Target, 15)
                 RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  造成了15点伤害！"
             Case 5
+                RawText += "  一股暖流浸润着你的五脏六腑。"
             Case 6
                 Hp = Math.Min(Hp + 700, HpMax)
                 RawText += "  你的HP恢复了700点！"
             Case 7
+                RawText += "  你目前已经到达了最高等级。"
         End Select
         StartChat({RawText, "/TURNEND"}, True)
     End Sub
@@ -159,11 +161,11 @@
             Case 4
                 Return "炉锤战斧"
             Case 5
-                Return "装备5"
+                Return "匿踪刺剑"
             Case 6
                 Return "荆棘链甲"
             Case 7
-                Return "装备7名称"
+                Return "冰霜护甲"
         End Select
     End Function
     Public Function GetEquipDesc(Id As Integer) As String
@@ -177,11 +179,11 @@
             Case 4
                 Return "矮人族的至高杰作。ATK+2000，造成光明属性伤害。"
             Case 5
-                Return "装备5描述"
+                Return "用秘银精制的刺剑。ATK+1000，让你的隐匿检定带有优势。"
             Case 6
                 Return "缠满倒刺的链甲。DEF+300，反弹受到的一半近战伤害。"
             Case 7
-                Return "装备7描述"
+                Return "永冻不化的冰石制作的护甲。DEF+800，获得火焰伤害抗性。"
         End Select
     End Function
     Public Function GetEquipIsWeapon(Id As Integer) As Boolean
@@ -195,7 +197,7 @@
             Case 4
                 Return True
             Case 5
-                Return False
+                Return True
             Case 6
                 Return False
             Case 7
@@ -213,7 +215,7 @@
             Case 4
                 Return 2000
             Case 5
-                Return 0
+                Return 1000
             Case 6
                 Return 0
             Case 7
@@ -235,7 +237,7 @@
             Case 6
                 Return 300
             Case 7
-                Return 0
+                Return 800
         End Select
     End Function
 
@@ -267,7 +269,7 @@
             Case "骑士1"
                 Return 1500
             Case "魔王"
-                Return 2800
+                Return 3500
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -283,7 +285,7 @@
             Case "骷髅2"
                 Return 100
             Case "骑士1"
-                Return 1000
+                Return 2000
             Case "魔王"
                 Return 3200
             Case "苦力怕1"
@@ -399,15 +401,15 @@
     Public Function GetLevelName(Id As Integer) As String
         Select Case Id
             Case 100
-                Return "魔王宫走廊"
+                Return "魔宫入口"
             Case 101
-                Return "魔王宫大厅"
+                Return "魔宫大厅"
             Case 102
                 Return "魔王房间"
             Case 1
-                Return "测试关卡2-1"
+                Return "魔宫入口？"
             Case 2
-                Return "测试关卡2-2"
+                Return "魔宫入口"
             Case 3
                 Return "测试关卡2-3"
             Case 4
@@ -433,14 +435,14 @@
             Case 102
                 Return {"* 你终于来到了魔王的面前。",
                         "* 宛如实质的黑暗在你的四周涌现。",
-                        "* 传闻魔王可以操纵一切，魔力、能量，甚至是……\n  不，这不可能。",
-                        "* 你不再愿去回想那些恐怖的传说。",
+                        "* 传闻魔王可以操纵一切，魔力、能量，甚至是……",
+                        "* 这不可能。\n  你不再愿去回想那些恐怖的传说。",
                         "* 魔王高举双手，大声诵念着你从未听过的咒文……"}
             Case 1
                 Return {"* 你似乎回到了起点。",
-                        "* 到底发生了什么？",
+                        "* 到底发生了什么？它们理应对你毫无威胁……",
                         "* 骷髅们的骨头喀拉作响。",
-                        "* 它们理应对你毫无威胁……",
+                        "* 你似乎必须得想点其他办法了。",
                         "* 你陷入了迷茫。"}
             Case 2
                 Return {"* 更多的骷髅来袭！",
@@ -506,28 +508,51 @@
         Select Case Id
             Case 100
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了620XP！", "* 你在魔宫之中飞速穿梭，一只只怪物飞灰烟灭……", "* 魔王的房间已经近在咫尺，\n  这片大地所承受的苦难终要走向尽头。", "/LEVEL101"}, True)
+                StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "* 你在魔宫之中飞速穿梭，一只只怪物在你的剑下飞灰烟灭。",
+                           "* 魔王的房间已经近在咫尺。",
+                           "* 这片大地所承受的苦难终要走向尽头。",
+                           "/LEVEL101"}, True)
             Case 101
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了3855XP！", "* 你迈步走向下一个路口，推开大门……", "* 奇异的紫色光芒涌现，\n  这一刻，你知道你漫长的旅程终于走到了终点。", "/LEVEL102"}, True)
+                StartChat({"* 恭喜获胜！你获得了3855XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "* 你迈步走向下一个路口，推开大门……",
+                           "* 奇异的紫色光芒涌现。",
+                           "* 这一刻，你知道你漫长的旅程终于走到了终点。",
+                           "/LEVEL102"}, True)
             Case 102
                 Screen = Screens.Empty
-                StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。", "/LOCKRBIGDWXKLA", "* 在你眼里，似乎整个世界都在崩坏……", "/LOCK124579", "* 似乎有哪里不对。", "* 一些你熟悉的事物似乎正在从你的身上被剥离……", "* …………", "* …………………………", "* 你失去了什么？", "* 当你再次睁开眼……", "/LEVEL1"}, True)
+                StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。",
+                           "/LOCK124579",
+                           "* 在你眼里，似乎整个世界都在崩坏……",
+                           "* 一切都在离你远去。",
+                           "* 似乎有哪里不对。",
+                           "/LOCKRBIGDWXKLA",
+                           "* 一些你熟悉的事物似乎正在从你的身上被剥离……",
+                           "* 知识，概念……",
+                           "* 抽象的，难以理解的，超形上学的……",
+                           "* 你到底失去了什么？",
+                           "* …………",
+                           "* …………………………",
+                           "* 当你再次睁开眼……",
+                           "/LEVEL1"}, True)
             Case 1
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKD", "* 你找回了按键D！", "* 即将进入下一关……", "/LEVEL2"}, True)
+                StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "/UNLOCKD",
+                           "* 你找回了按键D！", "* 即将进入下一关……", "/LEVEL2"}, True)
             Case 2
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了按键R！", "* 即将进入下一关……", "/LEVEL3"}, True)
+                StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCKR", "* 你找回了按键R！", "* 即将进入下一关……", "/LEVEL3"}, True)
             Case 3
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了860XP！", "/UNLOCKI", "* 你找回了按键I！", "* 即将进入下一关……", "/LEVEL4"}, True)
+                StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCKI", "* 你找回了按键I！", "* 即将进入下一关……", "/LEVEL4"}, True)
             Case 4
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1755XP！", "/UNLOCK4", "* 你找回了按键4！", "* 即将进入下一关……", "/LEVEL5"}, True)
+                StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCK4", "* 你找回了按键4！", "* 即将进入下一关……", "/LEVEL5"}, True)
             Case 5
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了2090XP！", "/UNLOCKA", "* 你找回了按键A！", "* 即将进入下一关……", "/LEVEL6"}, True)
+                StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCKA", "* 你找回了按键A！", "* 即将进入下一关……", "/LEVEL6"}, True)
         End Select
     End Sub
 

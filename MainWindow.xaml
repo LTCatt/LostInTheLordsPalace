@@ -20,7 +20,7 @@
         <Grid x:Name="PanBack">
             <Grid.Effect>
                 <!--<DropShadowEffect Color="Gray" Opacity="0.7" ShadowDepth="2" BlurRadius="3" />-->
-                <ee:MagnifyEffect Amount="0.05" InnerRadius="0" OuterRadius="1" />
+                <ee:MagnifyEffect Amount="0.06" InnerRadius="0" OuterRadius="1" />
             </Grid.Effect>
             <Grid x:Name="PanBack2" Background="Black">
                 <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">

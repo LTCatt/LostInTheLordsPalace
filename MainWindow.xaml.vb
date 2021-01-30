@@ -59,7 +59,7 @@ Public Class MainWindow
                                            Pixelation = RandomInteger(-200, 400)
                                        End If
                                    Case 3
-                                       If RandomInteger(0, 19) = 0 Then
+                                       If RandomInteger(0, 19) < 3 Then
                                            Pixelation = RandomInteger(700, 900)
                                        Else
                                            Pixelation = RandomInteger(200, 700)
@@ -103,7 +103,7 @@ Public Class MainWindow
             TextInputBox.Tag = ""
         ElseIf RealKey.Length = 1 Then
             If DisabledKey.Contains(RealKey) AndAlso Not e.KeyboardDevice.IsKeyDown(Key.RightCtrl) Then
-                SetText(FrmMain.TextInputResult, "\RED错误：无法识别的按键！")
+                SetText(FrmMain.TextInputResult, "\RED错误：内联逻辑已损坏！")
                 Beep()
             Else
                 '成功输入

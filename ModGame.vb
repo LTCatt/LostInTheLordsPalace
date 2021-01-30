@@ -7,7 +7,7 @@
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, ExtraAtk As Integer = 0
     Public BaseDef As Integer = 276, ExtraDef As Integer = 0
-    Public ItemCount As Integer() = {0, 1, 2, 5, 62, 99, 89, 999}
+    Public ItemCount As Integer() = {0, 1, 2, 5, 96, 43, 73, 4}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 100
     Public Turn As Integer = 0
@@ -119,7 +119,7 @@
         '检查玩家死亡
         If Hp = 0 Then
             Screen = Screens.Empty
-            StartChat({"* 你死了！", "* 即将重置本场战斗……", "/RESET"}, True)
+            StartChat({"* 你死了！", "* 但你的灵魂还不愿放弃……", "* 光明再次在你的眼前浮现。", "/RESET"}, True)
             Exit Sub
         End If
         '检查玩家获胜
