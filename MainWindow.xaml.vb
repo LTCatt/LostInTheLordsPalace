@@ -7,12 +7,12 @@ Public Class MainWindow
 
     '初始化
     Private Const WindowMargin = 40
-    Public PixelLevel As Integer = 1
+    Public PixelLevel As Integer = 0
     Public IsHalfSec As Boolean = False
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
         AniStartRun()
-        StartLevel(1)
+        StartLevel(Level)
         'UI 初始化
         SetText(TextBottomLine, "\DARKGRAY─────────────────────────────────────┴───────────────")
         SetText(TextActionLine, "\DARKGRAY││││││││││││││││┤││││││││││││││││││││")
@@ -53,6 +53,12 @@ Public Class MainWindow
                                            Pixelation = 0
                                        End If
                                    Case 2
+                                       If RandomInteger(0, 29) = 0 Then
+                                           Pixelation = RandomInteger(660, 860)
+                                       Else
+                                           Pixelation = RandomInteger(-200, 400)
+                                       End If
+                                   Case 3
                                        If RandomInteger(0, 19) = 0 Then
                                            Pixelation = RandomInteger(700, 900)
                                        Else

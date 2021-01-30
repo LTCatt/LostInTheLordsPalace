@@ -2,14 +2,15 @@
     Public FrmMain As MainWindow
 
     '存档数据
-    Public DisabledKey As String = "RBIGDWXKLA124579"
+    Public DisabledKey As String = ""
     Public Hp As Integer = 1, HpMax As Integer = 1652
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, ExtraAtk As Integer = 0
     Public BaseDef As Integer = 276, ExtraDef As Integer = 0
     Public ItemCount As Integer() = {0, 1, 2, 5, 62, 99, 89, 999}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
-    Public Level As Integer = 1
+    Public Level As Integer = 100
+    Public Turn As Integer = 0
 
     '怪物数据
     Public MonsterType As New List(Of String), MonsterName As New List(Of String), MonsterHp As New List(Of Integer), MonsterSp As New List(Of Integer)
@@ -30,8 +31,9 @@
     End Function
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
-        StartChat({RandomOne(GetLevelIntro(Id))}, False)
+        StartChat({GetLevelIntros(Id)(0)}, False)
         '重置存档
+        Turn = 0
         ItemCount = ItemCountLast
         EquipWeapon = EquipWeaponLast
         EquipArmor = EquipArmorLast
@@ -134,7 +136,8 @@
         '下一回合
         MonsterTurnPerformed = Nothing
         ExtraAtk = 0 : ExtraDef = 0
-        StartChat({RandomOne(GetLevelIntro2(Level))}, False)
+        Turn += 1
+        StartChat({GetLevelIntros(Level)(Math.Min(4, Turn))}, False)
     End Sub
 
     '当前屏幕

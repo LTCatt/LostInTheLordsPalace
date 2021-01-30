@@ -157,7 +157,7 @@
             Case 3
                 Return "精金板甲"
             Case 4
-                Return "装备4"
+                Return "炉锤战斧"
             Case 5
                 Return "装备5"
             Case 6
@@ -169,13 +169,13 @@
     Public Function GetEquipDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "精灵一族的传奇之剑，仅精灵敬重之人才可握持。ATK+2800。"
+                Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+2800。"
             Case 2
-                Return "失落科技与魔法结合的究极护甲。ATK+100，DEF+1800。"
+                Return "失落科技与魔法结合的究极护甲。ATK+300，DEF+1800。"
             Case 3
                 Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
             Case 4
-                Return "装备4描述"
+                Return "矮人族的至高杰作。ATK+2000，造成光明属性伤害。"
             Case 5
                 Return "装备5描述"
             Case 6
@@ -193,7 +193,7 @@
             Case 3
                 Return False
             Case 4
-                Return False
+                Return True
             Case 5
                 Return False
             Case 6
@@ -207,11 +207,11 @@
             Case 1
                 Return 2800
             Case 2
-                Return 100
+                Return 300
             Case 3
                 Return 0
             Case 4
-                Return 0
+                Return 2000
             Case 5
                 Return 0
             Case 6
@@ -246,6 +246,10 @@
                 Return 50
             Case "骷髅2"
                 Return 200
+            Case "骑士1"
+                Return 2000
+            Case "魔王"
+                Return 6666
             Case "苦力怕1"
                 Return 20
             Case "苦力怕2"
@@ -260,6 +264,10 @@
                 Return 720
             Case "骷髅2"
                 Return 720
+            Case "骑士1"
+                Return 1500
+            Case "魔王"
+                Return 2800
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -271,9 +279,13 @@
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
-                Return 10
+                Return 50
             Case "骷髅2"
-                Return 20
+                Return 100
+            Case "骑士1"
+                Return 1000
+            Case "魔王"
+                Return 3200
             Case "苦力怕1"
                 Return 0
             Case "苦力怕2"
@@ -287,6 +299,10 @@
             Case "骷髅1"
                 Return 0
             Case "骷髅2"
+                Return 0
+            Case "骑士1"
+                Return 0
+            Case "魔王"
                 Return 0
             Case "苦力怕1"
                 Return 3
@@ -302,6 +318,10 @@
                 Return "攻击性强，但极度脆弱的敌人。"
             Case "骷髅2"
                 Return "骨架更加粗壮的骷髅。"
+            Case "骑士1"
+                Return "包裹在暗黑盔甲下的冷血骑士。"
+            Case "魔王"
+                Return "极致邪恶、极致黑暗的化身。"
             Case "苦力怕1"
                 Return "咝咝作响。将在" & Sp & "回合后爆炸。"
             Case "苦力怕2"
@@ -316,7 +336,24 @@
                 PerformMonsterAttack(Id, "挥剑向你砍来！", True, False)
             Case "骷髅2"
                 PerformMonsterAttack(Id, "挥起了它的巨剑！", True, False)
-            Case "苦力怕1", "苦力怕2"
+            Case "骑士1"
+                PerformMonsterAttack(Id, "将漆黑的战戟刺向你的胸口！", True, False)
+            Case "魔王"
+                MonsterSp(Id) += 1
+                Select Case MonsterSp(Id)
+                    Case 0, 1, 3
+                        PerformMonsterAttack(Id, "抬起手，一道黑光闪过……", True, False)
+                    Case 2
+                        Mp = 0
+                        StartChat({"* " & MonsterName(Id) & "的双眼闪过摄人的紫光，\n  你的MP被抽光了！", "/TURNEND"}, True)
+                    Case 4
+                        FrmMain.PixelLevel = 2
+                        StartChat({"* " & MonsterName(Id) & "似乎在酝酿着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True)
+                    Case 5
+                        FrmMain.PixelLevel = 3
+                        PerformLevelWin(102)
+                End Select
+            Case "苦力怕1"
                 If MonsterSp(Id) = 1 Then
                     PerformMonsterAttack(Id, "爆炸了！", True, True)
                     MonsterType.RemoveAt(Id)
@@ -328,6 +365,19 @@
                 Else
                     MonsterSp(Id) -= 1
                     StartChat({"* " & MonsterName(Id) & "正在嘶嘶作响……", "/TURNEND"}, True)
+                End If
+            Case "苦力怕2"
+                If MonsterSp(Id) = 1 Then
+                    PerformMonsterAttack(Id, "引发了盛大的爆炸！", True, True)
+                    MonsterType.RemoveAt(Id)
+                    MonsterName.RemoveAt(Id)
+                    MonsterHp.RemoveAt(Id)
+                    MonsterSp.RemoveAt(Id)
+                    MonsterTurnPerformed.RemoveAt(Id)
+                    Return False
+                Else
+                    MonsterSp(Id) -= 1
+                    StartChat({"* " & MonsterName(Id) & "正与雷电起舞……", "/TURNEND"}, True)
                 End If
         End Select
         Return True
@@ -348,49 +398,74 @@
     '关卡
     Public Function GetLevelName(Id As Integer) As String
         Select Case Id
+            Case 100
+                Return "魔王宫走廊"
+            Case 101
+                Return "魔王宫大厅"
+            Case 102
+                Return "魔王房间"
             Case 1
-                Return "测试关卡1"
+                Return "测试关卡2-1"
             Case 2
-                Return "测试关卡2"
+                Return "测试关卡2-2"
             Case 3
-                Return "测试关卡3"
+                Return "测试关卡2-3"
             Case 4
-                Return "测试关卡4"
+                Return "测试关卡2-4"
             Case 5
-                Return "测试关卡5"
+                Return "测试关卡2-5"
         End Select
     End Function
-    Public Function GetLevelIntro(Id As Integer) As String()
+    Public Function GetLevelIntros(Id As Integer) As String()
         Select Case Id
+            Case 100
+                Return {"* 你早已为了今天做好了准备，\n  两只骷髅对已经到达99级的你来说毫无威胁。",
+                        "* 无论发生什么，都无法阻挠你击败魔王的决心。",
+                        "* 魔王，你的一生之敌，如今已近在眼前。",
+                        "* 你早已决定不再犹豫。",
+                        "* 你还在等待什么？"}
+            Case 101
+                Return {"* 所有怪物都在阻拦你奔向魔王房间的脚步。",
+                        "* 离魔王的房间只差最后一步。",
+                        "* 这些怪物对早已身经百战的你而言，根本不值一提。",
+                        "* 你此前所经受的漫长磨练终于将走到尽头。",
+                        "* 是时候为一切画下句号了。"}
+            Case 102
+                Return {"* 你终于来到了魔王的面前。",
+                        "* 宛如实质的黑暗在你的四周涌现。",
+                        "* 传闻魔王可以操纵一切，魔力、能量，甚至是……\n  不，这不可能。",
+                        "* 你不再愿去回想那些恐怖的传说。",
+                        "* 魔王高举双手，大声诵念着你从未听过的咒文……"}
             Case 1
-                Return {"* 两只对99级的勇者而言毫无威胁的骷髅袭来。"}
+                Return {"* 你似乎回到了起点。",
+                        "* 到底发生了什么？",
+                        "* 骷髅们的骨头喀拉作响。",
+                        "* 它们理应对你毫无威胁……",
+                        "* 你陷入了迷茫。"}
             Case 2
-                Return {"* 更多的骷髅来袭！"}
+                Return {"* 更多的骷髅来袭！",
+                        "* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。"}
             Case 3
-                Return {"* 移动的坟墓正在靠近……"}
+                Return {"* 移动的坟墓正在靠近……",
+                        "* 爆炸，硝烟，艺术！"}
             Case 4
-                Return {"* 毁灭来临。"}
+                Return {"* 毁灭来临。",
+                        "* 电弧碰撞的火光在空气中迸溅。"}
             Case 5
-                Return {"* 但凡能换回以太之甲，这一切就都应该不在话下……"}
-        End Select
-    End Function
-    Public Function GetLevelIntro2(Id As Integer) As String()
-        Select Case Id
-            Case 1
-                Return {"* 骷髅们的骨头喀拉作响。"}
-            Case 2
-                Return {"* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。"}
-            Case 3
-                Return {"* 爆炸，硝烟，艺术！"}
-            Case 4
-                Return {"* 电弧碰撞的火光在空气中迸溅。"}
-            Case 5
-                Return {"* 爆炸盛宴。"}
+                Return {"* 但凡能换回以太之甲，这一切就都应该不在话下……",
+                        "* 爆炸盛宴。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
         Select Case Id
+            Case 100
+                Return {"骷髅1", "骷髅1"}
+            Case 101
+                Return {"骷髅1", "骷髅2", "骷髅2", "骑士1"}
+            Case 102
+                Return {"魔王"}
             Case 1
+                FrmMain.PixelLevel = 1
                 Return {"骷髅1", "骷髅1"}
             Case 2
                 Return {"骷髅2", "骷髅2", "骷髅1"}
@@ -404,6 +479,12 @@
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
         Select Case Id
+            Case 100
+                Return {"骷髅士兵", "骷髅卫兵"}
+            Case 101
+                Return {"骷髅士兵", "粗骨骷髅士兵", "粗骨骷髅卫士", "暗黑骑士"}
+            Case 102
+                Return {"魔王"}
             Case 1
                 Return {"骷髅士兵", "骷髅卫兵"}
             Case 2
@@ -423,6 +504,15 @@
         EquipArmorLast = EquipArmor
         '切换关卡
         Select Case Id
+            Case 100
+                Screen = Screens.Empty
+                StartChat({"* 恭喜获胜！你获得了620XP！", "* 你在魔宫之中飞速穿梭，一只只怪物飞灰烟灭……", "* 魔王的房间已经近在咫尺，\n  这片大地所承受的苦难终要走向尽头。", "/LEVEL101"}, True)
+            Case 101
+                Screen = Screens.Empty
+                StartChat({"* 恭喜获胜！你获得了3855XP！", "* 你迈步走向下一个路口，推开大门……", "* 奇异的紫色光芒涌现，\n  这一刻，你知道你漫长的旅程终于走到了终点。", "/LEVEL102"}, True)
+            Case 102
+                Screen = Screens.Empty
+                StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。", "/LOCKRBIGDWXKLA", "* 在你眼里，似乎整个世界都在崩坏……", "/LOCK124579", "* 似乎有哪里不对。", "* 一些你熟悉的事物似乎正在从你的身上被剥离……", "* …………", "* …………………………", "* 你失去了什么？", "* 当你再次睁开眼……", "/LEVEL1"}, True)
             Case 1
                 Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKD", "* 你找回了按键D！", "* 即将进入下一关……", "/LEVEL2"}, True)
