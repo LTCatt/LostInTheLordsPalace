@@ -154,10 +154,12 @@ Public Module ModMain
                                 If Id >= 0 AndAlso Id <= MonsterHp.Count - 1 Then
                                     '选中对象：Id
                                     PerformSelect(Id)
+                                    FrmMain.TextTitle.Opacity = 1 : AniStop("Title Opacity")
                                     Exit Sub
                                 End If
                             Case "ESC"
                                 Screen = ScreenReturn
+                                FrmMain.TextTitle.Opacity = 1 : AniStop("Title Opacity")
                                 Exit Sub
                         End Select
                     Case Screens.Equip

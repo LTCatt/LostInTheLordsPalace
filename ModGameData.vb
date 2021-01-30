@@ -173,7 +173,7 @@
             Case 1
                 Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+2800。"
             Case 2
-                Return "失落科技与魔法结合的究极护甲。ATK+300，DEF+1800。"
+                Return "失落科技与魔法结合的究极护甲。ATK+300，DEF+1700。"
             Case 3
                 Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
             Case 4
@@ -227,7 +227,7 @@
             Case 1
                 Return 0
             Case 2
-                Return 1800
+                Return 1700
             Case 3
                 Return 1200
             Case 4
@@ -247,7 +247,7 @@
             Case "骷髅1"
                 Return 50
             Case "骷髅2"
-                Return 200
+                Return 190
             Case "骑士1"
                 Return 2000
             Case "魔王"
@@ -265,11 +265,11 @@
             Case "骷髅1"
                 Return 720
             Case "骷髅2"
-                Return 720
+                Return 750
             Case "骑士1"
-                Return 1500
+                Return 2000
             Case "魔王"
-                Return 3200
+                Return 3100
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -281,13 +281,13 @@
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
-                Return 50
+                Return 60
             Case "骷髅2"
-                Return 100
+                Return 120
             Case "骑士1"
                 Return 2000
             Case "魔王"
-                Return 3200
+                Return 3100
             Case "苦力怕1"
                 Return 0
             Case "苦力怕2"
@@ -398,7 +398,7 @@
     End Function
     Private Sub PerformMonsterAttack(Id As Integer, Desc As String, IsMeele As Boolean, IsExplode As Boolean)
         Dim Damage As Integer = Math.Max(1, GetMonsterAtk(MonsterType(Id)) - GetRealDef())
-        Hp = Math.Max(0, Hp - Damage)
+        HurtPlayer(Damage)
         Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  你受到了" & Damage & "点伤害！"
         If EquipArmor = 6 AndAlso IsMeele AndAlso Not IsExplode Then
             '荆棘
@@ -468,7 +468,7 @@
             Case 4
                 Return {"* 毁灭来临。",
                         "* 电弧碰撞的火光在空气中迸溅。",
-                        "* 雷电大大提高了爆炸的威能。\n  不过还没有结束。"}
+                        "* 雷电让爆炸的威能也得以跃升。"}
             Case 5
                 Return {"* 而在出口门前，\n  是一场盛大的送别庆典。",
                         "* 但凡能穿上以太之甲，这一切就都应该不在话下……",

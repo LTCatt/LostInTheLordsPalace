@@ -23,11 +23,19 @@ Public Class MainWindow
         Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width))
         TransScale.ScaleX = Size
         TransScale.ScaleY = Size
-        '闪烁计数
+        '闪烁计数与动画
         RunInNewThread(Sub()
                            Do While True
                                IsHalfSec = Not IsHalfSec
-                               If IsHalfSec Then AniStart({AaTranslateY(ImgLine, 40, 1000), AaTranslateY(ImgLine, -40, 1, After:=True)})
+                               If IsHalfSec Then
+                                   '扫描线
+                                   AniStart({AaTranslateY(ImgLine, 40, 1000), AaTranslateY(ImgLine, -40, 1, After:=True)})
+                                   '选择闪烁
+                                   If Screen = Screens.Select Then
+                                       AniStart({AaOpacity(TextTitle, -0.6, 490, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
+                                                 AaOpacity(TextTitle, 0.6, 490, 490, New AniEaseInoutFluent(AniEasePower.Weak))}, "Title Opacity")
+                                   End If
+                               End If
                                Thread.Sleep(500)
                            Loop
                        End Sub, "Half Sec")

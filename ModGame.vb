@@ -11,11 +11,20 @@
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 100
     Public Turn As Integer = 0
-
     '怪物数据
     Public MonsterType As New List(Of String), MonsterName As New List(Of String), MonsterHp As New List(Of Integer), MonsterSp As New List(Of Integer)
+
+    '受伤
     Public Sub HurtMonster(Id As Integer, Damage As Integer)
         MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
+    End Sub
+    Public Sub HurtPlayer(Damage As Integer)
+        Hp = Math.Max(0, Hp - Damage)
+        '受伤动画
+        If Damage = 1 Then Exit Sub
+        Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 2)
+        FrmMain.RectHurt.Opacity = DeltaOpacity
+        AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, DeltaOpacity * 2000, DeltaOpacity * 700, Ease:=New AniEaseOutFluent), "Hurt Player")
     End Sub
 
     '原始存档
@@ -32,6 +41,7 @@
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
         StartChat({GetLevelIntros(Id)(0)}, False)
+        FrmMain.TextTitle.Opacity = 1 : AniStop("Title Opacity")
         '重置存档
         Turn = 0
         ItemCount = ItemCountLast
