@@ -421,11 +421,11 @@
             Case 2
                 Return "魔宫入口"
             Case 3
-                Return "测试关卡2-3"
+                Return "黑火药之厅1"
             Case 4
-                Return "测试关卡2-4"
+                Return "黑火药之厅2"
             Case 5
-                Return "测试关卡2-5"
+                Return "黑火药之厅3"
         End Select
     End Function
     Public Function GetLevelIntros(Id As Integer) As String()
@@ -453,19 +453,24 @@
                         "* 遗忘？还是剥离？这就是魔王的能力吗？"}
             Case 2
                 Return {"* 三具骷髅已经将你包围。",
-                        "* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。",
                         "* 骷骨的响声宛如一首嘈杂的打击乐。",
+                        "* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。",
                         "* 你忍耐着肉体的痛楚。",
                         "* 骨头喀拉作响。"}
             Case 3
-                Return {"* 移动的坟墓正在靠近……",
-                        "* 爆炸，硝烟，艺术！"}
+                Return {"* 前方是火药与爆炸之厅。",
+                        "* 移动的坟墓正在靠近……",
+                        "* 倒计时已经数到了「1」。",
+                        "* 爆炸，硝烟，艺术！",
+                        "* 火药的气味在空中久久不散。"}
             Case 4
                 Return {"* 毁灭来临。",
-                        "* 电弧碰撞的火光在空气中迸溅。"}
+                        "* 电弧碰撞的火光在空气中迸溅。",
+                        "* 雷电大大提高了爆炸的威能。\n  不过还没有结束。"}
             Case 5
-                Return {"* 但凡能换回以太之甲，这一切就都应该不在话下……",
-                        "* 爆炸盛宴。"}
+                Return {"* 而在出口门前，\n  是一场盛大的送别庆典。",
+                        "* 但凡能穿上以太之甲，这一切就都应该不在话下……",
+                        "* 它用空洞的眼窝盯着你。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
@@ -485,7 +490,7 @@
             Case 4
                 Return {"苦力怕2", "苦力怕1", "苦力怕1"}
             Case 5
-                Return {"苦力怕2", "苦力怕2", "苦力怕1"}
+                Return {"苦力怕1", "苦力怕2", "苦力怕2", "苦力怕2"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -505,7 +510,7 @@
             Case 4
                 Return {"闪电爬行冢", "爬行墓", "爬行冢"}
             Case 5
-                Return {"闪电爬行冢", "高压爬行冢", "爬行冢"}
+                Return {"爬行冢", "高压爬行冢", "闪电爬行冢", "雷电爬行冢"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
@@ -513,6 +518,8 @@
         ItemCountLast = ItemCount
         EquipWeaponLast = EquipWeapon
         EquipArmorLast = EquipArmor
+        '回血
+        Hp = HpMax : Mp = MpMax
         '切换关卡
         Select Case Id
             Case 100
@@ -549,16 +556,38 @@
                            "/LEVEL2"}, True)
             Case 2
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCKR", "* 你找回了按键R！", "* 即将进入下一关……", "/LEVEL3"}, True)
+                StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "* 你决定重新踏上魔宫之旅。",
+                           "* 再次出发。新生，即是新的希望。\n  伊尔梅特，再次开始的机会。",
+                           "/UNLOCKR",
+                           "* 「R」的内联逻辑已恢复。",
+                           "* 你迈步走入魔宫入口的台阶……",
+                           "/LEVEL3"}, True)
             Case 3
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCKI", "* 你找回了按键I！", "* 即将进入下一关……", "/LEVEL4"}, True)
+                StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "* 所幸，你的行囊还没有因为爆炸损坏。",
+                           "/UNLOCKI",
+                           "* 「I」的内联逻辑已恢复。",
+                           "* 你刚整理好行囊，就听到了嗞啦作响的电弧声。",
+                           "/LEVEL4"}, True)
             Case 4
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCK4", "* 你找回了按键4！", "* 即将进入下一关……", "/LEVEL5"}, True)
+                StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "* 但凡能再多一点助力，刚才的战斗也不至如此艰辛。",
+                           "/UNLOCK4",
+                           "* 「4」的内联逻辑已恢复。",
+                           "* 看上去你走到了黑火药之厅的尽头。",
+                           "/LEVEL5"}, True)
             Case 5
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/UNLOCKA", "* 你找回了按键A！", "* 即将进入下一关……", "/LEVEL6"}, True)
+                StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                           "* 你离开了黑火药之厅。\n  在你的前方，是元素与魔法的领域。",
+                           "* 但这并不是法术应当被使用的地方。",
+                           "/UNLOCKA",
+                           "* 「A」的内联逻辑已恢复。",
+                           "* 没有下一关了。",
+                           "* 真的没有下一关了。"}, True)
         End Select
     End Sub
 

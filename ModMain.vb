@@ -112,7 +112,7 @@ Public Module ModMain
                 SetText(FrmMain.TextInputResult, "\DARKGRAY等待玩家输入指令。")
                 If Input = "RST" Then
                     StartLevel(Level)
-                    StartChat({"* 伊尔梅特的祝福已生效，\n  创伤已被抚平，时光已被重置。"}, False)
+                    StartChat({"* 伊尔梅特的祝福已生效。\n  创伤已被抚平，时光已被重置。"}, False)
                     Exit Sub
                 ElseIf Input.StartsWith("TP ") Then
                     Level = Input.Replace("TP ", "")
