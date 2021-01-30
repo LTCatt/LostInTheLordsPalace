@@ -29,6 +29,9 @@
             ElseIf Inline.StartsWith("RED") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 0, 0))
                 Delta = 3
+            ElseIf Inline.StartsWith("ORANGE") Then
+                TargetColor = New SolidColorBrush(Color.FromRgb(255, 128, 0))
+                Delta = 6
             ElseIf Inline.StartsWith("DARKRED") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(100, 0, 0))
                 Delta = 7
@@ -38,6 +41,9 @@
             ElseIf Inline.StartsWith("GREEN") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(0, 255, 0))
                 Delta = 5
+            ElseIf Inline.StartsWith("DARKBLUE") Then
+                TargetColor = New SolidColorBrush(Color.FromRgb(0, 0, 150))
+                Delta = 8
             ElseIf Inline.StartsWith("BLUE") Then
                 TargetColor = New SolidColorBrush(Color.FromRgb(0, 0, 255))
                 Delta = 4
@@ -58,6 +64,7 @@
     Public Function GetRawText(Text As String) As String
         Return StrConv(Text.Replace("\n", vbCrLf), VbStrConv.Wide)
     End Function
+
     '获取根据按键处理后的富文本
     Public Function GetKeyText(Key As String) As String
         Dim Letters As New List(Of String)
@@ -65,6 +72,10 @@
             Letters.Add("\KEY" & Letter)
         Next
         Return "\YELLOW<" & Join(Letters.ToArray, "") & "\YELLOW>\WHITE"
+    End Function
+    '获取单个项目的富文本
+    Public Function GetItemText(Id As Integer, Title As String, Desc As String) As String
+        Return GetKeyText(Id) & " " & Title & vbCrLf & "    " & Desc
     End Function
 
     '玩家输入指令
@@ -86,6 +97,8 @@
                         Screen = Screens.Item
                     Case "BAC"
                         Screen = Screens.Combat
+                    Case "CHAT"
+                        StartChat({"* Chat Content 1.", "* Chat Content Line 2, it's a little long."}, True)
                     Case Else
                         SetText(FrmMain.TextInputResult, " \RED指令未知或无效，请输入屏幕上以黄色显示的指令。")
                 End Select
@@ -96,7 +109,6 @@
 
     '对话框
     Private ChatContents As New List(Of String)
-    Public CanContinue As Boolean = False
     Private Sub StartChat(Contents As String(), RequireEnsure As Boolean)
         ChatContents = New List(Of String)(Contents)
         If RequireEnsure Then
@@ -107,15 +119,19 @@
         NextChat()
     End Sub
     Public Sub NextChat()
-        AniStop("Chat Content")
-        If ChatContents.Count > 0 Then
-            CanContinue = False
-            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \AQUA按任意键以继续。")
-            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(0, 255, 255), New MyColor(160, 160, 160))
+        If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
+            '补全当前对话
+            AniStop("Chat Content")
+            FrmMain.TextChat.Text = FrmMain.TextChat.Tag
+        ElseIf ChatContents.Count > 0 Then
+            '下一句对话
+            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \AQUA按任意键以继续对话。")
+            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(160, 160, 160))
             FrmMain.TextChat.Text = GetRawText(ChatContents.First)
+            FrmMain.TextChat.Tag = FrmMain.TextChat.Text
+            AniStop("Chat Content")
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=50),
-                     AaCode(Sub() CanContinue = True, 500),
+                     AaTextAppear(FrmMain.TextChat, Time:=40),
                      AaCode(Sub()
                                 If Not EnterStatus = EnterStatuses.Chat Then
                                     RunInThread(Sub() RunInUi(Sub() NextChat()))
@@ -125,11 +141,14 @@
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)
         Else
+            '结束对话
+            AniStop("Chat Content")
             If EnterStatus = EnterStatuses.Chat Then
                 EnterStatus = EnterStatuses.Normal
                 SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
             End If
             FrmMain.TextChat.Text = ""
+            FrmMain.TextChat.Tag = ""
         End If
     End Sub
 

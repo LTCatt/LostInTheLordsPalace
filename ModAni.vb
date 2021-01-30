@@ -922,15 +922,15 @@ NextAni:
                 Dim TextCount As Integer = If(Ani.Value(1), Ani.Value(0).ToString.Length, 0) +
                                            Math.Round(Ani.Value(0).ToString.Length * If(Ani.Value(1), -1, 1) * Ani.Ease.GetDelta(Ani.TimeFinished / Ani.TimeTotal, 0))
                 Dim NewText As String = Mid(Ani.Value(0), 1, TextCount)
-                '添加乱码
-                If TextCount < Ani.Value(0).ToString.Length Then
-                    Dim NextText As String = Mid(Ani.Value(0), TextCount + 1, 1)
-                    If Convert.ToInt32(Convert.ToChar(NextText)) >= Convert.ToInt32(Convert.ToChar(128)) Then
-                        NewText &= Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
-                    Else
-                        NewText &= RandomOne("0123456789./*-+\[]{};':/?,!@#$%^&*()_+-=qwwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".ToCharArray)
-                    End If
-                End If
+                ''添加乱码
+                'If TextCount < Ani.Value(0).ToString.Length Then
+                '    Dim NextText As String = Mid(Ani.Value(0), TextCount + 1, 1)
+                '    If Convert.ToInt32(Convert.ToChar(NextText)) >= Convert.ToInt32(Convert.ToChar(128)) Then
+                '        NewText &= Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
+                '    Else
+                '        NewText &= RandomOne("0123456789./*-+\[]{};':/?,!@#$%^&*()_+-=qwwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".ToCharArray)
+                '    End If
+                'End If
                 '设置文本
                 If Ani.Obj.GetType.Name = "TextBlock" Then
                     Ani.Obj.Text = NewText

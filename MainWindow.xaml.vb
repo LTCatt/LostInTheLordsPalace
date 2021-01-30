@@ -25,7 +25,7 @@ Public Class MainWindow
         RunInNewThread(Sub()
                            Do While True
                                Dispatcher.Invoke(Sub() RefreshUI())
-                               Thread.Sleep(20)
+                               Thread.Sleep(30)
                            Loop
                        End Sub, "UI Loop")
     End Sub
@@ -38,7 +38,7 @@ Public Class MainWindow
         If RealKey.StartsWith("D") AndAlso RealKey.Length = 2 Then RealKey = RealKey.Substring(1)
         '按下任意按键
         If EnterStatus = EnterStatuses.Chat Then
-            If CanContinue Then NextChat()
+            NextChat()
             Exit Sub
         End If
         '主输入状态

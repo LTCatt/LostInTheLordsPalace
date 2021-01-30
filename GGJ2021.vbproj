@@ -107,6 +107,7 @@
     <Compile Include="ModAni.vb" />
     <Compile Include="ModBase.vb" />
     <Compile Include="ModGame.vb" />
+    <Compile Include="ModGameData.vb" />
     <Compile Include="ModMain.vb" />
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>

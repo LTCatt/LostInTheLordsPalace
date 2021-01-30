@@ -12,12 +12,13 @@
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
             <Setter Property="LineHeight" Value="1.001" />
+            <Setter Property="Foreground" Value="White" />
         </Style>
     </Window.Resources>
     <Grid x:Name="PanBack">
-        <!--<Grid.Effect>
-            <DropShadowEffect Color="White" Opacity="0.5" ShadowDepth="1" BlurRadius="3" />
-        </Grid.Effect>-->
+        <Grid.Effect>
+            <DropShadowEffect Color="Gray" Opacity="0.7" ShadowDepth="2" BlurRadius="3" />
+        </Grid.Effect>
         <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
             <Grid.RenderTransform>
                 <ScaleTransform x:Name="TransScale" />
@@ -42,7 +43,7 @@
             <TextBlock Name="TextInfo" Grid.Row="1" />
             <!-- 对话框 -->
             <TextBlock Name="TextChatLine" Grid.Row="2" />
-            <TextBlock Name="TextChat" Grid.Row="3" Foreground="Aqua" />
+            <TextBlock Name="TextChat" Grid.Row="3" />
             <!-- 指令窗口 -->
             <TextBlock Name="TextActionLine" Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" />
             <TextBlock Name="TextAction" Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Margin="1" />
