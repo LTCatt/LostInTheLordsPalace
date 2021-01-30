@@ -21,11 +21,11 @@
     '玩家输入指令
     Public Function Enter(Input As String) As String
         If Input = "5" Then
-            Hp += 5
-            SetText(FrmMain.TextInfo, "\YELLOW玩家输入：\WHITE" & Input & "\n" & GetKeyText("ATK") & " 攻击")
+            FrmMain.TextChat.Text = GetRawText("<系统> 这是一段测试的聊天文本！:D 52/55")
+            AniStart(AaTextAppear(FrmMain.TextChat, Time:=50))
             Return "YES5"
         End If
-        Return "\RED指令未知或无效。"
+        Return "\RED指令未知或无效，请输入右上角指令窗口中显示的指令。"
     End Function
 
 End Module

@@ -8,7 +8,8 @@ Public Class MainWindow
         AniStartRun()
         'UI 初始化
         SetText(TextBottomLine, "\DARKGRAY─────────────────────────────────────┴───────────────")
-        SetText(TextActionLine, "\DARKGRAY││││││││││││││││││││││││││││││││││││││││")
+        SetText(TextActionLine, "\DARKGRAY││││││││││││││││┤││││││││││││││││││││")
+        SetText(TextChatLine, "\DARKGRAY──────────────────────────────────────────────────────")
         SetText(TextInputResult, " \DARKGRAY等待玩家输入指令。")
         TextInputBox.Tag = ""
         '窗口自适应

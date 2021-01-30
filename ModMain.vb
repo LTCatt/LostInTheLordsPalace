@@ -54,6 +54,9 @@
             Target.Inlines.Add(New Run(StrConv(Inline.Substring(Delta), VbStrConv.Wide)) With {.Foreground = TargetColor})
         Next
     End Sub
+    Public Function GetRawText(Text As String) As String
+        Return StrConv(Text.Replace("\n", vbCrLf), VbStrConv.Wide)
+    End Function
     Public Function GetKeyText(Key As String) As String
         Dim Letters As New List(Of String)
         For Each Letter In Key

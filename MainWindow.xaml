@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Black" Cursor="None" UseLayoutRounding="False" SnapsToDevicePixels="True">
+        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Black" Cursor="None" UseLayoutRounding="False" SnapsToDevicePixels="False">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="1" />
             <Setter Property="FontFamily" Value="SimSun" />
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
-            <Setter Property="LineHeight" Value="1" />
+            <Setter Property="LineHeight" Value="1.001" />
         </Style>
     </Window.Resources>
     <Grid x:Name="PanBack">
@@ -25,6 +25,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="1" />
+                <RowDefinition Height="4" />
+                <RowDefinition Height="1" />
                 <RowDefinition Height="3" />
                 <RowDefinition Height="1" />
                 <RowDefinition Height="1" />
@@ -36,15 +38,18 @@
             </Grid.ColumnDefinitions>
             <!-- 上半部分 -->
             <TextBlock Name="TextInfo" Grid.Row="0" />
-            <!-- 操作指示 -->
-            <TextBlock Name="TextActionLine" Grid.Row="0" Grid.Column="1" />
-            <TextBlock Name="TextAction" Grid.Row="0" Grid.Column="2" Margin="1" />
+            <!-- 对话框 -->
+            <TextBlock Name="TextChatLine" Grid.Row="1" />
+            <TextBlock Name="TextChat" Grid.Row="2" Foreground="Aqua" />
+            <!-- 指令窗口 -->
+            <TextBlock Name="TextActionLine" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" />
+            <TextBlock Name="TextAction" Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Margin="1" />
             <!-- 状态栏 -->
-            <TextBlock Name="TextBottomLine" Grid.Row="1" Grid.ColumnSpan="5" />
-            <TextBlock Name="TextStatus" Grid.Row="2" Grid.ColumnSpan="5" />
+            <TextBlock Name="TextBottomLine" Grid.Row="3" Grid.ColumnSpan="5" />
+            <TextBlock Name="TextStatus" Grid.Row="4" Grid.ColumnSpan="5" />
             <!-- 输入框 -->
-            <TextBlock Name="TextInputBox" Grid.Row="3" Grid.ColumnSpan="5" />
-            <TextBlock Name="TextInputResult" Grid.Row="4" Grid.ColumnSpan="5" />
+            <TextBlock Name="TextInputBox" Grid.Row="5" Grid.ColumnSpan="5" />
+            <TextBlock Name="TextInputResult" Grid.Row="6" Grid.ColumnSpan="5" />
         </Grid>
     </Grid>
 </Window>
