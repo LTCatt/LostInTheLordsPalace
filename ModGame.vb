@@ -2,7 +2,7 @@
     Public FrmMain As MainWindow
 
     '存档数据
-    Public DisabledKey As String = "RBIGDWXKL124579"
+    Public DisabledKey As String = "RBIGDWXKLA124579"
     Public Hp As Integer = 1, HpMax As Integer = 1652
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, ExtraAtk As Integer = 0

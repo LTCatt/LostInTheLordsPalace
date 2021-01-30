@@ -399,7 +399,7 @@
             Case 4
                 Return {"苦力怕2", "苦力怕1", "苦力怕1"}
             Case 5
-                Return {"苦力怕2", "骷髅2", "苦力怕2"}
+                Return {"苦力怕2", "苦力怕2", "苦力怕1"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -413,7 +413,7 @@
             Case 4
                 Return {"闪电爬行冢", "爬行墓", "爬行冢"}
             Case 5
-                Return {"闪电爬行冢", "粗骨骷髅士兵", "闪电爬行墓"}
+                Return {"闪电爬行冢", "高压爬行冢", "爬行冢"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
@@ -437,7 +437,7 @@
                 StartChat({"* 恭喜获胜！你获得了1755XP！", "/UNLOCK4", "* 你找回了按键4！", "* 即将进入下一关……", "/LEVEL5"}, True)
             Case 5
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了2090XP！", "/UNLOCKG", "* 你找回了按键G！", "* 即将进入下一关……", "/LEVEL6"}, True)
+                StartChat({"* 恭喜获胜！你获得了2090XP！", "/UNLOCKA", "* 你找回了按键A！", "* 即将进入下一关……", "/LEVEL6"}, True)
         End Select
     End Sub
 

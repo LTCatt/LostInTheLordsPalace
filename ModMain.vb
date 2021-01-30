@@ -123,23 +123,23 @@ Public Module ModMain
                     Case Screens.Empty
                     Case Screens.Combat
                         Select Case Input
-                            Case "ATK"
+                            Case "ATK", "ATTACK"
                                 ScreenReturn = Screen
                                 Screen = Screens.Select
                                 ScreenData = "ATK"
                                 ScreenTitle = "攻击"
                                 Exit Sub
-                            Case "DEF"
+                            Case "DEF", "DEFENCE"
                                 ExtraDef += 100
                                 StartChat({"* 你做好迎接敌人攻击的准备。\n  你在本回合内的防御略微提高了！", "/TURNEND"}, True)
                                 Exit Sub
-                            Case "MAG"
+                            Case "MAG", "MAGIC"
                                 Screen = Screens.Magic
                                 Exit Sub
-                            Case "EQU"
+                            Case "EQU", "EQUIP", "EQUIPMENT"
                                 Screen = Screens.Equip
                                 Exit Sub
-                            Case "ITM"
+                            Case "ITM", "ITEM"
                                 Screen = Screens.Item
                                 Exit Sub
                             Case "WIN"
