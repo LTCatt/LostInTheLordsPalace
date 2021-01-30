@@ -91,8 +91,7 @@ Public Class MainWindow
             TextInputBox.Tag = ""
             Enter("ESC")
         ElseIf e.Key = Key.Back Then
-            TextInputBox.Tag = ""
-            'If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
+            If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
         ElseIf e.Key = Key.Enter Then
             If TextInputBox.Tag <> "" Then Enter(TextInputBox.Tag)
             TextInputBox.Tag = ""

@@ -165,7 +165,8 @@ Public Module ModMain
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If EquipArmor = Input OrElse EquipWeapon = Input Then
-                                    SetText(FrmMain.TextInputResult, "\RED你已装备该物品！")
+                                    SetText(FrmMain.TextInputResult, "\RED错误：你已装备该物品！")
+                                    Beep()
                                 Else
                                     If GetEquipIsWeapon(Input) Then
                                         EquipWeapon = Input
@@ -184,7 +185,8 @@ Public Module ModMain
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If ItemCount(Input) = 0 Then
-                                    SetText(FrmMain.TextInputResult, "\RED该道具槽位为空！")
+                                    SetText(FrmMain.TextInputResult, "\RED错误：该道具槽位为空！")
+                                    Beep()
                                 Else
                                     UseItem(Input)
                                 End If
@@ -198,7 +200,8 @@ Public Module ModMain
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If Mp < GetMagicCost(Input) Then
-                                    SetText(FrmMain.TextInputResult, "\RED你的法力值不足！")
+                                    SetText(FrmMain.TextInputResult, "\RED错误：你的法力值不足！")
+                                    Beep()
                                 Else
                                     UseMagic(Input)
                                 End If
@@ -209,8 +212,7 @@ Public Module ModMain
                         End Select
                 End Select
                 SetText(FrmMain.TextInputResult, "\RED错误：指令未知或无效，请输入屏幕上以黄色显示的指令！")
-            Case Else
-                SetText(FrmMain.TextInputResult, "\RED未知的输入状态！")
+                Beep()
         End Select
     End Sub
 

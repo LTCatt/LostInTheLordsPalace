@@ -102,11 +102,11 @@
             Case 3
                 Return "可解除中毒状态的蓝色药剂。"
             Case 4
-                Return "对单个敌人造成25点伤害。"
+                Return "对单个敌人造成15点伤害。"
             Case 5
                 Return "道具5描述"
             Case 6
-                Return "可回复500HP的草药。"
+                Return "可回复700HP的草药。"
             Case 7
                 Return "道具7描述"
         End Select
@@ -136,12 +136,12 @@
                 RawText += "  但你目前并没有中毒。"
             Case 4
                 Screen = Screens.Combat
-                HurtMonster(Target, 25)
-                RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  造成了25点伤害！"
+                HurtMonster(Target, 15)
+                RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  造成了15点伤害！"
             Case 5
             Case 6
-                Hp = Math.Min(Hp + 500, HpMax)
-                RawText += "  你的HP恢复了500点！"
+                Hp = Math.Min(Hp + 700, HpMax)
+                RawText += "  你的HP恢复了700点！"
             Case 7
         End Select
         StartChat({RawText, "/TURNEND"}, True)
@@ -246,8 +246,10 @@
                 Return 50
             Case "骷髅2"
                 Return 200
-            Case "苦力怕"
+            Case "苦力怕1"
                 Return 20
+            Case "苦力怕2"
+                Return 10
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -258,8 +260,10 @@
                 Return 720
             Case "骷髅2"
                 Return 720
-            Case "苦力怕"
-                Return 2050
+            Case "苦力怕1"
+                Return 2150
+            Case "苦力怕2"
+                Return 2500
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -270,7 +274,9 @@
                 Return 10
             Case "骷髅2"
                 Return 20
-            Case "苦力怕"
+            Case "苦力怕1"
+                Return 0
+            Case "苦力怕2"
                 Return 0
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
@@ -282,8 +288,10 @@
                 Return 0
             Case "骷髅2"
                 Return 0
-            Case "苦力怕"
+            Case "苦力怕1"
                 Return 3
+            Case "苦力怕2"
+                Return 2
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -294,8 +302,10 @@
                 Return "攻击性强，但极度脆弱的敌人。"
             Case "骷髅2"
                 Return "骨架更加粗壮的骷髅。"
-            Case "苦力怕"
-                Return "咝咝作响，将在" & Sp & "回合后爆炸。"
+            Case "苦力怕1"
+                Return "咝咝作响。将在" & Sp & "回合后爆炸。"
+            Case "苦力怕2"
+                Return "闪电中的毁灭化身。将在" & Sp & "回合后爆炸。"
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -306,7 +316,7 @@
                 PerformMonsterAttack(Id, "挥剑向你砍来！", True, False)
             Case "骷髅2"
                 PerformMonsterAttack(Id, "挥起了它的巨剑！", True, False)
-            Case "苦力怕"
+            Case "苦力怕1", "苦力怕2"
                 If MonsterSp(Id) = 1 Then
                     PerformMonsterAttack(Id, "爆炸了！", True, True)
                     MonsterType.RemoveAt(Id)
@@ -357,7 +367,7 @@
             Case 3
                 Return {"* 移动的坟墓正在靠近……"}
             Case 4
-                Return {"* 比一只更可怕的无疑是一群。"}
+                Return {"* 毁灭来临。"}
         End Select
     End Function
     Public Function GetLevelIntro2(Id As Integer) As String()
@@ -369,7 +379,7 @@
             Case 3
                 Return {"* 爆炸，硝烟，艺术！"}
             Case 4
-                Return {"* 空洞的眼窝正面对着你。"}
+                Return {"* 电弧碰撞的火光在空气中迸溅。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
@@ -379,9 +389,9 @@
             Case 2
                 Return {"骷髅2", "骷髅2", "骷髅1"}
             Case 3
-                Return {"苦力怕", "骷髅2"}
+                Return {"苦力怕1", "骷髅2"}
             Case 4
-                Return {"苦力怕", "苦力怕", "苦力怕", "骷髅2"}
+                Return {"苦力怕2", "苦力怕1", "苦力怕1"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -393,7 +403,7 @@
             Case 3
                 Return {"爬行冢", "粗骨骷髅战士"}
             Case 4
-                Return {"爬行坟", "爬行冢", "爬行墓", "粗骨骷髅战士"}
+                Return {"闪电爬行冢", "爬行墓", "爬行冢"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
