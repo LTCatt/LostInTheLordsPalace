@@ -31,13 +31,19 @@ Public Class MainWindow
         Dim RealKey As String = e.Key.ToString.ToUpper
         If RealKey.StartsWith("NUMPAD") Then RealKey = RealKey.Substring(6)
         If RealKey.StartsWith("D") AndAlso RealKey.Length = 2 Then RealKey = RealKey.Substring(1)
-        '根据按键判断
-        If e.Key = Key.Escape Then
-            Process.GetCurrentProcess.Kill()
-        ElseIf e.Key = Key.Back Then
-            If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
+        '退出游戏
+        If e.Key = Key.Escape Then Process.GetCurrentProcess.Kill()
+        '按下任意按键
+        If EnterStatus = EnterStatuses.Chat Then
+            If CanContinue Then NextChat()
+            Exit Sub
+        End If
+        '主输入状态
+        If e.Key = Key.Back Then
+            TextInputBox.Tag = ""
+            'If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
         ElseIf e.Key = Key.Enter Then
-            SetText(TextInputResult, " " & Enter(TextInputBox.Tag))
+            If TextInputBox.Tag <> "" Then Enter(TextInputBox.Tag)
             TextInputBox.Tag = ""
         ElseIf Not DisabledKey.Contains(RealKey) AndAlso RealKey.Length = 1 Then
             TextInputBox.Tag = (TextInputBox.Tag.ToString & RealKey).Substring(0, Math.Min(TextInputBox.Tag.ToString.Length + 1, 47))
