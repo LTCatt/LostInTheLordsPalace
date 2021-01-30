@@ -13,9 +13,9 @@
             Dim TargetColor As SolidColorBrush
             Dim Delta As Integer = 0
             If Inline.StartsWith("KEY") Then
-                '特殊：根据字符是否解锁自动使用黄色和暗黄色
+                '特殊：根据字符是否解锁自动使用黄色和深灰色
                 If DisabledKey.Contains(Inline.Substring(3, 1)) Then
-                    TargetColor = New SolidColorBrush(Color.FromRgb(100, 100, 0))
+                    TargetColor = New SolidColorBrush(Color.FromRgb(60, 60, 60))
                 Else
                     TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
                 End If

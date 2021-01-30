@@ -2,12 +2,13 @@
 Public Class MainWindow
 
     '初始化
-    Private Const WindowMargin = 50
+    Private Const WindowMargin = 30
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
         AniStartRun()
         'UI 初始化
-        SetText(TextBottomLine, "\DARKGRAY".PadRight(PanMain.Width + 5, "-"))
+        SetText(TextBottomLine, "\DARKGRAY─────────────────────────────────────┴───────────────")
+        SetText(TextActionLine, "\DARKGRAY││││││││││││││││││││││││││││││││││││││││")
         SetText(TextInputResult, " \DARKGRAY等待玩家输入指令。")
         TextInputBox.Tag = ""
         '窗口自适应
@@ -15,13 +16,12 @@ Public Class MainWindow
         TransScale.ScaleX = Size
         TransScale.ScaleY = Size
         '刷新 UI
-        Dim th As New Thread(Sub()
-                                 Do While True
-                                     Dispatcher.Invoke(Sub() RefreshUI())
-                                     Thread.Sleep(10)
-                                 Loop
-                             End Sub)
-        th.Start()
+        RunInNewThread(Sub()
+                           Do While True
+                               Dispatcher.Invoke(Sub() RefreshUI())
+                               Thread.Sleep(10)
+                           Loop
+                       End Sub, "UI Loop")
     End Sub
 
     '文本输入
@@ -36,7 +36,7 @@ Public Class MainWindow
         ElseIf e.Key = Key.Back Then
             If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
         ElseIf e.Key = Key.Enter Then
-            SetText(TextInputResult, " \DARKGRAY" & If(Enter(TextInputBox.Tag), "\DARKRED指令未知或无效。"))
+            SetText(TextInputResult, " " & Enter(TextInputBox.Tag))
             TextInputBox.Tag = ""
         ElseIf Not DisabledKey.Contains(RealKey) AndAlso RealKey.Length = 1 Then
             TextInputBox.Tag = (TextInputBox.Tag.ToString & RealKey).Substring(0, Math.Min(TextInputBox.Tag.ToString.Length + 1, 47))
