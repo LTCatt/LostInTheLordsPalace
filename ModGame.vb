@@ -40,6 +40,7 @@
         ExtraAtk = 0 : ExtraDef = 0
         Hp = HpMax : Mp = MpMax
         '初始化怪物数据
+        MonsterTurnPerformed = Nothing
         MonsterType.Clear()
         MonsterName.Clear()
         MonsterHp.Clear()

@@ -269,7 +269,7 @@
             Case "骑士1"
                 Return 1500
             Case "魔王"
-                Return 3500
+                Return 3200
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -343,7 +343,7 @@
             Case "魔王"
                 MonsterSp(Id) += 1
                 Select Case MonsterSp(Id)
-                    Case 0, 1, 3
+                    Case 1, 3
                         PerformMonsterAttack(Id, "抬起手，一道黑光闪过……", True, False)
                     Case 2
                         Mp = 0
@@ -364,6 +364,8 @@
                            "* 抽象的，难以理解的，超形上学的……",
                            "* 你到底失去了什么？",
                            "/WIN"}, True)
+                    Case Else
+                        Throw New Exception("未知的行动轮：" & MonsterSp(Id))
                 End Select
             Case "苦力怕1"
                 If MonsterSp(Id) = 1 Then
@@ -521,23 +523,21 @@
         '回血
         Hp = HpMax : Mp = MpMax
         '切换关卡
+        Screen = Screens.Empty
         Select Case Id
             Case 100
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你在魔宫之中飞速穿梭，一只只怪物在你的剑下飞灰烟灭。",
                            "* 魔王的房间已经近在咫尺。",
                            "* 这片大地所承受的苦难终要走向尽头。",
                            "/LEVEL101"}, True)
             Case 101
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了3855XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你迈步走向下一个路口，推开大门……",
                            "* 奇异的紫色光芒涌现。",
                            "* 这一刻，你知道你漫长的旅程终于走到了终点。",
                            "/LEVEL102"}, True)
             Case 102
-                Screen = Screens.Empty
                 FrmMain.PixelLevel = 1
                 StartChat({"* ……",
                            "* …………",
@@ -545,7 +545,6 @@
                            "* 当你再次睁开眼……",
                            "/LEVEL1"}, True)
             Case 1
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 顷刻间，那些骷髅刚才造成的伤痕已经消失不见。",
                            "* 守护……防御……",
@@ -555,7 +554,6 @@
                            "* 你抬起头……",
                            "/LEVEL2"}, True)
             Case 2
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你决定重新踏上魔宫之旅。",
                            "* 再次出发。新生，即是新的希望。\n  伊尔梅特，再次开始的机会。",
@@ -564,7 +562,6 @@
                            "* 你迈步走入魔宫入口的台阶……",
                            "/LEVEL3"}, True)
             Case 3
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 所幸，你的行囊还没有因为爆炸损坏。",
                            "/UNLOCKI",
@@ -572,7 +569,6 @@
                            "* 你刚整理好行囊，就听到了嗞啦作响的电弧声。",
                            "/LEVEL4"}, True)
             Case 4
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 但凡能再多一点助力，刚才的战斗也不至如此艰辛。",
                            "/UNLOCK4",
@@ -580,7 +576,6 @@
                            "* 看上去你走到了黑火药之厅的尽头。",
                            "/LEVEL5"}, True)
             Case 5
-                Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你离开了黑火药之厅。\n  在你的前方，是元素与魔法的领域。",
                            "* 但这并不是法术应当被使用的地方。",
