@@ -88,6 +88,11 @@
         Select Case EnterStatus
             Case EnterStatuses.Normal
                 SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
+                If Input = "RST" Then
+                    StartLevel(Level)
+                    SetText(FrmMain.TextInputResult, " \WHITE战斗已重置！")
+                    Exit Sub
+                End If
                 Select Case Screen
                     Case Screens.Empty
                     Case Screens.Combat
@@ -103,9 +108,6 @@
                                 Exit Sub
                             Case "BAC"
                                 Screen = Screens.Combat
-                                Exit Sub
-                            Case "CHAT"
-                                StartChat({"* Chat Content 1.", "* Chat Content Line 2, it's a little long."}, True)
                                 Exit Sub
                         End Select
                     Case Screens.Equip
@@ -187,13 +189,14 @@
             '播放动画
             AniStop("Chat Content")
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=40),
-                     AaCode(Sub()
-                                If Not EnterStatus = EnterStatuses.Chat Then
-                                    RunInThread(Sub() RunInUi(Sub() NextChat()))
-                                End If
-                            End Sub, If(ChatContents.Count = 1, 3000, 1500), True)
+                     AaTextAppear(FrmMain.TextChat, Time:=40)
                 }, "Chat Content")
+            ',
+            '         AaCode(Sub()
+            '                    If Not EnterStatus = EnterStatuses.Chat Then
+            '                        RunInThread(Sub() RunInUi(Sub() NextChat()))
+            '                    End If
+            '                End Sub, If(ChatContents.Count = 1, 3000, 1500), True)
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)
         Else

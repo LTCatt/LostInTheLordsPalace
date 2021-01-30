@@ -196,4 +196,82 @@
         End Select
     End Function
 
+    '怪物
+    Public Function GetMonsterHp(Name As String) As Integer
+        Select Case Name
+            Case "史莱姆"
+                Return 100
+            Case "大史莱姆"
+                Return 1000
+            Case Else
+                Throw New Exception("未知的怪物：" & Name)
+        End Select
+    End Function
+    Public Function GetMonsterAtk(Name As String) As Integer
+        Select Case Name
+            Case "史莱姆"
+                Return 100
+            Case "大史莱姆"
+                Return 500
+            Case Else
+                Throw New Exception("未知的怪物：" & Name)
+        End Select
+    End Function
+    Public Function GetMonsterDef(Name As String) As Integer
+        Select Case Name
+            Case "史莱姆"
+                Return 100
+            Case "大史莱姆"
+                Return 500
+            Case Else
+                Throw New Exception("未知的怪物：" & Name)
+        End Select
+    End Function
+    Public Function GetMonsterSp(Name As String) As Integer
+        Select Case Name
+            Case "史莱姆"
+                Return 0
+            Case "大史莱姆"
+                Return 0
+            Case Else
+                Throw New Exception("未知的怪物：" & Name)
+        End Select
+    End Function
+    Public Function GetMonsterDesc(Name As String, Sp As Integer) As String
+        Select Case Name
+            Case "史莱姆"
+                Return "史莱姆描述"
+            Case "大史莱姆"
+                Return "大史莱姆描述"
+            Case Else
+                Throw New Exception("未知的怪物：" & Name)
+        End Select
+    End Function
+
+    '关卡
+    Public Function GetLevelName(Id As Integer) As String
+        Select Case Id
+            Case 1
+                Return "第1关"
+        End Select
+    End Function
+    Public Function GetLevelIntro(Id As Integer) As String()
+        Select Case Id
+            Case 1
+                Return {"* 一场测试战斗。"}
+        End Select
+    End Function
+    Public Function GetLevelMonsters(Id As Integer) As String()
+        Select Case Id
+            Case 1
+                Return {"史莱姆", "史莱姆", "大史莱姆"}
+        End Select
+    End Function
+    Public Function GetLevelMonstersName(Id As Integer) As String()
+        Select Case Id
+            Case 1
+                Return {"史莱姆A", "史莱姆B", "大史莱姆"}
+        End Select
+    End Function
+
 End Module

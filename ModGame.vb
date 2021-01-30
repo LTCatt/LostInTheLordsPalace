@@ -3,12 +3,17 @@
 
     '存档数据
     Public DisabledKey As String = ""
-    Public Hp As Integer = 3258, HpMax As Integer = 3652
-    Public Mp As Integer = 568, MpMax As Integer = 638
+    Public Hp As Integer = 1, HpMax As Integer = 3652
+    Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, BaseDef As Integer = 276
     Public ItemCount As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
-    Public Location As String = "玩家位置"
+    Public Level As Integer = 1
+    Public MonsterType As New List(Of String), MonsterName As New List(Of String), MonsterHp As New List(Of Integer), MonsterSp As New List(Of Integer)
+
+    '原始存档
+    Public ItemCountLast As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
+    Public EquipWeaponLast As Integer = 1, EquipArmorLast As Integer = 2
 
     '修改存档
     Public Function GetRealAtk() As Integer
@@ -17,13 +22,34 @@
     Public Function GetRealDef() As Integer
         Return BaseDef + GetEquipData(EquipArmor)
     End Function
+    Public Function StartLevel(Id As Integer) As Integer
+        Screen = Screens.Combat
+        StartChat(GetLevelIntro(Id), False)
+        '重置存档
+        ItemCount = ItemCountLast
+        EquipWeapon = EquipWeaponLast
+        EquipArmor = EquipArmorLast
+        Hp = HpMax
+        Mp = MpMax
+        '初始化怪物数据
+        MonsterType.Clear()
+        MonsterName.Clear()
+        MonsterHp.Clear()
+        MonsterSp.Clear()
+        MonsterType.AddRange(GetLevelMonsters(Id))
+        MonsterName.AddRange(GetLevelMonstersName(Id))
+        For Each Monster In MonsterType
+            MonsterHp.Add(GetMonsterHp(Monster))
+            MonsterSp.Add(GetMonsterSp(Monster))
+        Next
+    End Function
 
     '刷新 UI
     Public Sub RefreshUI()
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk.ToString.PadLeft(4, " ") & vbCrLf &
                                     "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef.ToString.PadLeft(4, " "))
-        SetText(FrmMain.TextStatusRight, "\GRAY" & Location)
+        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level))
         '主要部分
         Select Case Screen
             Case Screens.Empty
@@ -37,6 +63,7 @@
                         GetKeyText("MAG") & " 法术\n" &
                         GetKeyText("ITM") & " 道具\n" &
                         GetKeyText("EQU") & " 装备\n")
+                SetText(FrmMain.TextInfo, CombatInfo)
             Case Screens.Magic
                 SetText(FrmMain.TextTitle, "\ORANGE※ 法术 ※")
                 SetText(FrmMain.TextAction,
@@ -65,6 +92,17 @@
         Item
         Equip
     End Enum
+
+    '战斗
+    Public Function CombatInfo() As String
+        Dim Info As New List(Of String)
+        For i = 0 To MonsterType.Count - 1
+            Info.Add(GetItemText(i + 1,
+                                 MonsterName(i).PadRight(8, " ") & "\REDHP " & MonsterHp(i),
+                                 "\DARKGRAY" & GetMonsterDesc(MonsterType(i), MonsterSp(i))).Replace("KEY", "WHITE").Replace("YELLOW", "WHITE"))
+        Next
+        Return Join(Info.ToArray, vbCrLf)
+    End Function
 
     '法术
     Public Function MagicInfo() As String

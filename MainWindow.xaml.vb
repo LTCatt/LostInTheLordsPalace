@@ -10,6 +10,7 @@ Public Class MainWindow
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
         AniStartRun()
+        StartLevel(1)
         'UI 初始化
         SetText(TextBottomLine, "\DARKGRAY─────────────────────────────────────┴───────────────")
         SetText(TextActionLine, "\DARKGRAY││││││││││││││││┤││││││││││││││││││││")
