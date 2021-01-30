@@ -255,7 +255,7 @@ Public Module ModMain
             If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, "\DARKGRAY请按任意键继续。")
             FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, If(IsNowImportant, New MyColor(0, 255, 255), New MyColor(255, 255, 255)), New MyColor(100, 100, 100))
             '处理文本
-            Dim RawText As String = GetRawText(ChatContents.First)
+            Dim RawText As String = GetRawText(ChatContents.First) & If(IsNowImportant, "    ", "")
             FrmMain.TextChat.Text = RawText
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
