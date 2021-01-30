@@ -2,11 +2,12 @@
     Public FrmMain As MainWindow
 
     '存档数据
-    Public DisabledKey As String = "RBIGDWFKL124579"
+    Public DisabledKey As String = "RBIGDWXKL124579"
     Public Hp As Integer = 1, HpMax As Integer = 1652
     Public Mp As Integer = 1, MpMax As Integer = 638
-    Public BaseAtk As Integer = 505, BaseDef As Integer = 276
-    Public ItemCount As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
+    Public BaseAtk As Integer = 505, ExtraAtk As Integer = 0
+    Public BaseDef As Integer = 276, ExtraDef As Integer = 0
+    Public ItemCount As Integer() = {0, 1, 2, 5, 99, 99, 89, 999}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 1
 
@@ -17,15 +18,15 @@
     End Sub
 
     '原始存档
-    Public ItemCountLast As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
-    Public EquipWeaponLast As Integer = 1, EquipArmorLast As Integer = 2
+    Public ItemCountLast As Integer() = ItemCount
+    Public EquipWeaponLast As Integer = EquipWeapon, EquipArmorLast As Integer = EquipArmor
 
     '修改存档
-    Public Function GetRealAtk() As Integer
-        Return BaseAtk + GetEquipAtk(EquipWeapon) + GetEquipAtk(EquipArmor)
+    Public Function GetRealAtk(Optional IgnoreExtra As Boolean = False) As Integer
+        Return BaseAtk + GetEquipAtk(EquipWeapon) + GetEquipAtk(EquipArmor) + If(IgnoreExtra, 0, ExtraAtk)
     End Function
-    Public Function GetRealDef() As Integer
-        Return BaseDef + GetEquipDef(EquipWeapon) + GetEquipDef(EquipArmor)
+    Public Function GetRealDef(Optional IgnoreExtra As Boolean = False) As Integer
+        Return BaseDef + GetEquipDef(EquipWeapon) + GetEquipDef(EquipArmor) + If(IgnoreExtra, 0, ExtraDef)
     End Function
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
@@ -34,8 +35,8 @@
         ItemCount = ItemCountLast
         EquipWeapon = EquipWeaponLast
         EquipArmor = EquipArmorLast
-        Hp = HpMax
-        Mp = MpMax
+        ExtraAtk = 0 : ExtraDef = 0
+        Hp = HpMax : Mp = MpMax
         '初始化怪物数据
         MonsterType.Clear()
         MonsterName.Clear()
@@ -54,8 +55,8 @@
         SetText(FrmMain.TextInputBox, ">" & FrmMain.TextInputBox.Tag & If(FrmMain.IsHalfSec, "_", ""))
         SetText(FrmMain.TextActionButtom, GetKeyText("RST") & " 重置\n\n" & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏
-        SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk.ToString.PadLeft(4, " ") & vbCrLf &
-                                    "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef.ToString.PadLeft(4, " "))
+        SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk(True).ToString.PadLeft(4, " ") & If(ExtraAtk > 0, "\GREEN+" & ExtraAtk.ToString.PadLeft(3, ""), "") & vbCrLf &
+                                    "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef(True).ToString.PadLeft(4, " ") & If(ExtraDef > 0, "\GREEN+" & ExtraDef.ToString.PadLeft(3, ""), ""))
         SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level))
         '主要部分
         Select Case Screen
@@ -67,7 +68,7 @@
                 SetText(FrmMain.TextTitle, "\ORANGE※ 战斗 ※")
                 SetText(FrmMain.TextAction,
                         GetKeyText("ATK") & " 攻击\n\n" &
-                        GetKeyText("WAT") & " 等待\n\n" &
+                        GetKeyText("DEF") & " 防御\n\n" &
                         GetKeyText("MAG") & " 法术\n\n" &
                         GetKeyText("ITM") & " 道具\n\n" &
                         GetKeyText("EQU") & " 装备\n")
@@ -132,6 +133,7 @@
         Next
         '下一回合
         MonsterTurnPerformed = Nothing
+        ExtraAtk = 0 : ExtraDef = 0
         StartChat({RandomOne(GetLevelIntro2(Level))}, False)
     End Sub
 

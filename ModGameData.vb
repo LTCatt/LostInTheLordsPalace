@@ -78,35 +78,35 @@
     Public Function GetItemTitle(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "道具a1"
+                Return "远古秘药"
             Case 2
-                Return "道具2"
+                Return "秘药"
             Case 3
-                Return "道具3"
+                Return "解毒药"
             Case 4
                 Return "道具4"
             Case 5
                 Return "道具5"
             Case 6
-                Return "道具6"
+                Return "回复药"
             Case 7
-                Return "道具7名称"
+                Return "道具7"
         End Select
     End Function
     Public Function GetItemDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "道具1a描述"
+                Return "将HP与MP都完全回复的珍贵的药丸。"
             Case 2
-                Return "道具2描述"
+                Return "将HP完全回复的珍贵的药丸。"
             Case 3
-                Return "道具3描述"
+                Return "可解除中毒状态的蓝色药剂。"
             Case 4
                 Return "道具4描述"
             Case 5
                 Return "道具5描述"
             Case 6
-                Return "道具6描述"
+                Return "可回复500HP的草药。"
             Case 7
                 Return "道具7描述"
         End Select
@@ -114,14 +114,21 @@
     Public Sub UseItem(Id As Integer)
         Screen = Screens.Combat
         ItemCount(Id) -= 1
-        Dim RawText As String = "* 你使用了" & GetItemTitle(Id) & "！"
+        Dim RawText As String = "* 你使用了" & GetItemTitle(Id) & "！\n"
         Select Case Id
             Case 1
+                Hp = HpMax : Mp = MpMax
+                RawText += "  你的HP与MP完全恢复了！"
             Case 2
+                Hp = HpMax
+                RawText += "  你的HP完全恢复了！"
             Case 3
+                RawText += "  但你目前并没有中毒。"
             Case 4
             Case 5
             Case 6
+                Hp = Math.Min(Hp + 500, HpMax)
+                RawText += "  你的HP恢复了500点！"
             Case 7
         End Select
         StartChat({RawText, "/TURNEND"}, True)
@@ -375,13 +382,13 @@
         Select Case Id
             Case 1
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKW", "* 你找回了W按键！", "/LEVEL2"}, True)
+                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKD", "* 你找回了D按键！", "* 即将进入下一关……", "/LEVEL2"}, True)
             Case 2
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "/LEVEL3"}, True)
+                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "* 即将进入下一关……", "/LEVEL3"}, True)
             Case 3
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了860XP！", "/UNLOCKR", "* 你找回了R按键！", "/LEVEL3"}, True)
+                StartChat({"* 恭喜获胜！你获得了860XP！", "/UNLOCKR", "* 你找回了I按键！", "* 即将进入下一关……", "/LEVEL4"}, True)
         End Select
     End Sub
 

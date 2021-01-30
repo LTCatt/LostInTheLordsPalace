@@ -128,8 +128,9 @@ Public Module ModMain
                                 ScreenData = "ATK"
                                 ScreenTitle = "攻击"
                                 Exit Sub
-                            Case "WAT"
-                                StartChat({"* 你决定无视敌人的存在。", "/TURNEND"}, True)
+                            Case "DEF"
+                                ExtraDef += 100
+                                StartChat({"* 你做好迎接敌人攻击的准备。\n  你在本回合内的防御略微提高了！", "/TURNEND"}, True)
                                 Exit Sub
                             Case "MAG"
                                 Screen = Screens.Magic
