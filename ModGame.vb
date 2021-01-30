@@ -52,7 +52,7 @@
 
     '刷新 UI
     Public Sub RefreshUI()
-        SetText(FrmMain.TextInputBox, ">" & FrmMain.TextInputBox.Tag & If(FrmMain.IsHalfSec, "_", ""))
+        SetText(FrmMain.TextInputBox, If(EnterStatus = EnterStatuses.Chat, "", ">" & FrmMain.TextInputBox.Tag & If(FrmMain.IsHalfSec, "_", "")))
         SetText(FrmMain.TextActionButtom, GetKeyText("RST") & " 重置\n\n" & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk(True).ToString.PadLeft(4, " ") & If(ExtraAtk > 0, "\GREEN+" & ExtraAtk.ToString.PadLeft(3, ""), "") & vbCrLf &
