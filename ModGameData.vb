@@ -225,9 +225,9 @@
             Case "骷髅1"
                 Return 50
             Case "骷髅2"
-                Return 150
+                Return 200
             Case "苦力怕"
-                Return 100
+                Return 20
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -235,11 +235,11 @@
     Public Function GetMonsterAtk(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
-                Return 750
+                Return 720
             Case "骷髅2"
-                Return 800
+                Return 720
             Case "苦力怕"
-                Return 100
+                Return 2000
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -275,7 +275,7 @@
             Case "骷髅2"
                 Return "骨架更加粗壮的骷髅。"
             Case "苦力怕"
-                Return "将在" & Sp & "回合后爆炸。"
+                Return "咝咝作响，将在" & Sp & "回合后爆炸。"
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -283,12 +283,12 @@
     Public Function PerformMonsterTurn(Id As Integer) As Boolean
         Select Case MonsterType(Id)
             Case "骷髅1"
-                PerformMonsterAttack(Id, "挥剑向你砍来！", True)
+                PerformMonsterAttack(Id, "挥剑向你砍来！", True, False)
             Case "骷髅2"
-                PerformMonsterAttack(Id, "挥起了它的巨剑！", True)
+                PerformMonsterAttack(Id, "挥起了它的巨剑！", True, False)
             Case "苦力怕"
                 If MonsterSp(Id) = 1 Then
-                    PerformMonsterAttack(Id, "爆炸了！", True)
+                    PerformMonsterAttack(Id, "爆炸了！", True, True)
                     MonsterType.RemoveAt(Id)
                     MonsterName.RemoveAt(Id)
                     MonsterHp.RemoveAt(Id)
@@ -302,11 +302,11 @@
         End Select
         Return True
     End Function
-    Private Sub PerformMonsterAttack(Id As Integer, Desc As String, IsMeele As Boolean)
+    Private Sub PerformMonsterAttack(Id As Integer, Desc As String, IsMeele As Boolean, IsExplode As Boolean)
         Dim Damage As Integer = Math.Max(1, GetMonsterAtk(MonsterType(Id)) - GetRealDef())
         Hp = Math.Max(0, Hp - Damage)
         Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  你受到了" & Damage & "点伤害！"
-        If EquipArmor = 6 AndAlso IsMeele Then
+        If EquipArmor = 6 AndAlso IsMeele AndAlso Not IsExplode Then
             '荆棘
             Dim BackDamage As Integer = Damage / 2
             BaseText += "\n  护甲上的荆棘对攻击者造成了" & BackDamage & "点伤害！"
@@ -316,13 +316,14 @@
     End Sub
 
     '关卡
-    Public Levels As Integer() = {1, 2}
     Public Function GetLevelName(Id As Integer) As String
         Select Case Id
             Case 1
                 Return "测试关卡1"
             Case 2
                 Return "测试关卡2"
+            Case 3
+                Return "测试关卡3"
         End Select
     End Function
     Public Function GetLevelIntro(Id As Integer) As String()
@@ -330,15 +331,19 @@
             Case 1
                 Return {"* 两只对99级的勇者而言毫无威胁的骷髅袭来。"}
             Case 2
-                Return {"* 竟然还有更多的骷髅……"}
+                Return {"* 更多的骷髅来袭！"}
+            Case 3
+                Return {"* 移动的坟墓正在靠近……"}
         End Select
     End Function
     Public Function GetLevelIntro2(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"* 骷髅的骨头在喀拉作响。"}
+                Return {"* 骷髅们的骨头喀拉作响。"}
             Case 2
                 Return {"* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。"}
+            Case 3
+                Return {"* 爆炸，硝烟，艺术！"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
@@ -347,6 +352,8 @@
                 Return {"骷髅1", "骷髅1"}
             Case 2
                 Return {"骷髅2", "骷髅2", "骷髅1"}
+            Case 3
+                Return {"苦力怕", "骷髅2"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -354,7 +361,9 @@
             Case 1
                 Return {"骷髅士兵", "骷髅卫兵"}
             Case 2
-                Return {"精英骷髅士兵", "精英骷髅卫兵", "骷髅守卫"}
+                Return {"粗骨骷髅士兵", "粗骨骷髅卫士", "骷髅守卫"}
+            Case 3
+                Return {"爬行冢", "粗骨骷髅战士"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
@@ -370,6 +379,9 @@
             Case 2
                 Screen = Screens.Empty
                 StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "/LEVEL3"}, True)
+            Case 3
+                Screen = Screens.Empty
+                StartChat({"* 恭喜获胜！你获得了860XP！", "/UNLOCKR", "* 你找回了R按键！", "/LEVEL3"}, True)
         End Select
     End Sub
 

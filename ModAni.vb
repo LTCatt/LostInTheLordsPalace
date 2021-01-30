@@ -809,6 +809,7 @@ Sleeper:
             Dim ii = 0
 
             '循环每个动画
+            If Entry.Data Is Nothing Then Entry.Data = New List(Of AniData)
             Do While ii < Entry.Data.Count
                 Dim Anim As AniData = Entry.Data(ii)
                 '执行种类

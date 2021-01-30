@@ -3,7 +3,7 @@
 
     '存档数据
     Public DisabledKey As String = "RBIGDWFKL124579"
-    Public Hp As Integer = 1, HpMax As Integer = 3652
+    Public Hp As Integer = 1, HpMax As Integer = 1652
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, BaseDef As Integer = 276
     Public ItemCount As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
@@ -29,7 +29,7 @@
     End Function
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
-        StartChat(GetLevelIntro(Id), False)
+        StartChat({RandomOne(GetLevelIntro(Id))}, False)
         '重置存档
         ItemCount = ItemCountLast
         EquipWeapon = EquipWeaponLast
@@ -132,7 +132,7 @@
         Next
         '下一回合
         MonsterTurnPerformed = Nothing
-        StartChat(GetLevelIntro2(Level), False)
+        StartChat({RandomOne(GetLevelIntro2(Level))}, False)
     End Sub
 
     '当前屏幕
