@@ -1,5 +1,16 @@
 ﻿Public Module ModGameData
 
+    '伤害
+    Public Enum DamageType
+        Melee
+        Distance
+        Fire
+        Ice
+        Dark
+        Light
+        Absolute
+    End Enum
+
     '法术
     Public Function GetMagicTitle(Id As Integer) As String
         Select Case Id
@@ -102,7 +113,7 @@
             Case 3
                 Return "可解除中毒状态的蓝色药剂。"
             Case 4
-                Return "对单个敌人造成15点伤害。"
+                Return "对单个敌人造成15点物理伤害。"
             Case 5
                 Return "获得5回合冷冻伤害抗性。"
             Case 6
@@ -136,15 +147,16 @@
                 RawText += "  但你目前并没有中毒。"
             Case 4
                 Screen = Screens.Combat
-                HurtMonster(Target, 15)
-                RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  造成了15点伤害！"
+                Dim Result = HurtMonster(Target, 15, DamageType.Melee)
+                RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！"
             Case 5
+                ExtraWarm = 5
                 RawText += "  一股暖流浸润着你的五脏六腑。"
             Case 6
                 Hp = Math.Min(Hp + 750, HpMax)
                 RawText += "  你的HP恢复了750点！"
             Case 7
-                RawText += "  你目前已经到达了最高等级。"
+                RawText += "  你目前已经到达了最高等级，无法升级。"
         End Select
         StartChat({RawText, "/TURNEND"}, True)
     End Sub
@@ -177,7 +189,7 @@
             Case 3
                 Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
             Case 4
-                Return "矮人族的至高杰作。ATK+2000，造成光明属性伤害。"
+                Return "矮人族的至高杰作。ATK+2400，造成光耀伤害。"
             Case 5
                 Return "用秘银精制的刺剑。ATK+1000，让你的隐匿检定带有优势。"
             Case 6
@@ -213,7 +225,7 @@
             Case 3
                 Return 0
             Case 4
-                Return 2000
+                Return 2400
             Case 5
                 Return 1000
             Case 6
@@ -281,13 +293,13 @@
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
-                Return 60
+                Return 100
             Case "骷髅2"
-                Return 120
+                Return 200
             Case "骑士1"
                 Return 2000
             Case "魔王"
-                Return 3100
+                Return 2800
             Case "苦力怕1"
                 Return 0
             Case "苦力怕2"
@@ -314,6 +326,24 @@
                 Throw New Exception("未知的怪物：" & Name)
         End Select
     End Function
+    Public Function GetMonsterInv(Name As String, Type As DamageType) As Double
+        Select Case Name
+            Case "骷髅1"
+                Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0.5, 1))
+            Case "骷髅2"
+                Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0.5, 1))
+            Case "骑士1"
+                Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0.5, 1))
+            Case "魔王"
+                Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0.5, 1))
+            Case "苦力怕1"
+                Return 1
+            Case "苦力怕2"
+                Return 1
+            Case Else
+                Throw New Exception("未知的怪物：" & Name)
+        End Select
+    End Function
     Public Function GetMonsterDesc(Name As String, Sp As Integer) As String
         Select Case Name
             Case "骷髅1"
@@ -335,16 +365,16 @@
     Public Function PerformMonsterTurn(Id As Integer) As Boolean
         Select Case MonsterType(Id)
             Case "骷髅1"
-                PerformMonsterAttack(Id, "挥剑向你砍来！", True, False)
+                PerformMonsterAttack(Id, "挥剑向你砍来！", DamageType.Melee)
             Case "骷髅2"
-                PerformMonsterAttack(Id, "挥起了它的巨剑！", True, False)
+                PerformMonsterAttack(Id, "挥起了它的巨剑！", DamageType.Melee)
             Case "骑士1"
-                PerformMonsterAttack(Id, "将漆黑的战戟刺向你的胸口！", True, False)
+                PerformMonsterAttack(Id, "将漆黑的战戟刺向你的胸口！", DamageType.Melee)
             Case "魔王"
                 MonsterSp(Id) += 1
                 Select Case MonsterSp(Id)
                     Case 1, 3
-                        PerformMonsterAttack(Id, "抬起手，一道黑光闪过……", True, False)
+                        PerformMonsterAttack(Id, "抬起手，一道黑光闪过……", DamageType.Dark)
                     Case 2
                         Mp = 0
                         StartChat({"* " & MonsterName(Id) & "的双眼闪过摄人的紫光，\n  你的MP被抽光了！", "/TURNEND"}, True)
@@ -369,7 +399,7 @@
                 End Select
             Case "苦力怕1"
                 If MonsterSp(Id) = 1 Then
-                    PerformMonsterAttack(Id, "爆炸了！", True, True)
+                    PerformMonsterAttack(Id, "爆炸了！", DamageType.Distance)
                     MonsterType.RemoveAt(Id)
                     MonsterName.RemoveAt(Id)
                     MonsterHp.RemoveAt(Id)
@@ -382,7 +412,7 @@
                 End If
             Case "苦力怕2"
                 If MonsterSp(Id) = 1 Then
-                    PerformMonsterAttack(Id, "引发了盛大的爆炸！", True, True)
+                    PerformMonsterAttack(Id, "引发了盛大的爆炸！", DamageType.Distance)
                     MonsterType.RemoveAt(Id)
                     MonsterName.RemoveAt(Id)
                     MonsterHp.RemoveAt(Id)
@@ -396,15 +426,15 @@
         End Select
         Return True
     End Function
-    Private Sub PerformMonsterAttack(Id As Integer, Desc As String, IsMeele As Boolean, IsExplode As Boolean)
+    Private Sub PerformMonsterAttack(Id As Integer, Desc As String, Type As DamageType)
         Dim Damage As Integer = Math.Max(1, GetMonsterAtk(MonsterType(Id)) - GetRealDef())
-        HurtPlayer(Damage)
-        Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  你受到了" & Damage & "点伤害！"
-        If EquipArmor = 6 AndAlso IsMeele AndAlso Not IsExplode Then
+        Dim Result = HurtPlayer(Damage, Type)
+        Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  " & Result(1) & "你受到了" & Result(0) & "点伤害！"
+        If EquipArmor = 6 AndAlso Type = DamageType.Melee Then
             '荆棘
-            Dim BackDamage As Integer = Damage / 2
-            BaseText += "\n  护甲上的荆棘对攻击者造成了" & BackDamage & "点伤害！"
-            HurtMonster(Id, BackDamage)
+            Dim BackDamage As Integer = Result(0) / 2
+            BaseText += "\n  护甲上的荆棘反弹了" & BackDamage & "点伤害！"
+            HurtMonster(Id, BackDamage, DamageType.Absolute)
         End If
         StartChat({BaseText, "/TURNEND"}, True)
     End Sub

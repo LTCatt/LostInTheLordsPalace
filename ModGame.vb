@@ -11,21 +11,37 @@
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 100
     Public Turn As Integer = 0
+    Public ExtraWarm As Integer = 0
     '怪物数据
     Public MonsterType As New List(Of String), MonsterName As New List(Of String), MonsterHp As New List(Of Integer), MonsterSp As New List(Of Integer)
 
     '受伤
-    Public Sub HurtMonster(Id As Integer, Damage As Integer)
+    Public Function HurtMonster(Id As Integer, Damage As Integer, Type As DamageType)
+        Dim Mul = GetMonsterInv(MonsterType(Id), Type)
+        Damage = Math.Max(If(Mul = 0, 0, 1), Mul * (GetRealAtk() - GetMonsterDef(MonsterType(Id))))
+        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul = 0.5, "收效甚微，", If(Mul = 0, "对方完全免疫，", "")))
+        '实际扣血
         MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
-    End Sub
-    Public Sub HurtPlayer(Damage As Integer)
+        '返回结果
+        Return {Damage, ExtraDisc}
+    End Function
+    Public Function HurtPlayer(Damage As Integer, Type As DamageType)
+        '获取抗性
+        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.Fire, 0.5, If(ExtraWarm > 0 AndAlso Type = DamageType.Ice, 0.5, 1))
+        Damage = Math.Max(If(Mul = 0, 0, 1), Damage * Mul)
+        If Damage = 2 Then Damage = 1
+        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul < 1, "收效甚微，", ""))
+        '实际扣血
         Hp = Math.Max(0, Hp - Damage)
         '受伤动画
-        If Damage = 1 Then Exit Sub
-        Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 4)
-        FrmMain.RectHurt.Opacity = DeltaOpacity
-        AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, DeltaOpacity * 2000, DeltaOpacity * 700, Ease:=New AniEaseOutFluent), "Hurt Player")
-    End Sub
+        If Damage > 1 Then
+            Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 4)
+            FrmMain.RectHurt.Opacity = DeltaOpacity
+            AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, DeltaOpacity * 2000, DeltaOpacity * 700, Ease:=New AniEaseOutFluent), "Hurt Player")
+        End If
+        '返回结果
+        Return {Damage, ExtraDisc}
+    End Function
 
     '原始存档
     Public ItemCountLast As Integer() = ItemCount
@@ -47,7 +63,7 @@
         ItemCount = ItemCountLast
         EquipWeapon = EquipWeaponLast
         EquipArmor = EquipArmorLast
-        ExtraAtk = 0 : ExtraDef = 0
+        ExtraAtk = 0 : ExtraDef = 0 : ExtraWarm = 0
         Hp = HpMax : Mp = MpMax
         '初始化怪物数据
         MonsterTurnPerformed = Nothing
@@ -70,7 +86,7 @@
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk(True).ToString.PadLeft(4, " ") & If(ExtraAtk > 0, "\GREEN+" & ExtraAtk.ToString.PadLeft(3, ""), "") & vbCrLf &
                                     "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef(True).ToString.PadLeft(4, " ") & If(ExtraDef > 0, "\GREEN+" & ExtraDef.ToString.PadLeft(3, ""), ""))
-        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level))
+        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level) & If(ExtraWarm > 0, "\n\ORANGE热饮 " & ExtraWarm, ""))
         '主要部分
         Select Case Screen
             Case Screens.Empty
@@ -146,7 +162,7 @@
         Next
         '下一回合
         MonsterTurnPerformed = Nothing
-        ExtraAtk = 0 : ExtraDef = 0
+        ExtraAtk = 0 : ExtraDef = 0 : If ExtraWarm > 0 Then ExtraWarm -= 1
         Turn += 1
         StartChat({GetLevelIntros(Level)(Math.Min(4, Turn))}, False)
     End Sub
@@ -191,9 +207,8 @@
             Case "ATK"
                 '攻击怪物
                 Screen = Screens.Combat
-                Dim Damage As Integer = Math.Max(1, GetRealAtk() - GetMonsterDef(MonsterType(Id)))
-                HurtMonster(Id, Damage)
-                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  造成了" & Damage & "点伤害！", "/TURNEND"}, True)
+                Dim Result = HurtMonster(Id, GetRealAtk() - GetMonsterDef(MonsterType(Id)), If(EquipWeapon = 4, DamageType.Light, DamageType.Melee))
+                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！", "/TURNEND"}, True)
             Case "ITEM4"
                 '飞刀
                 PerformItem(4, Id)
