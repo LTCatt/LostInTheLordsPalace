@@ -56,7 +56,7 @@
     End Function
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
-        StartChat({GetLevelIntros(Id)(0)}, False)
+        StartChat({GetLevelIntros(Id)(0)}, False, False)
         FrmMain.TextTitle.Opacity = 1 : AniStop("Title Opacity")
         '重置存档
         Turn = 0
@@ -134,7 +134,7 @@
         '检查怪物死亡
         For i = 0 To MonsterType.Count - 1
             If MonsterHp(i) = 0 Then
-                StartChat({"* " & MonsterName(i) & "倒下了！", "/TURNEND"}, True)
+                StartChat({"* " & MonsterName(i) & "倒下了！", "/TURNEND"}, True, False)
                 MonsterType.RemoveAt(i)
                 MonsterName.RemoveAt(i)
                 MonsterTurnPerformed.RemoveAt(i)
@@ -146,7 +146,7 @@
         '检查玩家死亡
         If Hp = 0 Then
             Screen = Screens.Empty
-            StartChat({"* 你死了！", "* 但你的灵魂还不愿放弃……", "* 光明再次在你的眼前浮现。", "/RESET"}, True)
+            StartChat({"* 你死了！", "* 但你的灵魂还不愿放弃……", "* 光明再次在你的眼前浮现。", "/RESET"}, True, True)
             Exit Sub
         End If
         '检查玩家获胜
@@ -164,7 +164,7 @@
         MonsterTurnPerformed = Nothing
         ExtraAtk = 0 : ExtraDef = 0 : If ExtraWarm > 0 Then ExtraWarm -= 1
         Turn += 1
-        StartChat({GetLevelIntros(Level)(Math.Min(4, Turn))}, False)
+        StartChat({GetLevelIntros(Level)(Math.Min(4, Turn))}, False, False)
     End Sub
 
     '当前屏幕
@@ -208,7 +208,7 @@
                 '攻击怪物
                 Screen = Screens.Combat
                 Dim Result = HurtMonster(Id, GetRealAtk() - GetMonsterDef(MonsterType(Id)), If(EquipWeapon = 4, DamageType.Light, DamageType.Melee))
-                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！", "/TURNEND"}, True)
+                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！", "/TURNEND"}, True, False)
             Case "ITEM4"
                 '飞刀
                 PerformItem(4, Id)

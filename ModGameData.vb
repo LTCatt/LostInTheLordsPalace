@@ -82,7 +82,7 @@
             Case 6
             Case 7
         End Select
-        StartChat({RawText, "/TURNEND"}, True)
+        StartChat({RawText, "/TURNEND"}, True, False)
     End Sub
 
     '道具
@@ -158,7 +158,7 @@
             Case 7
                 RawText += "  你目前已经到达了最高等级，无法升级。"
         End Select
-        StartChat({RawText, "/TURNEND"}, True)
+        StartChat({RawText, "/TURNEND"}, True, False)
     End Sub
 
     '装备
@@ -377,10 +377,10 @@
                         PerformMonsterAttack(Id, "抬起手，一道黑光闪过……", DamageType.Dark)
                     Case 2
                         Mp = 0
-                        StartChat({"* " & MonsterName(Id) & "的双眼闪过摄人的紫光，\n  你的MP被抽光了！", "/TURNEND"}, True)
+                        StartChat({"* " & MonsterName(Id) & "的双眼闪过摄人的紫光，\n  你的MP被抽光了！", "/TURNEND"}, True, False)
                     Case 4
                         FrmMain.PixelLevel = 2
-                        StartChat({"* " & MonsterName(Id) & "似乎在酝酿着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True)
+                        StartChat({"* " & MonsterName(Id) & "似乎在酝酿着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
                     Case 5
                         FrmMain.PixelLevel = 3
                         StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。",
@@ -393,7 +393,7 @@
                            "* 知识，概念……",
                            "* 抽象的，难以理解的，超形上学的……",
                            "* 你到底失去了什么？",
-                           "/WIN"}, True)
+                           "/WIN"}, True, True)
                     Case Else
                         Throw New Exception("未知的行动轮：" & MonsterSp(Id))
                 End Select
@@ -408,7 +408,7 @@
                     Return False
                 Else
                     MonsterSp(Id) -= 1
-                    StartChat({"* " & MonsterName(Id) & "正在嘶嘶作响……", "/TURNEND"}, True)
+                    StartChat({"* " & MonsterName(Id) & "正在嘶嘶作响……", "/TURNEND"}, True, False)
                 End If
             Case "苦力怕2"
                 If MonsterSp(Id) = 1 Then
@@ -421,7 +421,7 @@
                     Return False
                 Else
                     MonsterSp(Id) -= 1
-                    StartChat({"* " & MonsterName(Id) & "正与雷电起舞……", "/TURNEND"}, True)
+                    StartChat({"* " & MonsterName(Id) & "正与雷电起舞……", "/TURNEND"}, True, False)
                 End If
         End Select
         Return True
@@ -436,7 +436,7 @@
             BaseText += "\n  护甲上的荆棘反弹了" & BackDamage & "点伤害！"
             HurtMonster(Id, BackDamage, DamageType.Absolute)
         End If
-        StartChat({BaseText, "/TURNEND"}, True)
+        StartChat({BaseText, "/TURNEND"}, True, False)
     End Sub
 
     '关卡
@@ -560,20 +560,20 @@
                            "* 你在魔宫之中飞速穿梭，一只只怪物在你的剑下飞灰烟灭。",
                            "* 魔王的房间已经近在咫尺。",
                            "* 这片大地所承受的苦难终要走向尽头。",
-                           "/LEVEL101"}, True)
+                           "/LEVEL101"}, True, True)
             Case 101
                 StartChat({"* 恭喜获胜！你获得了3855XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你迈步走向下一个路口，推开大门……",
                            "* 奇异的紫色光芒涌现。",
                            "* 这一刻，你知道你漫长的旅程终于走到了终点。",
-                           "/LEVEL102"}, True)
+                           "/LEVEL102"}, True, True)
             Case 102
                 FrmMain.PixelLevel = 1
                 StartChat({"* ……",
                            "* …………",
                            "* ………………",
                            "* 当你再次睁开眼……",
-                           "/LEVEL1"}, True)
+                           "/LEVEL1"}, True, True)
             Case 1
                 StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 顷刻间，那些骷髅刚才造成的伤痕已经消失不见。",
@@ -582,7 +582,7 @@
                            "/UNLOCKD",
                            "* 「D」的内联逻辑已恢复。",
                            "* 你抬起头……",
-                           "/LEVEL2"}, True)
+                           "/LEVEL2"}, True, True)
             Case 2
                 StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你决定重新踏上魔宫之旅。",
@@ -590,21 +590,21 @@
                            "/UNLOCKR",
                            "* 「R」的内联逻辑已恢复。",
                            "* 你迈步走入魔宫入口的台阶……",
-                           "/LEVEL3"}, True)
+                           "/LEVEL3"}, True, True)
             Case 3
                 StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 所幸，你的行囊还没有因为爆炸损坏。",
                            "/UNLOCKI",
                            "* 「I」的内联逻辑已恢复。",
                            "* 你刚整理好行囊，就听到了嗞啦作响的电弧声。",
-                           "/LEVEL4"}, True)
+                           "/LEVEL4"}, True, True)
             Case 4
                 StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 但凡能再多一点助力，刚才的战斗也不至如此艰辛。",
                            "/UNLOCK4",
                            "* 「4」的内联逻辑已恢复。",
                            "* 看上去你走到了黑火药之厅的尽头。",
-                           "/LEVEL5"}, True)
+                           "/LEVEL5"}, True, True)
             Case 5
                 StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
                            "* 你离开了黑火药之厅。\n  在你的前方，是元素与魔法的领域。",
@@ -612,7 +612,7 @@
                            "/UNLOCKA",
                            "* 「A」的内联逻辑已恢复。",
                            "* 没有下一关了。",
-                           "* 真的没有下一关了。"}, True)
+                           "* 真的没有下一关了。"}, True, True)
         End Select
     End Sub
 

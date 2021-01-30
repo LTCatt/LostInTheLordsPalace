@@ -112,7 +112,7 @@ Public Module ModMain
                 SetText(FrmMain.TextInputResult, "\DARKGRAY等待玩家输入指令。")
                 If Input = "RST" Then
                     StartLevel(Level)
-                    StartChat({"* 伊尔梅特的祝福已生效。\n  创伤已被抚平，时光已被重置。"}, False)
+                    StartChat({"* 伊尔梅特的祝福已生效。\n  创伤已被抚平，时光已被重置。"}, False, False)
                     Exit Sub
                 ElseIf Input.StartsWith("TP ") Then
                     Level = Input.Replace("TP ", "")
@@ -131,7 +131,7 @@ Public Module ModMain
                                 Exit Sub
                             Case "DEF", "DEFENCE"
                                 ExtraDef += 100
-                                StartChat({"* 你做好迎接敌人攻击的准备。\n  你在本回合内的防御略微提高了！", "/TURNEND"}, True)
+                                StartChat({"* 你做好迎接敌人攻击的准备。\n  你在本回合内的防御略微提高了！", "/TURNEND"}, True, False)
                                 Exit Sub
                             Case "MAG", "MAGIC"
                                 Screen = Screens.Magic
@@ -175,7 +175,7 @@ Public Module ModMain
                                     Else
                                         EquipArmor = Input
                                     End If
-                                    StartChat({"* 你将你所装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "更换为了" & GetEquipTitle(Input) & "。", "/TURNEND"}, True)
+                                    StartChat({"* 你将你所装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "更换为了" & GetEquipTitle(Input) & "。", "/TURNEND"}, True, False)
                                 End If
                                 Exit Sub
                             Case "ESC"
@@ -220,8 +220,10 @@ Public Module ModMain
 
     '对话框
     Private ChatContents As New List(Of String)
-    Public Sub StartChat(Contents As String(), RequireEnsure As Boolean)
+    Private IsNowImportant As Boolean = False
+    Public Sub StartChat(Contents As String(), RequireEnsure As Boolean, IsImportant As Boolean)
         ChatContents = New List(Of String)(Contents)
+        IsNowImportant = IsImportant
         If RequireEnsure Then
             EnterStatus = EnterStatuses.Chat
             FrmMain.TextInputBox.Tag = ""
@@ -230,38 +232,42 @@ Public Module ModMain
         FrmMain.TextChat.Tag = ""
         NextChat()
     End Sub
-    Public Sub StartOrAddChat(Contents As String(), RequireEnsure As Boolean)
-        If EnterStatus = EnterStatuses.Chat AndAlso RequireEnsure Then
-            '都需要确认，追加
-            ChatContents.AddRange(Contents)
-        ElseIf EnterStatus = EnterStatuses.Chat AndAlso Not RequireEnsure Then
-            '正在进行更重要的对话，忽略
-        Else
-            '未进行对话
-            StartChat(Contents, RequireEnsure)
-        End If
-    End Sub
+    'Public Sub StartOrAddChat(Contents As String(), RequireEnsure As Boolean)
+    '    If EnterStatus = EnterStatuses.Chat AndAlso RequireEnsure Then
+    '        '都需要确认，追加
+    '        ChatContents.AddRange(Contents)
+    '    ElseIf EnterStatus = EnterStatuses.Chat AndAlso Not RequireEnsure Then
+    '        '正在进行更重要的对话，忽略
+    '    Else
+    '        '未进行对话
+    '        StartChat(Contents, RequireEnsure)
+    '    End If
+    'End Sub
     Public Sub NextChat()
-        AniStop("Chat Content")
         If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
             '补全当前对话
-            FrmMain.TextChat.Text = FrmMain.TextChat.Tag
+            If Not IsNowImportant Then
+                AniStop("Chat Content")
+                FrmMain.TextChat.Text = FrmMain.TextChat.Tag
+            End If
         ElseIf ChatContents.Count > 0 AndAlso Not ChatContents(0).StartsWith("/") Then
             '下一句对话
             If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, "\DARKGRAY请按任意键继续。")
-            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(100, 100, 100))
+            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, If(IsNowImportant, New MyColor(0, 255, 255), New MyColor(255, 255, 255)), New MyColor(100, 100, 100))
             '处理文本
             Dim RawText As String = GetRawText(ChatContents.First)
             FrmMain.TextChat.Text = RawText
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
+            AniStop("Chat Content")
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=30)
+                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 40, 25))
                 }, "Chat Content")
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)
         ElseIf ChatContents.Count > 0 Then
             '执行命令
+            AniStop("Chat Content")
             Dim Cmd = ChatContents(0)
             ChatContents.RemoveAt(0)
             If ChatContents.Count = 0 Then EndChat()
@@ -282,6 +288,7 @@ Public Module ModMain
             End If
         Else
             '结束对话
+            AniStop("Chat Content")
             EndChat()
         End If
     End Sub
