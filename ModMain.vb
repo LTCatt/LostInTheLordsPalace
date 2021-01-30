@@ -267,6 +267,8 @@ Public Module ModMain
                 TurnEnd()
             ElseIf Cmd.StartsWith("/RESET") Then
                 Enter("RST")
+            ElseIf Cmd.StartsWith("/WIN") Then
+                Enter("WIN")
             ElseIf Cmd.StartsWith("/LOCK") Then
                 DisabledKey &= Cmd.Replace("/LOCK", "")
                 NextChat()
