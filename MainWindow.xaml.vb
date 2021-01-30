@@ -27,6 +27,7 @@ Public Class MainWindow
         RunInNewThread(Sub()
                            Do While True
                                IsHalfSec = Not IsHalfSec
+                               If IsHalfSec Then AniStart({AaTranslateY(ImgLine, 40, 1000), AaTranslateY(ImgLine, -40, 1, After:=True)})
                                Thread.Sleep(500)
                            Loop
                        End Sub, "Half Sec")

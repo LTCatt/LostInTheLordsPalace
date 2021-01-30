@@ -140,6 +140,9 @@ Public Module ModMain
                             Case "ITM"
                                 Screen = Screens.Item
                                 Exit Sub
+                            Case "WIN"
+                                PerformLevelWin(Level)
+                                Exit Sub
                         End Select
                     Case Screens.Select
                         '选取对象

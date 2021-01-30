@@ -149,7 +149,7 @@
     Public Function GetEquipDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "精灵一族的传奇之剑，仅有精灵敬重之人才可握持。ATK+2800。"
+                Return "精灵一族的传奇之剑，仅精灵敬重之人才可握持。ATK+2800。"
             Case 2
                 Return "失落科技与魔法结合的究极护甲。ATK+100，DEF+1800。"
             Case 3
@@ -358,6 +358,11 @@
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
+        '存档
+        ItemCountLast = ItemCount
+        EquipWeaponLast = EquipWeapon
+        EquipArmorLast = EquipArmor
+        '切换关卡
         Select Case Id
             Case 1
                 Screen = Screens.Empty
