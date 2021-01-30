@@ -55,6 +55,7 @@
             Case Screens.Empty
                 SetText(FrmMain.TextTitle, "")
                 SetText(FrmMain.TextAction, "")
+                SetText(FrmMain.TextInfo, "")
             Case Screens.Combat
                 SetText(FrmMain.TextTitle, "\ORANGE※ 战斗 ※")
                 SetText(FrmMain.TextAction,
@@ -89,10 +90,41 @@
     End Sub
 
     '玩家的回合结束
+    Public MonsterTurnPerformed As List(Of Boolean)
     Public Sub TurnEnd()
         Screen = Screens.Combat
         '检查怪物死亡
-
+        For i = 0 To MonsterType.Count - 1
+            If MonsterHp(i) = 0 Then
+                StartChat({"* " & MonsterName(i) & "倒下了！", "/TURNEND"}, True)
+                MonsterType.RemoveAt(i)
+                MonsterName.RemoveAt(i)
+                MonsterHp.RemoveAt(i)
+                MonsterSp.RemoveAt(i)
+                Exit Sub
+            End If
+        Next
+        '检查玩家死亡
+        If Hp = 0 Then
+            Screen = Screens.Empty
+            StartChat({"* 你死了！", "* 即将重置本场战斗……", "/RESET"}, True)
+            Exit Sub
+        End If
+        '检查玩家获胜
+        If MonsterType.Count = 0 Then
+            PerformLevelWin(Level)
+            Exit Sub
+        End If
+        '怪物的回合
+        If MonsterTurnPerformed Is Nothing Then MonsterTurnPerformed = New List(Of Boolean) From {False, False, False, False, False, False, False}
+        For i = 0 To MonsterType.Count - 1
+            If MonsterTurnPerformed(i) Then Continue For
+            If PerformMonsterTurn(i) Then MonsterTurnPerformed(i) = True
+            Exit Sub
+        Next
+        '下一回合
+        MonsterTurnPerformed = Nothing
+        StartChat(GetLevelIntro2(Level), False)
     End Sub
 
     '当前屏幕
@@ -116,7 +148,7 @@
                                  MonsterName(i).PadRight(9, " ") & "\REDHP " & MonsterHp(i).ToString.PadLeft(4, " "),
                                  "\DARKGRAY" & GetMonsterDesc(MonsterType(i), MonsterSp(i))).Replace("KEY", "WHITE").Replace("YELLOW", "WHITE"))
         Next
-        Return Join(Info.ToArray, vbCrLf)
+        Return If(Join(Info.ToArray, vbCrLf), "")
     End Function
 
     '选取对象
@@ -127,7 +159,7 @@
                                  MonsterName(i).PadRight(9, " ") & "\REDHP " & MonsterHp(i).ToString.PadLeft(4, " "),
                                  "\DARKGRAY" & GetMonsterDesc(MonsterType(i), MonsterSp(i))))
         Next
-        Return Join(Info.ToArray, vbCrLf)
+        Return If(Join(Info.ToArray, vbCrLf), "")
     End Function
     Public Sub PerformSelect(Id As Integer)
         Select Case ScreenData

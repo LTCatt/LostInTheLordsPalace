@@ -209,7 +209,7 @@
             Case "大史莱姆"
                 Return 1000
             Case "苦力怕"
-                Return 1000
+                Return 500
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -217,11 +217,11 @@
     Public Function GetMonsterAtk(Name As String) As Integer
         Select Case Name
             Case "史莱姆"
-                Return 100
+                Return 500
             Case "大史莱姆"
-                Return 500
+                Return 1000
             Case "苦力怕"
-                Return 500
+                Return 10000
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -262,31 +262,82 @@
                 Throw New Exception("未知的怪物：" & Name)
         End Select
     End Function
+    Public Function PerformMonsterTurn(Id As Integer) As Boolean
+        Select Case MonsterType(Id)
+            Case "史莱姆", "大史莱姆"
+                PerformMonsterAttack(Id, "向你扑来！")
+            Case "苦力怕"
+                If MonsterSp(Id) = 1 Then
+                    PerformMonsterAttack(Id, "爆炸了！")
+                    MonsterType.RemoveAt(Id)
+                    MonsterName.RemoveAt(Id)
+                    MonsterHp.RemoveAt(Id)
+                    MonsterSp.RemoveAt(Id)
+                    MonsterTurnPerformed.RemoveAt(Id)
+                    Return False
+                Else
+                    MonsterSp(Id) -= 1
+                    StartChat({"* " & MonsterName(Id) & "正在嘶嘶作响……", "/TURNEND"}, True)
+                End If
+        End Select
+        Return True
+    End Function
+    Private Sub PerformMonsterAttack(Id As Integer, Desc As String)
+        Dim Damage As Integer = Math.Max(1, GetMonsterAtk(MonsterType(Id)) - GetRealDef())
+        Hp = Math.Max(0, Hp - Damage)
+        StartChat({"* " & MonsterName(Id) & Desc & "\n  你受到了" & Damage & "点伤害！", "/TURNEND"}, True)
+    End Sub
 
     '关卡
+    Public Levels As Integer() = {1, 2}
     Public Function GetLevelName(Id As Integer) As String
         Select Case Id
             Case 1
                 Return "第1关"
+            Case 2
+                Return "第2关"
         End Select
     End Function
     Public Function GetLevelIntro(Id As Integer) As String()
         Select Case Id
             Case 1
                 Return {"* 一场测试战斗。"}
+            Case 2
+                Return {"* 两场测试战斗。"}
+        End Select
+    End Function
+    Public Function GetLevelIntro2(Id As Integer) As String()
+        Select Case Id
+            Case 1
+                Return {"* 一场测试战斗还在进行。"}
+            Case 2
+                Return {"* 两场测试战斗还在进行。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"史莱姆", "史莱姆", "大史莱姆", "苦力怕"}
+                Return {"史莱姆", "史莱姆", "苦力怕"}
+            Case 2
+                Return {"史莱姆", "苦力怕"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"史莱姆1", "史莱姆2", "大史莱姆", "苦力怕"}
+                Return {"史莱姆1", "史莱姆2", "苦力怕"}
+            Case 2
+                Return {"史莱姆？", "苦力怕"}
         End Select
     End Function
+    Public Sub PerformLevelWin(Id As Integer)
+        Select Case Id
+            Case 1
+                Screen = Screens.Empty
+                StartChat({"* 战斗结束！你获得了" & RandomInteger(1000, 5000) & "XP！", "/NEXTLEVEL"}, True)
+            Case 2
+
+        End Select
+    End Sub
 
 End Module

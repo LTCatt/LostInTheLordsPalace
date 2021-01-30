@@ -51,7 +51,7 @@
                 TargetColor = New SolidColorBrush(Color.FromRgb(160, 160, 160))
                 Delta = 4
             ElseIf Inline.StartsWith("DARKGRAY") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(60, 60, 60))
+                TargetColor = New SolidColorBrush(Color.FromRgb(100, 100, 100))
                 Delta = 8
             Else
                 TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
@@ -193,6 +193,17 @@
         FrmMain.TextChat.Tag = ""
         NextChat()
     End Sub
+    Public Sub StartOrAddChat(Contents As String(), RequireEnsure As Boolean)
+        If EnterStatus = EnterStatuses.Chat AndAlso RequireEnsure Then
+            '都需要确认，追加
+            ChatContents.AddRange(Contents)
+        ElseIf EnterStatus = EnterStatuses.Chat AndAlso Not RequireEnsure Then
+            '正在进行更重要的对话，忽略
+        Else
+            '未进行对话
+            StartChat(Contents, RequireEnsure)
+        End If
+    End Sub
     Public Sub NextChat()
         AniStop("Chat Content")
         If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
@@ -200,15 +211,15 @@
             FrmMain.TextChat.Text = FrmMain.TextChat.Tag
         ElseIf ChatContents.Count > 0 AndAlso Not ChatContents(0).StartsWith("/") Then
             '下一句对话
-            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \GRAY按任意键以继续。")
-            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(160, 160, 160))
+            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \GRAY请按任意键继续。")
+            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(100, 100, 100))
             '处理文本
             Dim RawText As String = GetRawText(ChatContents.First)
             FrmMain.TextChat.Text = RawText
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=30)
+                     AaTextAppear(FrmMain.TextChat, Time:=25)
                 }, "Chat Content")
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)
@@ -217,10 +228,19 @@
             Dim Cmd = ChatContents(0)
             ChatContents.RemoveAt(0)
             If ChatContents.Count = 0 Then EndChat()
-            Select Case Cmd
-                Case "/TURNEND"
-                    TurnEnd()
-            End Select
+            If Cmd.StartsWith("/TURNEND") Then
+                TurnEnd()
+            ElseIf Cmd.StartsWith("/RESET") Then
+                Enter("RST")
+            ElseIf Cmd.StartsWith("/NEXTLEVEL") Then
+                For i = 0 To Levels.Count - 1
+                    If Levels(i) = Level Then
+                        Level = Levels(i + 1)
+                        StartLevel(Level)
+                        Exit For
+                    End If
+                Next
+            End If
         Else
             '结束对话
             EndChat()
