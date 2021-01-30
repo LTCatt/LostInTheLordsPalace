@@ -79,6 +79,7 @@ Public Class MainWindow
         Dim RealKey As String = e.Key.ToString.ToUpper
         If RealKey.StartsWith("NUMPAD") Then RealKey = RealKey.Substring(6)
         If RealKey.StartsWith("D") AndAlso RealKey.Length = 2 Then RealKey = RealKey.Substring(1)
+        If RealKey = "SPACE" Then RealKey = " "
         '按下任意按键
         If EnterStatus = EnterStatuses.Chat Then
             NextChat()
@@ -95,7 +96,7 @@ Public Class MainWindow
             If TextInputBox.Tag <> "" Then Enter(TextInputBox.Tag)
             TextInputBox.Tag = ""
         ElseIf RealKey.Length = 1 Then
-            If DisabledKey.Contains(RealKey) Then
+            If DisabledKey.Contains(RealKey) AndAlso Not e.KeyboardDevice.IsKeyDown(Key.RightCtrl) Then
                 SetText(FrmMain.TextInputResult, "\RED错误：无法识别的按键！")
                 Beep()
             Else

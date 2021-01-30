@@ -114,6 +114,10 @@ Public Module ModMain
                     StartLevel(Level)
                     StartChat({"* 本场战斗已重置！"}, False)
                     Exit Sub
+                ElseIf Input.StartsWith("TP ") Then
+                    Level = Input.Replace("TP ", "")
+                    StartLevel(Level)
+                    Exit Sub
                 End If
                 Select Case Screen
                     Case Screens.Empty
@@ -243,7 +247,7 @@ Public Module ModMain
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=25)
+                     AaTextAppear(FrmMain.TextChat, Time:=30)
                 }, "Chat Content")
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)
@@ -262,14 +266,8 @@ Public Module ModMain
             ElseIf Cmd.StartsWith("/UNLOCK") Then
                 DisabledKey = DisabledKey.Replace(Cmd.Replace("/UNLOCK", ""), "")
                 NextChat()
-            ElseIf Cmd.StartsWith("/NEXTLEVEL") Then
-                For i = 0 To Levels.Count - 1
-                    If Levels(i) = Level Then
-                        Level = Levels(i + 1)
-                        StartLevel(Level)
-                        Exit For
-                    End If
-                Next
+            ElseIf Cmd.StartsWith("/LEVEL") Then
+                Enter(Cmd.Replace("/LEVEL", "TP "))
             End If
         Else
             '结束对话

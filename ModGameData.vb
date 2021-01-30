@@ -361,10 +361,10 @@
         Select Case Id
             Case 1
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKW", "* 你找回了W按键！", "/NEXTLEVEL"}, True)
+                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKW", "* 你找回了W按键！", "/LEVEL2"}, True)
             Case 2
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "/NEXTLEVEL"}, True)
+                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "/LEVEL3"}, True)
         End Select
     End Sub
 
