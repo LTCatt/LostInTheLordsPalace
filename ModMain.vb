@@ -173,7 +173,7 @@ Public Module ModMain
                                     Else
                                         EquipArmor = Input
                                     End If
-                                    StartChat({"* 你将装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "切换为了" & GetEquipTitle(Input) & "！", "/TURNEND"}, True)
+                                    StartChat({"* 你将你所装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "更换为了" & GetEquipTitle(Input) & "。", "/TURNEND"}, True)
                                 End If
                                 Exit Sub
                             Case "ESC"
