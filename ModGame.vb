@@ -2,7 +2,7 @@
     Public FrmMain As MainWindow
 
     '存档数据
-    Public DisabledKey As String = "RBIGDFKV124579"
+    Public DisabledKey As String = "RBIGDWFKV124579"
     Public Hp As Integer = 1, HpMax As Integer = 3652
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, BaseDef As Integer = 276
@@ -67,6 +67,7 @@
                 SetText(FrmMain.TextTitle, "\ORANGE※ 战斗 ※")
                 SetText(FrmMain.TextAction,
                         GetKeyText("ATK") & " 攻击\n\n" &
+                        GetKeyText("WAT") & " 等待\n\n" &
                         GetKeyText("MAG") & " 法术\n\n" &
                         GetKeyText("ITM") & " 道具\n\n" &
                         GetKeyText("EQU") & " 装备\n")

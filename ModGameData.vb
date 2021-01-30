@@ -224,8 +224,10 @@
         Select Case Name
             Case "骷髅1"
                 Return 50
+            Case "骷髅2"
+                Return 150
             Case "苦力怕"
-                Return 500
+                Return 100
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -234,8 +236,10 @@
         Select Case Name
             Case "骷髅1"
                 Return 750
+            Case "骷髅2"
+                Return 800
             Case "苦力怕"
-                Return 10000
+                Return 100
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -243,7 +247,9 @@
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
-                Return 0
+                Return 10
+            Case "骷髅2"
+                Return 20
             Case "苦力怕"
                 Return 0
             Case Else
@@ -253,6 +259,8 @@
     Public Function GetMonsterSp(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
+                Return 0
+            Case "骷髅2"
                 Return 0
             Case "苦力怕"
                 Return 3
@@ -264,6 +272,8 @@
         Select Case Name
             Case "骷髅1"
                 Return "攻击性强，但极度脆弱的敌人。"
+            Case "骷髅2"
+                Return "骨架更加粗壮的骷髅。"
             Case "苦力怕"
                 Return "将在" & Sp & "回合后爆炸。"
             Case Else
@@ -274,6 +284,8 @@
         Select Case MonsterType(Id)
             Case "骷髅1"
                 PerformMonsterAttack(Id, "挥剑向你砍来！", True)
+            Case "骷髅2"
+                PerformMonsterAttack(Id, "挥起了它的巨剑！", True)
             Case "苦力怕"
                 If MonsterSp(Id) = 1 Then
                     PerformMonsterAttack(Id, "爆炸了！", True)
@@ -308,9 +320,9 @@
     Public Function GetLevelName(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "第1关"
+                Return "测试关卡1"
             Case 2
-                Return "第2关"
+                Return "测试关卡2"
         End Select
     End Function
     Public Function GetLevelIntro(Id As Integer) As String()
@@ -318,7 +330,7 @@
             Case 1
                 Return {"* 两只对99级的勇者而言毫无威胁的骷髅袭来。"}
             Case 2
-                Return {"* 两场测试战斗。"}
+                Return {"* 竟然还有更多的骷髅……"}
         End Select
     End Function
     Public Function GetLevelIntro2(Id As Integer) As String()
@@ -326,7 +338,7 @@
             Case 1
                 Return {"* 骷髅的骨头在喀拉作响。"}
             Case 2
-                Return {"* 两场测试战斗还在进行。"}
+                Return {"* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
@@ -334,7 +346,7 @@
             Case 1
                 Return {"骷髅1", "骷髅1"}
             Case 2
-                Return {"史莱姆", "苦力怕"}
+                Return {"骷髅2", "骷髅2", "骷髅1"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -342,16 +354,17 @@
             Case 1
                 Return {"骷髅士兵", "骷髅卫兵"}
             Case 2
-                Return {"史莱姆？", "苦力怕"}
+                Return {"精英骷髅士兵", "精英骷髅卫兵", "骷髅守卫"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
         Select Case Id
             Case 1
                 Screen = Screens.Empty
-                StartChat({"* 恭喜获胜！你获得了" & RandomInteger(1000, 5000) & "XP！", "/NEXTLEVEL"}, True)
+                StartChat({"* 恭喜获胜！你获得了620XP！", "/UNLOCKW", "* 你找回了W按键！", "/NEXTLEVEL"}, True)
             Case 2
-
+                Screen = Screens.Empty
+                StartChat({"* 恭喜获胜！你获得了1205XP！", "/UNLOCKR", "* 你找回了R按键！", "/NEXTLEVEL"}, True)
         End Select
     End Sub
 

@@ -124,6 +124,9 @@ Public Module ModMain
                                 ScreenData = "ATK"
                                 ScreenTitle = "攻击"
                                 Exit Sub
+                            Case "WAT"
+                                StartChat({"* 你决定无视敌人的存在。", "/TURNEND"}, True)
+                                Exit Sub
                             Case "MAG"
                                 Screen = Screens.Magic
                                 Exit Sub
@@ -253,6 +256,12 @@ Public Module ModMain
                 TurnEnd()
             ElseIf Cmd.StartsWith("/RESET") Then
                 Enter("RST")
+            ElseIf Cmd.StartsWith("/LOCK") Then
+                DisabledKey &= Cmd.Replace("/LOCK", "")
+                NextChat()
+            ElseIf Cmd.StartsWith("/UNLOCK") Then
+                DisabledKey = DisabledKey.Replace(Cmd.Replace("/UNLOCK", ""), "")
+                NextChat()
             ElseIf Cmd.StartsWith("/NEXTLEVEL") Then
                 For i = 0 To Levels.Count - 1
                     If Levels(i) = Level Then
