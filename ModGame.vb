@@ -9,7 +9,12 @@
     Public ItemCount As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 1
+
+    '怪物数据
     Public MonsterType As New List(Of String), MonsterName As New List(Of String), MonsterHp As New List(Of Integer), MonsterSp As New List(Of Integer)
+    Public Sub HurtMonster(Id As Integer, Damage As Integer)
+        MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
+    End Sub
 
     '原始存档
     Public ItemCountLast As Integer() = {0, 999, 999, 999, 0, 99, 9, 999}
@@ -17,10 +22,10 @@
 
     '修改存档
     Public Function GetRealAtk() As Integer
-        Return BaseAtk + GetEquipData(EquipWeapon)
+        Return BaseAtk + GetEquipAtk(EquipWeapon) + GetEquipAtk(EquipArmor)
     End Function
     Public Function GetRealDef() As Integer
-        Return BaseDef + GetEquipData(EquipArmor)
+        Return BaseDef + GetEquipDef(EquipWeapon) + GetEquipDef(EquipArmor)
     End Function
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
@@ -46,6 +51,7 @@
 
     '刷新 UI
     Public Sub RefreshUI()
+        SetText(FrmMain.TextInputBox, ">" & FrmMain.TextInputBox.Tag & If(FrmMain.IsHalfSec, "_", ""))
         SetText(FrmMain.TextActionButtom, GetKeyText("RST") & " 重置\n" & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk.ToString.PadLeft(4, " ") & vbCrLf &
@@ -93,6 +99,7 @@
     '玩家的回合结束
     Public MonsterTurnPerformed As List(Of Boolean)
     Public Sub TurnEnd()
+        If MonsterTurnPerformed Is Nothing Then MonsterTurnPerformed = New List(Of Boolean) From {False, False, False, False, False, False, False}
         Screen = Screens.Combat
         '检查怪物死亡
         For i = 0 To MonsterType.Count - 1
@@ -100,6 +107,7 @@
                 StartChat({"* " & MonsterName(i) & "倒下了！", "/TURNEND"}, True)
                 MonsterType.RemoveAt(i)
                 MonsterName.RemoveAt(i)
+                MonsterTurnPerformed.RemoveAt(i)
                 MonsterHp.RemoveAt(i)
                 MonsterSp.RemoveAt(i)
                 Exit Sub
@@ -117,7 +125,6 @@
             Exit Sub
         End If
         '怪物的回合
-        If MonsterTurnPerformed Is Nothing Then MonsterTurnPerformed = New List(Of Boolean) From {False, False, False, False, False, False, False}
         For i = 0 To MonsterType.Count - 1
             If MonsterTurnPerformed(i) Then Continue For
             If PerformMonsterTurn(i) Then MonsterTurnPerformed(i) = True
@@ -168,7 +175,7 @@
                 '攻击怪物
                 Screen = Screens.Combat
                 Dim Damage As Integer = Math.Max(1, GetRealAtk() - GetMonsterDef(MonsterType(Id)))
-                MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
+                HurtMonster(Id, Damage)
                 StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  造成了" & Damage & "点伤害！", "/TURNEND"}, True)
         End Select
     End Sub
@@ -192,7 +199,7 @@
                 Info.Add(GetItemText(i, "\GRAY无物品", ""))
             Else
                 Info.Add(GetItemText(i,
-                                     GetItemTitle(i).PadRight(9, " ") & "\GRAYx" & ItemCount(i),
+                                     GetItemTitle(i).PadRight(6, " ") & "\GRAYx" & ItemCount(i),
                                      "\DARKGRAY" & GetItemDesc(i)))
             End If
         Next
@@ -204,7 +211,7 @@
         Dim Info As New List(Of String)
         For i = 1 To 7
             Info.Add(GetItemText(i,
-                                 GetEquipTitle(i).PadRight(9, " ") & If(EquipArmor = i OrElse EquipWeapon = i, "\DARKBLUE <已装备>", ""),
+                                 GetEquipTitle(i).PadRight(6, " ") & If(EquipArmor = i OrElse EquipWeapon = i, "\BLUE <已装备>", ""),
                                  "\DARKGRAY" & GetEquipDesc(i)))
         Next
         Return Join(Info.ToArray, vbCrLf)

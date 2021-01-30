@@ -75,8 +75,8 @@ Public Module ModMain
                             If RandomInteger(1, 10) > 5 Then Letter = Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
                             RealTargetColor = TargetColor * RandomInteger(40, 70) * 0.01
                         Else
-                            If RandomInteger(1, 10) > 8 Then Letter = Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
-                            RealTargetColor = TargetColor * ((RandomInteger(85, 100) * 0.01) ^ 2)
+                            If RandomInteger(1, 10) > 9 Then Letter = Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
+                            RealTargetColor = TargetColor * ((RandomInteger(90, 100) * 0.01) ^ 2)
                         End If
                         Target.Inlines.Add(New Run(StrConv(Letter, VbStrConv.Wide)) With {.Foreground = RealTargetColor})
                     Else
@@ -196,7 +196,7 @@ Public Module ModMain
                                 Exit Sub
                         End Select
                 End Select
-                SetText(FrmMain.TextInputResult, "\RED指令未知或无效，请输入屏幕上以黄色显示的指令！")
+                SetText(FrmMain.TextInputResult, "\RED错误：指令未知或无效，请输入屏幕上以黄色显示的指令！")
             Case Else
                 SetText(FrmMain.TextInputResult, "\RED未知的输入状态！")
         End Select
@@ -209,7 +209,6 @@ Public Module ModMain
         If RequireEnsure Then
             EnterStatus = EnterStatuses.Chat
             FrmMain.TextInputBox.Tag = ""
-            FrmMain.RefreshInputBox()
         End If
         FrmMain.TextChat.Text = ""
         FrmMain.TextChat.Tag = ""

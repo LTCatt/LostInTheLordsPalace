@@ -131,17 +131,17 @@
     Public Function GetEquipTitle(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "装备1a"
+                Return "月刃"
             Case 2
-                Return "装备2"
+                Return "以太之甲"
             Case 3
-                Return "装备3"
+                Return "精金板甲"
             Case 4
                 Return "装备4"
             Case 5
                 Return "装备5"
             Case 6
-                Return "装备6"
+                Return "荆棘链甲"
             Case 7
                 Return "装备7名称"
         End Select
@@ -149,17 +149,17 @@
     Public Function GetEquipDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "装备1描述"
+                Return "精灵一族的传奇之剑，仅有精灵敬重之人才可握持。ATK+2800。"
             Case 2
-                Return "装备2描述"
+                Return "失落科技与魔法结合的究极护甲。ATK+100，DEF+1800。"
             Case 3
-                Return "装备3描述"
+                Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
             Case 4
                 Return "装备4描述"
             Case 5
                 Return "装备5描述"
             Case 6
-                Return "装备6描述"
+                Return "缠满倒刺的链甲。DEF+300，反弹受到的一半近战伤害。"
             Case 7
                 Return "装备7描述"
         End Select
@@ -171,43 +171,59 @@
             Case 2
                 Return False
             Case 3
-                Return True
+                Return False
             Case 4
                 Return False
             Case 5
                 Return False
             Case 6
-                Return True
+                Return False
             Case 7
                 Return False
         End Select
     End Function
-    Public Function GetEquipData(Id As Integer) As Integer
+    Public Function GetEquipAtk(Id As Integer) As Integer
         Select Case Id
             Case 1
-                Return 10
+                Return 2800
             Case 2
-                Return 20
-            Case 3
-                Return 30
-            Case 4
-                Return 50
-            Case 5
                 Return 100
+            Case 3
+                Return 0
+            Case 4
+                Return 0
+            Case 5
+                Return 0
             Case 6
-                Return 200
+                Return 0
             Case 7
-                Return 900
+                Return 0
+        End Select
+    End Function
+    Public Function GetEquipDef(Id As Integer) As Integer
+        Select Case Id
+            Case 1
+                Return 0
+            Case 2
+                Return 1800
+            Case 3
+                Return 1200
+            Case 4
+                Return 0
+            Case 5
+                Return 0
+            Case 6
+                Return 300
+            Case 7
+                Return 0
         End Select
     End Function
 
     '怪物
     Public Function GetMonsterHp(Name As String) As Integer
         Select Case Name
-            Case "史莱姆"
-                Return 100
-            Case "大史莱姆"
-                Return 1000
+            Case "脆皮高攻"
+                Return 50
             Case "苦力怕"
                 Return 500
             Case Else
@@ -216,10 +232,8 @@
     End Function
     Public Function GetMonsterAtk(Name As String) As Integer
         Select Case Name
-            Case "史莱姆"
-                Return 500
-            Case "大史莱姆"
-                Return 1000
+            Case "脆皮高攻"
+                Return 650
             Case "苦力怕"
                 Return 10000
             Case Else
@@ -228,21 +242,17 @@
     End Function
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
-            Case "史莱姆"
-                Return 100
-            Case "大史莱姆"
-                Return 500
+            Case "脆皮高攻"
+                Return 0
             Case "苦力怕"
-                Return 100
+                Return 0
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
     End Function
     Public Function GetMonsterSp(Name As String) As Integer
         Select Case Name
-            Case "史莱姆"
-                Return 0
-            Case "大史莱姆"
+            Case "脆皮高攻"
                 Return 0
             Case "苦力怕"
                 Return 3
@@ -252,10 +262,8 @@
     End Function
     Public Function GetMonsterDesc(Name As String, Sp As Integer) As String
         Select Case Name
-            Case "史莱姆"
-                Return "史莱姆描述。"
-            Case "大史莱姆"
-                Return "大史莱姆描述。"
+            Case "脆皮高攻"
+                Return "攻击性强，但极度脆弱的敌人。"
             Case "苦力怕"
                 Return "将在" & Sp & "回合后爆炸。"
             Case Else
@@ -264,11 +272,11 @@
     End Function
     Public Function PerformMonsterTurn(Id As Integer) As Boolean
         Select Case MonsterType(Id)
-            Case "史莱姆", "大史莱姆"
-                PerformMonsterAttack(Id, "向你扑来！")
+            Case "脆皮高攻"
+                PerformMonsterAttack(Id, "挥剑向你砍来！", True)
             Case "苦力怕"
                 If MonsterSp(Id) = 1 Then
-                    PerformMonsterAttack(Id, "爆炸了！")
+                    PerformMonsterAttack(Id, "爆炸了！", True)
                     MonsterType.RemoveAt(Id)
                     MonsterName.RemoveAt(Id)
                     MonsterHp.RemoveAt(Id)
@@ -282,10 +290,17 @@
         End Select
         Return True
     End Function
-    Private Sub PerformMonsterAttack(Id As Integer, Desc As String)
+    Private Sub PerformMonsterAttack(Id As Integer, Desc As String, IsMeele As Boolean)
         Dim Damage As Integer = Math.Max(1, GetMonsterAtk(MonsterType(Id)) - GetRealDef())
         Hp = Math.Max(0, Hp - Damage)
-        StartChat({"* " & MonsterName(Id) & Desc & "\n  你受到了" & Damage & "点伤害！", "/TURNEND"}, True)
+        Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  你受到了" & Damage & "点伤害！"
+        If EquipArmor = 6 AndAlso IsMeele Then
+            '荆棘
+            Dim BackDamage As Integer = Damage / 2
+            BaseText += "\n  护甲上的荆棘对攻击者造成了" & BackDamage & "点伤害！"
+            HurtMonster(Id, BackDamage)
+        End If
+        StartChat({BaseText, "/TURNEND"}, True)
     End Sub
 
     '关卡
@@ -301,7 +316,7 @@
     Public Function GetLevelIntro(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"* 一场测试战斗。"}
+                Return {"* 两只对99级的勇者而言毫无威胁的骷髅袭来。"}
             Case 2
                 Return {"* 两场测试战斗。"}
         End Select
@@ -309,7 +324,7 @@
     Public Function GetLevelIntro2(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"* 一场测试战斗还在进行。"}
+                Return {"* 骷髅的骨头在喀拉作响。"}
             Case 2
                 Return {"* 两场测试战斗还在进行。"}
         End Select
@@ -317,7 +332,7 @@
     Public Function GetLevelMonsters(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"史莱姆", "史莱姆", "苦力怕"}
+                Return {"脆皮高攻", "脆皮高攻"}
             Case 2
                 Return {"史莱姆", "苦力怕"}
         End Select
@@ -325,7 +340,7 @@
     Public Function GetLevelMonstersName(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"史莱姆1", "史莱姆2", "苦力怕"}
+                Return {"骷髅士兵", "骷髅卫兵"}
             Case 2
                 Return {"史莱姆？", "苦力怕"}
         End Select

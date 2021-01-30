@@ -7,7 +7,8 @@ Public Class MainWindow
 
     '初始化
     Private Const WindowMargin = 40
-    Public PixelLevel = 1
+    Public PixelLevel As Integer = 1
+    Public IsHalfSec As Boolean = False
     Private Sub Init() Handles Me.Loaded
         FrmMain = Me
         AniStartRun()
@@ -22,6 +23,13 @@ Public Class MainWindow
         Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width))
         TransScale.ScaleX = Size
         TransScale.ScaleY = Size
+        '闪烁计数
+        RunInNewThread(Sub()
+                           Do While True
+                               IsHalfSec = Not IsHalfSec
+                               Thread.Sleep(500)
+                           Loop
+                       End Sub, "Half Sec")
         '刷新 UI
         RunInNewThread(Sub()
                            Do While True
@@ -86,13 +94,16 @@ Public Class MainWindow
         ElseIf e.Key = Key.Enter Then
             If TextInputBox.Tag <> "" Then Enter(TextInputBox.Tag)
             TextInputBox.Tag = ""
-        ElseIf Not DisabledKey.Contains(RealKey) AndAlso RealKey.Length = 1 Then
-            TextInputBox.Tag = (TextInputBox.Tag.ToString & RealKey).Substring(0, Math.Min(TextInputBox.Tag.ToString.Length + 1, 47))
+        ElseIf RealKey.Length = 1 Then
+            If DisabledKey.Contains(RealKey) Then
+                SetText(FrmMain.TextInputResult, "\RED错误：无法识别的按键！")
+                Beep()
+            Else
+                '成功输入
+                SetText(FrmMain.TextInputResult, "\DARKGRAY等待玩家输入指令。")
+                TextInputBox.Tag = (TextInputBox.Tag.ToString & RealKey).Substring(0, Math.Min(TextInputBox.Tag.ToString.Length + 1, 47))
+            End If
         End If
-        RefreshInputBox()
-    End Sub
-    Public Sub RefreshInputBox() Handles Me.Loaded
-        SetText(TextInputBox, ">" & TextInputBox.Tag & "_")
     End Sub
 
 End Class
