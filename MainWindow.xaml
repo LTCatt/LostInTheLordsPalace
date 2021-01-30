@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Black" Cursor="None" UseLayoutRounding="False" SnapsToDevicePixels="False">
+        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Gray" Cursor="None" UseLayoutRounding="False" SnapsToDevicePixels="False">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="1" />
@@ -15,46 +16,50 @@
             <Setter Property="Foreground" Value="White" />
         </Style>
     </Window.Resources>
-    <Grid x:Name="PanBack" Background="Black">
+    <Grid x:Name="PanBack">
         <Grid.Effect>
-            <DropShadowEffect Color="Gray" Opacity="0.7" ShadowDepth="2" BlurRadius="3" />
+            <!--<DropShadowEffect Color="Gray" Opacity="0.7" ShadowDepth="2" BlurRadius="3" />-->
+            <ee:MagnifyEffect Amount="0.05" InnerRadius="0" OuterRadius="1" />
         </Grid.Effect>
-        <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-            <Grid.RenderTransform>
-                <ScaleTransform x:Name="TransScale" />
-            </Grid.RenderTransform>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2" />
-                <RowDefinition />
-                <RowDefinition Height="1" />
-                <RowDefinition Height="4" />
-                <RowDefinition Height="1" />
-                <RowDefinition Height="3" />
-                <RowDefinition Height="1" />
-                <RowDefinition Height="1" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="37" />
-                <ColumnDefinition Width="1" />
-                <ColumnDefinition Width="10" />
-            </Grid.ColumnDefinitions>
-            <!-- 上半部分 -->
-            <TextBlock Name="TextTitle" Grid.Row="0" />
-            <TextBlock Name="TextInfo" Grid.Row="1" />
-            <!-- 对话框 -->
-            <TextBlock Name="TextChatLine" Grid.Row="2" />
-            <TextBlock Name="TextChat" Grid.Row="3" />
-            <!-- 指令窗口 -->
-            <TextBlock Name="TextActionLine" Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" />
-            <TextBlock Name="TextAction" Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Margin="1" />
-            <TextBlock Name="TextActionButtom" Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Margin="1" VerticalAlignment="Bottom" />
-            <!-- 状态栏 -->
-            <TextBlock Name="TextBottomLine" Grid.Row="4" Grid.ColumnSpan="5" />
-            <TextBlock Name="TextStatus" Grid.Row="5" Grid.ColumnSpan="5" />
-            <TextBlock Name="TextStatusRight" Grid.Row="5" Grid.ColumnSpan="5" HorizontalAlignment="Right" />
-            <!-- 输入框 -->
-            <TextBlock Name="TextInputResult" Grid.Row="6" Grid.ColumnSpan="5" />
-            <TextBlock Name="TextInputBox" Grid.Row="7" Grid.ColumnSpan="5" />
+        <Grid x:Name="PanBack2" Background="Black">
+            <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <ScaleTransform x:Name="TransScale" />
+                </Grid.RenderTransform>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2" />
+                    <RowDefinition />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="1" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="37" />
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+                <!-- 上半部分 -->
+                <TextBlock Name="TextTitle" Grid.Row="0" />
+                <TextBlock Name="TextInfo" Grid.Row="1" />
+                <!-- 对话框 -->
+                <TextBlock Name="TextChatLine" Grid.Row="2" />
+                <TextBlock Name="TextChat" Grid.Row="3" />
+                <!-- 指令窗口 -->
+                <TextBlock Name="TextActionLine" Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" />
+                <TextBlock Name="TextAction" Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Margin="1" />
+                <TextBlock Name="TextActionButtom" Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Margin="1" VerticalAlignment="Bottom" />
+                <!-- 状态栏 -->
+                <TextBlock Name="TextBottomLine" Grid.Row="4" Grid.ColumnSpan="5" />
+                <TextBlock Name="TextStatus" Grid.Row="5" Grid.ColumnSpan="5" />
+                <TextBlock Name="TextStatusRight" Grid.Row="5" Grid.ColumnSpan="5" HorizontalAlignment="Right" />
+                <!-- 输入框 -->
+                <TextBlock Name="TextInputResult" Grid.Row="6" Grid.ColumnSpan="5" />
+                <TextBlock Name="TextInputBox" Grid.Row="7" Grid.ColumnSpan="5" />
+            </Grid>
         </Grid>
+        <Image Source="Images/Backgrounds/Line.png" Stretch="UniformToFill" d:IsHidden="True" IsHitTestVisible="False" Opacity="0.6" />
     </Grid>
 </Window>
