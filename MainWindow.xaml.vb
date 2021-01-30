@@ -1,5 +1,9 @@
-﻿Imports System.Threading
+﻿Imports System.ComponentModel
+Imports System.Threading
 Public Class MainWindow
+    Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        Process.GetCurrentProcess.Kill()
+    End Sub
 
     '初始化
     Private Const WindowMargin = 30
@@ -11,6 +15,7 @@ Public Class MainWindow
         SetText(TextActionLine, "\DARKGRAY││││││││││││││││┤││││││││││││││││││││")
         SetText(TextChatLine, "\DARKGRAY──────────────────────────────────────────────────────")
         SetText(TextInputResult, " \DARKGRAY等待玩家输入指令。")
+        SetText(TextActionButtom, GetKeyText("RST") & " 重置\n\YELLOW<ALT+F4>\WHITE\n    退出游戏")
         TextInputBox.Tag = ""
         '窗口自适应
         Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width))
@@ -20,7 +25,7 @@ Public Class MainWindow
         RunInNewThread(Sub()
                            Do While True
                                Dispatcher.Invoke(Sub() RefreshUI())
-                               Thread.Sleep(10)
+                               Thread.Sleep(20)
                            Loop
                        End Sub, "UI Loop")
     End Sub
@@ -31,8 +36,6 @@ Public Class MainWindow
         Dim RealKey As String = e.Key.ToString.ToUpper
         If RealKey.StartsWith("NUMPAD") Then RealKey = RealKey.Substring(6)
         If RealKey.StartsWith("D") AndAlso RealKey.Length = 2 Then RealKey = RealKey.Substring(1)
-        '退出游戏
-        If e.Key = Key.Escape Then Process.GetCurrentProcess.Kill()
         '按下任意按键
         If EnterStatus = EnterStatuses.Chat Then
             If CanContinue Then NextChat()
@@ -50,7 +53,7 @@ Public Class MainWindow
         End If
         RefreshInputBox()
     End Sub
-    Private Sub RefreshInputBox() Handles Me.Loaded
+    Public Sub RefreshInputBox() Handles Me.Loaded
         SetText(TextInputBox, ">" & TextInputBox.Tag)
     End Sub
 
