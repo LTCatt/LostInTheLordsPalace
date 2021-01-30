@@ -2,7 +2,7 @@
     Public FrmMain As MainWindow
 
     '存档数据
-    Public DisabledKey As String = ""
+    Public DisabledKey As String = "RBIGDFK124579"
     Public Hp As Integer = 1, HpMax As Integer = 3652
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, BaseDef As Integer = 276
@@ -46,6 +46,7 @@
 
     '刷新 UI
     Public Sub RefreshUI()
+        SetText(FrmMain.TextActionButtom, GetKeyText("RST") & " 重置\n" & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk.ToString.PadLeft(4, " ") & vbCrLf &
                                     "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef.ToString.PadLeft(4, " "))
@@ -68,22 +69,22 @@
             Case Screens.Select
                 SetText(FrmMain.TextTitle, "\ORANGE※ 选择" & ScreenTitle & "目标 ※")
                 SetText(FrmMain.TextAction,
-                        GetKeyText("BAC") & " 返回")
+                        GetKeyText("ESC") & " 返回")
                 SetText(FrmMain.TextInfo, SelectInfo)
             Case Screens.Magic
                 SetText(FrmMain.TextTitle, "\ORANGE※ 法术 ※")
                 SetText(FrmMain.TextAction,
-                        GetKeyText("BAC") & " 返回")
+                        GetKeyText("ESC") & " 返回")
                 SetText(FrmMain.TextInfo, MagicInfo)
             Case Screens.Item
                 SetText(FrmMain.TextTitle, "\ORANGE※ 道具 ※")
                 SetText(FrmMain.TextAction,
-                        GetKeyText("BAC") & " 返回")
+                        GetKeyText("ESC") & " 返回")
                 SetText(FrmMain.TextInfo, ItemInfo)
             Case Screens.Equip
                 SetText(FrmMain.TextTitle, "\ORANGE※ 装备 ※")
                 SetText(FrmMain.TextAction,
-                        GetKeyText("BAC") & " 返回")
+                        GetKeyText("ESC") & " 返回")
                 SetText(FrmMain.TextInfo, EquipInfo)
         End Select
 

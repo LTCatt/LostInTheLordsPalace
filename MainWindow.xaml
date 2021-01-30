@@ -53,8 +53,8 @@
             <TextBlock Name="TextStatus" Grid.Row="5" Grid.ColumnSpan="5" />
             <TextBlock Name="TextStatusRight" Grid.Row="5" Grid.ColumnSpan="5" HorizontalAlignment="Right" />
             <!-- 输入框 -->
-            <TextBlock Name="TextInputBox" Grid.Row="6" Grid.ColumnSpan="5" />
-            <TextBlock Name="TextInputResult" Grid.Row="7" Grid.ColumnSpan="5" />
+            <TextBlock Name="TextInputResult" Grid.Row="6" Grid.ColumnSpan="5" />
+            <TextBlock Name="TextInputBox" Grid.Row="7" Grid.ColumnSpan="5" />
         </Grid>
     </Grid>
 </Window>

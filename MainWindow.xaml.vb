@@ -15,8 +15,7 @@ Public Class MainWindow
         SetText(TextBottomLine, "\DARKGRAY─────────────────────────────────────┴───────────────")
         SetText(TextActionLine, "\DARKGRAY││││││││││││││││┤││││││││││││││││││││")
         SetText(TextChatLine, "\DARKGRAY──────────────────────────────────────────────────────")
-        SetText(TextInputResult, " \DARKGRAY等待玩家输入指令。")
-        SetText(TextActionButtom, GetKeyText("RST") & " 重置\n\YELLOW<ALT+F4>\WHITE\n    退出游戏")
+        SetText(TextInputResult, "\DARKGRAY等待玩家输入指令。")
         TextInputBox.Tag = ""
         '窗口自适应
         Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width))
@@ -55,7 +54,7 @@ Public Class MainWindow
         RefreshInputBox()
     End Sub
     Public Sub RefreshInputBox() Handles Me.Loaded
-        SetText(TextInputBox, ">" & TextInputBox.Tag)
+        SetText(TextInputBox, ">" & TextInputBox.Tag & "_")
     End Sub
 
 End Class

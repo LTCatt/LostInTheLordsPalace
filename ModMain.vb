@@ -1,4 +1,6 @@
-﻿Public Module ModMain
+﻿Imports System.Text
+
+Public Module ModMain
 
     '对 TextBlock 设置富文本
     Public Sub SetText(Target As TextBlock, RawText As String)
@@ -15,7 +17,10 @@
             If Inline.StartsWith("KEY") Then
                 '特殊：根据字符是否解锁自动使用黄色和深灰色
                 If DisabledKey.Contains(Inline.Substring(3, 1)) Then
-                    TargetColor = New SolidColorBrush(Color.FromRgb(60, 60, 60))
+                    TargetColor = New SolidColorBrush(Color.FromRgb(80, 80, 0))
+                    If RandomInteger(1, 2) = 2 Then
+                        Inline = "KEY" & Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
+                    End If
                 Else
                     TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
                 End If
@@ -87,7 +92,7 @@
     Public Sub Enter(Input As String)
         Select Case EnterStatus
             Case EnterStatuses.Normal
-                SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
+                SetText(FrmMain.TextInputResult, "\DARKGRAY等待玩家输入指令。")
                 If Input = "RST" Then
                     StartLevel(Level)
                     StartChat({"* 本场战斗已重置！"}, False)
@@ -122,7 +127,7 @@
                                     PerformSelect(Id)
                                     Exit Sub
                                 End If
-                            Case "BAC"
+                            Case "ESC"
                                 Screen = Screens.Combat
                                 Exit Sub
                         End Select
@@ -131,7 +136,7 @@
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If EquipArmor = Input OrElse EquipWeapon = Input Then
-                                    SetText(FrmMain.TextInputResult, " \RED你已装备该物品！")
+                                    SetText(FrmMain.TextInputResult, "\RED你已装备该物品！")
                                 Else
                                     If GetEquipIsWeapon(Input) Then
                                         EquipWeapon = Input
@@ -141,7 +146,7 @@
                                     StartChat({"* 你将装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "切换为了" & GetEquipTitle(Input) & "！", "/TURNEND"}, True)
                                 End If
                                 Exit Sub
-                            Case "BAC"
+                            Case "ESC"
                                 Screen = Screens.Combat
                                 Exit Sub
                         End Select
@@ -150,12 +155,12 @@
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If ItemCount(Input) = 0 Then
-                                    SetText(FrmMain.TextInputResult, " \RED该道具槽位为空！")
+                                    SetText(FrmMain.TextInputResult, "\RED该道具槽位为空！")
                                 Else
                                     UseItem(Input)
                                 End If
                                 Exit Sub
-                            Case "BAC"
+                            Case "ESC"
                                 Screen = Screens.Combat
                                 Exit Sub
                         End Select
@@ -164,19 +169,19 @@
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If Mp < GetMagicCost(Input) Then
-                                    SetText(FrmMain.TextInputResult, " \RED你的法力值不足！")
+                                    SetText(FrmMain.TextInputResult, "\RED你的法力值不足！")
                                 Else
                                     UseMagic(Input)
                                 End If
                                 Exit Sub
-                            Case "BAC"
+                            Case "ESC"
                                 Screen = Screens.Combat
                                 Exit Sub
                         End Select
                 End Select
-                SetText(FrmMain.TextInputResult, " \RED指令未知或无效，请输入屏幕上以黄色显示的指令！")
+                SetText(FrmMain.TextInputResult, "\RED指令未知或无效，请输入屏幕上以黄色显示的指令！")
             Case Else
-                SetText(FrmMain.TextInputResult, " \RED未知的输入状态！")
+                SetText(FrmMain.TextInputResult, "\RED未知的输入状态！")
         End Select
     End Sub
 
@@ -211,7 +216,7 @@
             FrmMain.TextChat.Text = FrmMain.TextChat.Tag
         ElseIf ChatContents.Count > 0 AndAlso Not ChatContents(0).StartsWith("/") Then
             '下一句对话
-            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \GRAY请按任意键继续。")
+            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, "\DARKGRAY请按任意键继续。")
             FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(100, 100, 100))
             '处理文本
             Dim RawText As String = GetRawText(ChatContents.First)
@@ -249,7 +254,7 @@
     Public Sub EndChat()
         If EnterStatus = EnterStatuses.Chat Then
             EnterStatus = EnterStatuses.Normal
-            SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
+            SetText(FrmMain.TextInputResult, "\DARKGRAY等待玩家输入指令。")
         End If
         FrmMain.TextChat.Text = ""
         FrmMain.TextChat.Tag = ""
