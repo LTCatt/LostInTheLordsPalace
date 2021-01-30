@@ -15,7 +15,7 @@
             <Setter Property="Foreground" Value="White" />
         </Style>
     </Window.Resources>
-    <Grid x:Name="PanBack">
+    <Grid x:Name="PanBack" Background="Black">
         <Grid.Effect>
             <DropShadowEffect Color="Gray" Opacity="0.7" ShadowDepth="2" BlurRadius="3" />
         </Grid.Effect>

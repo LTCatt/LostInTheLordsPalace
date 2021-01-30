@@ -4,37 +4,37 @@
     Public Function GetMagicTitle(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "魔法1"
+                Return "法术1"
             Case 2
-                Return "魔法2"
+                Return "法术2"
             Case 3
-                Return "魔法3"
+                Return "法术3"
             Case 4
-                Return "魔法4"
+                Return "法术4"
             Case 5
-                Return "魔法5"
+                Return "法术5"
             Case 6
-                Return "魔法6"
+                Return "法术6"
             Case 7
-                Return "魔法7名称"
+                Return "法术7名称"
         End Select
     End Function
     Public Function GetMagicDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "魔法1描述"
+                Return "法术1描述"
             Case 2
-                Return "魔法2描述"
+                Return "法术2描述"
             Case 3
-                Return "魔法3描述"
+                Return "法术3描述"
             Case 4
-                Return "魔法4描述"
+                Return "法术4描述"
             Case 5
-                Return "魔法5描述"
+                Return "法术5描述"
             Case 6
-                Return "魔法6描述"
+                Return "法术6描述"
             Case 7
-                Return "魔法7描述"
+                Return "法术7描述"
         End Select
     End Function
     Public Function GetMagicCost(Id As Integer) As Integer
@@ -60,37 +60,37 @@
     Public Function GetItemTitle(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "魔法a1"
+                Return "道具a1"
             Case 2
-                Return "魔法2"
+                Return "道具2"
             Case 3
-                Return "魔法3"
+                Return "道具3"
             Case 4
-                Return "魔法4"
+                Return "道具4"
             Case 5
-                Return "魔法5"
+                Return "道具5"
             Case 6
-                Return "魔法6"
+                Return "道具6"
             Case 7
-                Return "魔法7名称"
+                Return "道具7名称"
         End Select
     End Function
     Public Function GetItemDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "魔法1a描述"
+                Return "道具1a描述"
             Case 2
-                Return "魔法2描述"
+                Return "道具2描述"
             Case 3
-                Return "魔法3描述"
+                Return "道具3描述"
             Case 4
-                Return "魔法4描述"
+                Return "道具4描述"
             Case 5
-                Return "魔法5描述"
+                Return "道具5描述"
             Case 6
-                Return "魔法6描述"
+                Return "道具6描述"
             Case 7
-                Return "魔法7描述"
+                Return "道具7描述"
         End Select
     End Function
 
@@ -100,38 +100,38 @@
             Case 1
                 Return "装备1a"
             Case 2
-                Return "魔法2"
+                Return "装备2"
             Case 3
-                Return "魔法3"
+                Return "装备3"
             Case 4
-                Return "魔法4"
+                Return "装备4"
             Case 5
-                Return "魔法5"
+                Return "装备5"
             Case 6
-                Return "魔法6"
+                Return "装备6"
             Case 7
-                Return "魔法7名称"
+                Return "装备7名称"
         End Select
     End Function
     Public Function GetEquipDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "魔法1描述"
+                Return "装备1描述"
             Case 2
-                Return "魔法2描述"
+                Return "装备2描述"
             Case 3
-                Return "魔法3描述"
+                Return "装备3描述"
             Case 4
-                Return "魔法4描述"
+                Return "装备4描述"
             Case 5
-                Return "魔法5描述"
+                Return "装备5描述"
             Case 6
-                Return "魔法6描述"
+                Return "装备6描述"
             Case 7
-                Return "魔法7描述"
+                Return "装备7描述"
         End Select
     End Function
-    Public Function GetEquipIsSword(Id As Integer) As Boolean
+    Public Function GetEquipIsWeapon(Id As Integer) As Boolean
         Select Case Id
             Case 1
                 Return True

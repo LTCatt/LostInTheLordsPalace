@@ -88,20 +88,59 @@
         Select Case EnterStatus
             Case EnterStatuses.Normal
                 SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
-                Select Case Input
-                    Case "MAG"
-                        Screen = Screens.Magic
-                    Case "EQU"
-                        Screen = Screens.Equip
-                    Case "ITM"
-                        Screen = Screens.Item
-                    Case "BAC"
-                        Screen = Screens.Combat
-                    Case "CHAT"
-                        StartChat({"* Chat Content 1.", "* Chat Content Line 2, it's a little long."}, True)
-                    Case Else
-                        SetText(FrmMain.TextInputResult, " \RED指令未知或无效，请输入屏幕上以黄色显示的指令。")
+                Select Case Screen
+                    Case Screens.Empty
+                    Case Screens.Combat
+                        Select Case Input
+                            Case "MAG"
+                                Screen = Screens.Magic
+                                Exit Sub
+                            Case "EQU"
+                                Screen = Screens.Equip
+                                Exit Sub
+                            Case "ITM"
+                                Screen = Screens.Item
+                                Exit Sub
+                            Case "BAC"
+                                Screen = Screens.Combat
+                                Exit Sub
+                            Case "CHAT"
+                                StartChat({"* Chat Content 1.", "* Chat Content Line 2, it's a little long."}, True)
+                                Exit Sub
+                        End Select
+                    Case Screens.Equip
+                        '装备
+                        Select Case Input
+                            Case "1", "2", "3", "4", "5", "6", "7"
+                                If EquipArmor = Input OrElse EquipWeapon = Input Then
+                                    SetText(FrmMain.TextInputResult, " \RED你已装备该物品。")
+                                Else
+                                    If GetEquipIsWeapon(Input) Then
+                                        EquipWeapon = Input
+                                    Else
+                                        EquipArmor = Input
+                                    End If
+                                    StartChat({"* 你将装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "切换为了" & GetEquipTitle(Input) & "！"}, True)
+                                End If
+                                Exit Sub
+                            Case "BAC"
+                                Screen = Screens.Combat
+                                Exit Sub
+                        End Select
+                    Case Screens.Item
+                        Select Case Input
+                            Case "BAC"
+                                Screen = Screens.Combat
+                                Exit Sub
+                        End Select
+                    Case Screens.Magic
+                        Select Case Input
+                            Case "BAC"
+                                Screen = Screens.Combat
+                                Exit Sub
+                        End Select
                 End Select
+                SetText(FrmMain.TextInputResult, " \RED指令未知或无效，请输入屏幕上以黄色显示的指令。")
             Case Else
                 SetText(FrmMain.TextInputResult, " \RED未知的输入状态！")
         End Select
@@ -125,10 +164,13 @@
             FrmMain.TextChat.Text = FrmMain.TextChat.Tag
         ElseIf ChatContents.Count > 0 Then
             '下一句对话
-            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \AQUA按任意键以继续对话。")
+            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \WHITE按任意键以继续对话。")
             FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(160, 160, 160))
-            FrmMain.TextChat.Text = GetRawText(ChatContents.First)
+            '处理文本
+            Dim RawText As String = GetRawText(ChatContents.First)
+            FrmMain.TextChat.Text = RawText
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
+            '播放动画
             AniStop("Chat Content")
             AniStart({
                      AaTextAppear(FrmMain.TextChat, Time:=40),

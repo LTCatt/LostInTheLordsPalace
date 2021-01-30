@@ -66,13 +66,13 @@
         Equip
     End Enum
 
-    '魔法
+    '法术
     Public Function MagicInfo() As String
         Dim Info As New List(Of String)
         For i = 1 To 7
             Info.Add(GetItemText(i,
-                                 GetMagicTitle(i).PadRight(8, " ") & "\DARKBLUE" & GetMagicCost(i).ToString.PadLeft(3, " ") & "MP",
-                                 If(GetMagicCost(i) > Mp, "\REDMP不足 ", "") & "\DARKGRAY" & GetMagicDesc(i)))
+                                 GetMagicTitle(i).PadRight(8, " ") & If(GetMagicCost(i) > Mp, "\RED", "\BLUE") & GetMagicCost(i).ToString.PadLeft(3, " ") & "MP" & If(GetMagicCost(i) > Mp, " MP不足", ""),
+                                 "\DARKGRAY" & GetMagicDesc(i)))
         Next
         Return Join(Info.ToArray, vbCrLf)
     End Function
