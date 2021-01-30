@@ -32,7 +32,7 @@ Public Class MainWindow
     End Sub
 
     '文本输入
-    Private Sub MainWindow_KeyUp(sender As Object, e As KeyEventArgs) Handles Me.KeyUp
+    Private Sub MainWindow_KeyPress(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         '获取真实输入文本
         Dim RealKey As String = e.Key.ToString.ToUpper
         If RealKey.StartsWith("NUMPAD") Then RealKey = RealKey.Substring(6)

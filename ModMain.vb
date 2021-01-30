@@ -74,8 +74,8 @@
         Return "\YELLOW<" & Join(Letters.ToArray, "") & "\YELLOW>\WHITE"
     End Function
     '获取单个项目的富文本
-    Public Function GetItemText(Id As Integer, Title As String, Desc As String) As String
-        Return GetKeyText(Id) & " " & Title & vbCrLf & "    " & Desc
+    Public Function GetItemText(Key As String, Title As String, Desc As String) As String
+        Return GetKeyText(Key) & " " & Title & vbCrLf & "    " & Desc
     End Function
 
     '玩家输入指令
@@ -90,13 +90,18 @@
                 SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
                 If Input = "RST" Then
                     StartLevel(Level)
-                    SetText(FrmMain.TextInputResult, " \WHITE战斗已重置！")
+                    StartChat({"* 本场战斗已重置！"}, False)
                     Exit Sub
                 End If
                 Select Case Screen
                     Case Screens.Empty
                     Case Screens.Combat
                         Select Case Input
+                            Case "ATK"
+                                Screen = Screens.Select
+                                ScreenData = "ATK"
+                                ScreenTitle = "攻击"
+                                Exit Sub
                             Case "MAG"
                                 Screen = Screens.Magic
                                 Exit Sub
@@ -106,6 +111,17 @@
                             Case "ITM"
                                 Screen = Screens.Item
                                 Exit Sub
+                        End Select
+                    Case Screens.Select
+                        '选取对象
+                        Select Case Input
+                            Case "A", "B", "C", "D", "E", "F", "G"
+                                Dim Id As Integer = "ABCDEFG".IndexOf(Input)
+                                If Id >= 0 AndAlso Id <= MonsterHp.Count - 1 Then
+                                    '选中对象：Id
+                                    PerformSelect(Id)
+                                    Exit Sub
+                                End If
                             Case "BAC"
                                 Screen = Screens.Combat
                                 Exit Sub
@@ -122,7 +138,7 @@
                                     Else
                                         EquipArmor = Input
                                     End If
-                                    StartChat({"* 你将装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "切换为了" & GetEquipTitle(Input) & "！"}, True)
+                                    StartChat({"* 你将装备的" & If(GetEquipIsWeapon(Input), "武器", "护甲") & "切换为了" & GetEquipTitle(Input) & "！", "/TURNEND"}, True)
                                 End If
                                 Exit Sub
                             Case "BAC"
@@ -130,10 +146,11 @@
                                 Exit Sub
                         End Select
                     Case Screens.Item
+                        '道具
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If ItemCount(Input) = 0 Then
-                                    SetText(FrmMain.TextInputResult, " \RED该物品槽位为空！")
+                                    SetText(FrmMain.TextInputResult, " \RED该道具槽位为空！")
                                 Else
                                     UseItem(Input)
                                 End If
@@ -143,10 +160,11 @@
                                 Exit Sub
                         End Select
                     Case Screens.Magic
+                        '法术
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If Mp < GetMagicCost(Input) Then
-                                    SetText(FrmMain.TextInputResult, " \RED你的魔力值不足！")
+                                    SetText(FrmMain.TextInputResult, " \RED你的法力值不足！")
                                 Else
                                     UseMagic(Input)
                                 End If
@@ -171,44 +189,50 @@
             FrmMain.TextInputBox.Tag = ""
             FrmMain.RefreshInputBox()
         End If
+        FrmMain.TextChat.Text = ""
+        FrmMain.TextChat.Tag = ""
         NextChat()
     End Sub
     Public Sub NextChat()
+        AniStop("Chat Content")
         If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
             '补全当前对话
-            AniStop("Chat Content")
             FrmMain.TextChat.Text = FrmMain.TextChat.Tag
-        ElseIf ChatContents.Count > 0 Then
+        ElseIf ChatContents.Count > 0 AndAlso Not ChatContents(0).StartsWith("/") Then
             '下一句对话
-            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \WHITE按任意键以继续对话。")
+            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, " \GRAY按任意键以继续。")
             FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, New MyColor(255, 255, 255), New MyColor(160, 160, 160))
             '处理文本
             Dim RawText As String = GetRawText(ChatContents.First)
             FrmMain.TextChat.Text = RawText
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
-            AniStop("Chat Content")
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=40)
+                     AaTextAppear(FrmMain.TextChat, Time:=30)
                 }, "Chat Content")
-            ',
-            '         AaCode(Sub()
-            '                    If Not EnterStatus = EnterStatuses.Chat Then
-            '                        RunInThread(Sub() RunInUi(Sub() NextChat()))
-            '                    End If
-            '                End Sub, If(ChatContents.Count = 1, 3000, 1500), True)
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)
+        ElseIf ChatContents.Count > 0 Then
+            '执行命令
+            Dim Cmd = ChatContents(0)
+            ChatContents.RemoveAt(0)
+            If ChatContents.Count = 0 Then EndChat()
+            Select Case Cmd
+                Case "/TURNEND"
+                    TurnEnd()
+            End Select
         Else
             '结束对话
-            AniStop("Chat Content")
-            If EnterStatus = EnterStatuses.Chat Then
-                EnterStatus = EnterStatuses.Normal
-                SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
-            End If
-            FrmMain.TextChat.Text = ""
-            FrmMain.TextChat.Tag = ""
+            EndChat()
         End If
+    End Sub
+    Public Sub EndChat()
+        If EnterStatus = EnterStatuses.Chat Then
+            EnterStatus = EnterStatuses.Normal
+            SetText(FrmMain.TextInputResult, " \DARKGRAY等待玩家输入指令。")
+        End If
+        FrmMain.TextChat.Text = ""
+        FrmMain.TextChat.Tag = ""
     End Sub
 
 End Module

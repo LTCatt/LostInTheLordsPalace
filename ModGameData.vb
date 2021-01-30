@@ -56,6 +56,10 @@
         End Select
     End Function
     Public Sub UseMagic(Id As Integer)
+        PerformMagic(Id, 0)
+    End Sub
+    Public Sub PerformMagic(Id As Integer, Target As Integer)
+        Screen = Screens.Combat
         Mp -= GetMagicCost(Id)
         Dim RawText As String = "* 你施展了" & GetMagicTitle(Id) & "！"
         Select Case Id
@@ -67,7 +71,7 @@
             Case 6
             Case 7
         End Select
-        StartChat({RawText}, True)
+        StartChat({RawText, "/TURNEND"}, True)
     End Sub
 
     '道具
@@ -108,6 +112,7 @@
         End Select
     End Function
     Public Sub UseItem(Id As Integer)
+        Screen = Screens.Combat
         ItemCount(Id) -= 1
         Dim RawText As String = "* 你使用了" & GetItemTitle(Id) & "！"
         Select Case Id
@@ -119,7 +124,7 @@
             Case 6
             Case 7
         End Select
-        StartChat({RawText}, True)
+        StartChat({RawText, "/TURNEND"}, True)
     End Sub
 
     '装备
@@ -203,6 +208,8 @@
                 Return 100
             Case "大史莱姆"
                 Return 1000
+            Case "苦力怕"
+                Return 1000
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -212,6 +219,8 @@
             Case "史莱姆"
                 Return 100
             Case "大史莱姆"
+                Return 500
+            Case "苦力怕"
                 Return 500
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
@@ -223,6 +232,8 @@
                 Return 100
             Case "大史莱姆"
                 Return 500
+            Case "苦力怕"
+                Return 100
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -233,6 +244,8 @@
                 Return 0
             Case "大史莱姆"
                 Return 0
+            Case "苦力怕"
+                Return 3
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -240,9 +253,11 @@
     Public Function GetMonsterDesc(Name As String, Sp As Integer) As String
         Select Case Name
             Case "史莱姆"
-                Return "史莱姆描述"
+                Return "史莱姆描述。"
             Case "大史莱姆"
-                Return "大史莱姆描述"
+                Return "大史莱姆描述。"
+            Case "苦力怕"
+                Return "将在" & Sp & "回合后爆炸。"
             Case Else
                 Throw New Exception("未知的怪物：" & Name)
         End Select
@@ -264,13 +279,13 @@
     Public Function GetLevelMonsters(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"史莱姆", "史莱姆", "大史莱姆"}
+                Return {"史莱姆", "史莱姆", "大史莱姆", "苦力怕"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"史莱姆A", "史莱姆B", "大史莱姆"}
+                Return {"史莱姆1", "史莱姆2", "大史莱姆", "苦力怕"}
         End Select
     End Function
 

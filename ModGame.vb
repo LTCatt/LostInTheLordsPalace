@@ -64,6 +64,11 @@
                         GetKeyText("ITM") & " 道具\n" &
                         GetKeyText("EQU") & " 装备\n")
                 SetText(FrmMain.TextInfo, CombatInfo)
+            Case Screens.Select
+                SetText(FrmMain.TextTitle, "\ORANGE※ 选择" & ScreenTitle & "目标 ※")
+                SetText(FrmMain.TextAction,
+                        GetKeyText("BAC") & " 返回")
+                SetText(FrmMain.TextInfo, SelectInfo)
             Case Screens.Magic
                 SetText(FrmMain.TextTitle, "\ORANGE※ 法术 ※")
                 SetText(FrmMain.TextAction,
@@ -83,33 +88,64 @@
 
     End Sub
 
+    '玩家的回合结束
+    Public Sub TurnEnd()
+        Screen = Screens.Combat
+        '检查怪物死亡
+
+    End Sub
+
     '当前屏幕
     Public Screen As Screens = Screens.Magic
+    Public ScreenData As String = "" '用于选取对象
+    Public ScreenTitle As String = "" '用于选取对象
     Public Enum Screens
         Empty
         Combat
         Magic
         Item
         Equip
+        [Select]
     End Enum
 
     '战斗
     Public Function CombatInfo() As String
         Dim Info As New List(Of String)
         For i = 0 To MonsterType.Count - 1
-            Info.Add(GetItemText(i + 1,
-                                 MonsterName(i).PadRight(8, " ") & "\REDHP " & MonsterHp(i),
+            Info.Add(GetItemText("ABCDEFG".ToCharArray()(i),
+                                 MonsterName(i).PadRight(9, " ") & "\REDHP " & MonsterHp(i).ToString.PadLeft(4, " "),
                                  "\DARKGRAY" & GetMonsterDesc(MonsterType(i), MonsterSp(i))).Replace("KEY", "WHITE").Replace("YELLOW", "WHITE"))
         Next
         Return Join(Info.ToArray, vbCrLf)
     End Function
+
+    '选取对象
+    Public Function SelectInfo() As String
+        Dim Info As New List(Of String)
+        For i = 0 To MonsterType.Count - 1
+            Info.Add(GetItemText("ABCDEFG".ToCharArray()(i),
+                                 MonsterName(i).PadRight(9, " ") & "\REDHP " & MonsterHp(i).ToString.PadLeft(4, " "),
+                                 "\DARKGRAY" & GetMonsterDesc(MonsterType(i), MonsterSp(i))))
+        Next
+        Return Join(Info.ToArray, vbCrLf)
+    End Function
+    Public Sub PerformSelect(Id As Integer)
+        Select Case ScreenData
+            Case "ATK"
+                '攻击怪物
+                Screen = Screens.Combat
+                Dim Damage As Integer = Math.Max(1, GetRealAtk() - GetMonsterDef(MonsterType(Id)))
+                MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
+                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  造成了" & Damage & "点伤害！", "/TURNEND"}, True)
+        End Select
+    End Sub
 
     '法术
     Public Function MagicInfo() As String
         Dim Info As New List(Of String)
         For i = 1 To 7
             Info.Add(GetItemText(i,
-                                 GetMagicTitle(i).PadRight(8, " ") & If(GetMagicCost(i) > Mp, "\RED", "\BLUE") & GetMagicCost(i).ToString.PadLeft(3, " ") & "MP" & If(GetMagicCost(i) > Mp, " MP不足", ""),
+                                 GetMagicTitle(i).PadRight(9, " ") & If(GetMagicCost(i) > Mp, "\RED", "\BLUE") & GetMagicCost(i).ToString.PadLeft(3, " ") & "MP" & If(GetMagicCost(i) > Mp, " MP不足", ""),
                                  "\DARKGRAY" & GetMagicDesc(i)))
         Next
         Return Join(Info.ToArray, vbCrLf)
@@ -123,7 +159,7 @@
                 Info.Add(GetItemText(i, "\GRAY无物品", ""))
             Else
                 Info.Add(GetItemText(i,
-                                     GetItemTitle(i).PadRight(8, " ") & "\GRAYx" & ItemCount(i),
+                                     GetItemTitle(i).PadRight(9, " ") & "\GRAYx" & ItemCount(i),
                                      "\DARKGRAY" & GetItemDesc(i)))
             End If
         Next
@@ -135,7 +171,7 @@
         Dim Info As New List(Of String)
         For i = 1 To 7
             Info.Add(GetItemText(i,
-                                 GetEquipTitle(i).PadRight(8, " ") & If(EquipArmor = i OrElse EquipWeapon = i, "\DARKBLUE <已装备>", ""),
+                                 GetEquipTitle(i).PadRight(9, " ") & If(EquipArmor = i OrElse EquipWeapon = i, "\DARKBLUE <已装备>", ""),
                                  "\DARKGRAY" & GetEquipDesc(i)))
         Next
         Return Join(Info.ToArray, vbCrLf)
