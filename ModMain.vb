@@ -12,57 +12,78 @@ Public Module ModMain
         Target.Inlines.Clear()
         For Each Inline In RawTexts
             If Inline = "" Then Continue For
-            Dim TargetColor As SolidColorBrush
+            Dim TargetColor As MyColor
             Dim Delta As Integer = 0
-            If Inline.StartsWith("KEY") Then
-                '特殊：根据字符是否解锁自动使用黄色和深灰色
-                If DisabledKey.Contains(Inline.Substring(3, 1)) Then
-                    TargetColor = New SolidColorBrush(Color.FromRgb(80, 80, 0))
-                    If RandomInteger(1, 2) = 2 Then
-                        Inline = "KEY" & Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
-                    End If
-                Else
-                    TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
-                End If
-                Delta = 3
-            ElseIf Inline.StartsWith("WHITE") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
+            If Inline.StartsWith("WHITE") Then
+                TargetColor = New MyColor(255, 255, 255)
                 Delta = 5
             ElseIf Inline.StartsWith("AQUA") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(0, 255, 255))
+                TargetColor = New MyColor(0, 255, 255)
                 Delta = 4
             ElseIf Inline.StartsWith("RED") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(255, 0, 0))
+                TargetColor = New MyColor(255, 0, 0)
                 Delta = 3
             ElseIf Inline.StartsWith("ORANGE") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(255, 128, 0))
+                TargetColor = New MyColor(255, 128, 0)
                 Delta = 6
             ElseIf Inline.StartsWith("DARKRED") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(100, 0, 0))
+                TargetColor = New MyColor(100, 0, 0)
                 Delta = 7
             ElseIf Inline.StartsWith("YELLOW") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 0))
+                TargetColor = New MyColor(255, 255, 0)
                 Delta = 6
             ElseIf Inline.StartsWith("GREEN") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(0, 255, 0))
+                TargetColor = New MyColor(0, 255, 0)
                 Delta = 5
             ElseIf Inline.StartsWith("DARKBLUE") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(0, 0, 150))
+                TargetColor = New MyColor(0, 0, 150)
                 Delta = 8
             ElseIf Inline.StartsWith("BLUE") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(0, 0, 255))
+                TargetColor = New MyColor(0, 0, 255)
                 Delta = 4
             ElseIf Inline.StartsWith("GRAY") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(160, 160, 160))
+                TargetColor = New MyColor(160, 160, 160)
                 Delta = 4
             ElseIf Inline.StartsWith("DARKGRAY") Then
-                TargetColor = New SolidColorBrush(Color.FromRgb(100, 100, 100))
+                TargetColor = New MyColor(100, 100, 100)
                 Delta = 8
             Else
-                TargetColor = New SolidColorBrush(Color.FromRgb(255, 255, 255))
+                TargetColor = New MyColor(255, 255, 255)
                 Inline += "未知的颜色"
             End If
-            Target.Inlines.Add(New Run(StrConv(Inline.Substring(Delta), VbStrConv.Wide)) With {.Foreground = TargetColor})
+            Dim RealString As String = Inline.Substring(Delta)
+            '判断是否有禁用的字母
+            Dim HasDisabledLetter As Boolean = False
+            For Each Letter In RealString
+                If DisabledKey.Contains(Letter) Then
+                    HasDisabledLetter = True
+                    Exit For
+                End If
+            Next
+            If Not HasDisabledLetter Then
+                '无禁用字，直接添加
+                Target.Inlines.Add(New Run(StrConv(RealString, VbStrConv.Wide)) With {.Foreground = TargetColor})
+            Else
+                '有禁用字，逐个添加
+                For Each Letter In RealString
+                    If Letter = vbCr Then Continue For
+                    If Letter = vbLf Then Letter = vbCrLf
+                    If DisabledKey.Contains(Letter) Then
+                        '修改字符与颜色
+                        Dim RealTargetColor As MyColor
+                        If Inline.StartsWith("YELLOW") Then
+                            If RandomInteger(1, 10) > 5 Then Letter = Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
+                            RealTargetColor = TargetColor * RandomInteger(40, 70) * 0.01
+                        Else
+                            If RandomInteger(1, 10) > 8 Then Letter = Encoding.Default.GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
+                            RealTargetColor = TargetColor * ((RandomInteger(85, 100) * 0.01) ^ 2)
+                        End If
+                        Target.Inlines.Add(New Run(StrConv(Letter, VbStrConv.Wide)) With {.Foreground = RealTargetColor})
+                    Else
+                        Target.Inlines.Add(New Run(StrConv(Letter, VbStrConv.Wide)) With {.Foreground = TargetColor})
+                    End If
+                Next
+            End If
         Next
     End Sub
     '获取全角处理后的纯文本
@@ -72,11 +93,7 @@ Public Module ModMain
 
     '获取根据按键处理后的富文本
     Public Function GetKeyText(Key As String) As String
-        Dim Letters As New List(Of String)
-        For Each Letter In Key
-            Letters.Add("\KEY" & Letter)
-        Next
-        Return "\YELLOW<" & Join(Letters.ToArray, "") & "\YELLOW>\WHITE"
+        Return "\YELLOW<" & Key & ">\WHITE"
     End Function
     '获取单个项目的富文本
     Public Function GetItemText(Key As String, Title As String, Desc As String) As String

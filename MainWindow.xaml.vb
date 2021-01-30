@@ -25,7 +25,7 @@ Public Class MainWindow
         RunInNewThread(Sub()
                            Do While True
                                Dispatcher.Invoke(Sub() RefreshUI())
-                               Thread.Sleep(30)
+                               Thread.Sleep(25)
                            Loop
                        End Sub, "UI Loop")
     End Sub
@@ -42,7 +42,10 @@ Public Class MainWindow
             Exit Sub
         End If
         '主输入状态
-        If e.Key = Key.Back Then
+        If e.Key = Key.Escape AndAlso Not (Screen = Screens.Combat OrElse Screen = Screens.Empty) Then
+            TextInputBox.Tag = ""
+            Enter("ESC")
+        ElseIf e.Key = Key.Back Then
             TextInputBox.Tag = ""
             'If TextInputBox.Tag.ToString.Length > 0 Then TextInputBox.Tag = TextInputBox.Tag.ToString.Substring(0, TextInputBox.Tag.ToString.Length - 1)
         ElseIf e.Key = Key.Enter Then
