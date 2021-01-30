@@ -222,7 +222,7 @@
     '怪物
     Public Function GetMonsterHp(Name As String) As Integer
         Select Case Name
-            Case "脆皮高攻"
+            Case "骷髅1"
                 Return 50
             Case "苦力怕"
                 Return 500
@@ -232,8 +232,8 @@
     End Function
     Public Function GetMonsterAtk(Name As String) As Integer
         Select Case Name
-            Case "脆皮高攻"
-                Return 650
+            Case "骷髅1"
+                Return 750
             Case "苦力怕"
                 Return 10000
             Case Else
@@ -242,7 +242,7 @@
     End Function
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
-            Case "脆皮高攻"
+            Case "骷髅1"
                 Return 0
             Case "苦力怕"
                 Return 0
@@ -252,7 +252,7 @@
     End Function
     Public Function GetMonsterSp(Name As String) As Integer
         Select Case Name
-            Case "脆皮高攻"
+            Case "骷髅1"
                 Return 0
             Case "苦力怕"
                 Return 3
@@ -262,7 +262,7 @@
     End Function
     Public Function GetMonsterDesc(Name As String, Sp As Integer) As String
         Select Case Name
-            Case "脆皮高攻"
+            Case "骷髅1"
                 Return "攻击性强，但极度脆弱的敌人。"
             Case "苦力怕"
                 Return "将在" & Sp & "回合后爆炸。"
@@ -272,7 +272,7 @@
     End Function
     Public Function PerformMonsterTurn(Id As Integer) As Boolean
         Select Case MonsterType(Id)
-            Case "脆皮高攻"
+            Case "骷髅1"
                 PerformMonsterAttack(Id, "挥剑向你砍来！", True)
             Case "苦力怕"
                 If MonsterSp(Id) = 1 Then
@@ -332,7 +332,7 @@
     Public Function GetLevelMonsters(Id As Integer) As String()
         Select Case Id
             Case 1
-                Return {"脆皮高攻", "脆皮高攻"}
+                Return {"骷髅1", "骷髅1"}
             Case 2
                 Return {"史莱姆", "苦力怕"}
         End Select
@@ -349,7 +349,7 @@
         Select Case Id
             Case 1
                 Screen = Screens.Empty
-                StartChat({"* 战斗结束！你获得了" & RandomInteger(1000, 5000) & "XP！", "/NEXTLEVEL"}, True)
+                StartChat({"* 恭喜获胜！你获得了" & RandomInteger(1000, 5000) & "XP！", "/NEXTLEVEL"}, True)
             Case 2
 
         End Select

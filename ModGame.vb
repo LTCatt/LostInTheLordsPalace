@@ -52,7 +52,7 @@
     '刷新 UI
     Public Sub RefreshUI()
         SetText(FrmMain.TextInputBox, ">" & FrmMain.TextInputBox.Tag & If(FrmMain.IsHalfSec, "_", ""))
-        SetText(FrmMain.TextActionButtom, GetKeyText("RST") & " 重置\n" & GetKeyText("ALT+F4") & "\n    退出游戏")
+        SetText(FrmMain.TextActionButtom, GetKeyText("RST") & " 重置\n\n" & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk.ToString.PadLeft(4, " ") & vbCrLf &
                                     "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef.ToString.PadLeft(4, " "))
@@ -66,10 +66,9 @@
             Case Screens.Combat
                 SetText(FrmMain.TextTitle, "\ORANGE※ 战斗 ※")
                 SetText(FrmMain.TextAction,
-                        GetKeyText("ATK") & " 攻击\n" &
-                        GetKeyText("DEF") & " 防御\n" &
-                        GetKeyText("MAG") & " 法术\n" &
-                        GetKeyText("ITM") & " 道具\n" &
+                        GetKeyText("ATK") & " 攻击\n\n" &
+                        GetKeyText("MAG") & " 法术\n\n" &
+                        GetKeyText("ITM") & " 道具\n\n" &
                         GetKeyText("EQU") & " 装备\n")
                 SetText(FrmMain.TextInfo, CombatInfo)
             Case Screens.Select
