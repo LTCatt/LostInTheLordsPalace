@@ -33,16 +33,16 @@
     Public Function GetMagicDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "召唤熊熊燃烧的流星坠落地面，对全体敌人造成高额物理伤害。"
+                Return "召唤熊熊燃烧的流星坠落地面，对全体敌人造成900点火焰伤害。"
             Case 2
-                Return "引导黑暗能量，对单个敌人造成极高黯蚀伤害。"
-            Case 3
+                Return "引导黑暗能量，对单个敌人造成1500点黯蚀伤害。"
+            Case 3 '
                 Return "法术3描述"
-            Case 4
+            Case 4 '
                 Return "法术4描述"
             Case 5
                 Return "法术5描述"
-            Case 6
+            Case 6 '
                 Return "法术6描述"
             Case 7
                 Return "法术7描述"
@@ -53,7 +53,7 @@
             Case 1
                 Return 260
             Case 2
-                Return 20
+                Return 190
             Case 3
                 Return 30
             Case 4
@@ -67,16 +67,44 @@
         End Select
     End Function
     Public Sub UseMagic(Id As Integer)
-        PerformMagic(Id, 0)
+        If Id = 2 Then
+            ScreenReturn = Screen
+            Screen = Screens.Select
+            ScreenData = "MAGIC2"
+            ScreenTitle = "晦暗之触的"
+        Else
+            PerformMagic(Id, 0)
+        End If
     End Sub
     Public Sub PerformMagic(Id As Integer, Target As Integer)
         Screen = Screens.Combat
         Mp -= GetMagicCost(Id)
-        Dim RawText As String = "* 你施展了" & GetMagicTitle(Id) & "！"
+        Dim RawText As String = "* 你施展了" & GetMagicTitle(Id) & "！\n"
         Select Case Id
             Case 1
-
+                Dim ChatList As New List(Of String)
+                '0-2
+                For i = 0 To Math.Min(2, MonsterHp.Count - 1)
+                    Dim Result = HurtMonster(i, 900, DamageType.Fire, True)
+                    RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                Next
+                ChatList.Add(RawText)
+                '3-6
+                If MonsterHp.Count > 3 Then
+                    RawText = ""
+                    For i = 3 To MonsterHp.Count - 1
+                        Dim Result = HurtMonster(i, 900, DamageType.Fire, True)
+                        RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                    Next
+                    ChatList.Add("*" & RawText.Substring(1))
+                End If
+                '输出
+                ChatList.Add("/TURNEND")
+                StartChat(ChatList.ToArray, True, False)
+                Exit Sub
             Case 2
+                Dim Result = HurtMonster(Target, 1500, DamageType.Dark, True)
+                RawText += "  " & Result(1) & MonsterName(Target) & "受到了" & Result(0) & "点伤害！"
             Case 3
             Case 4
             Case 5
@@ -114,7 +142,7 @@
             Case 3
                 Return "可解除中毒状态的蓝色药剂。"
             Case 4
-                Return "对单个敌人造成15点物理伤害。"
+                Return "对单个敌人造成固定15点物理伤害。"
             Case 5
                 Return "获得5回合冷冻伤害抗性。"
             Case 6
@@ -147,8 +175,7 @@
             Case 3
                 RawText += "  但你目前并没有中毒。"
             Case 4
-                Screen = Screens.Combat
-                Dim Result = HurtMonster(Target, 15, DamageType.Melee)
+                Dim Result = HurtMonster(Target, 15, DamageType.Melee, True)
                 RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！"
             Case 5
                 ExtraWarm = 5
@@ -437,7 +464,7 @@
             '荆棘
             Dim BackDamage As Integer = Result(0) / 2
             BaseText += "\n  护甲上的荆棘反弹了" & BackDamage & "点伤害！"
-            HurtMonster(Id, BackDamage, DamageType.Absolute)
+            HurtMonster(Id, BackDamage, DamageType.Absolute, True)
         End If
         StartChat({BaseText, "/TURNEND"}, True, False)
     End Sub
@@ -595,7 +622,7 @@
             Case 2
                 StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你决定重新踏上魔宫之旅。",
-                           "* 再次出发。新生，即是新的希望。\n  伊尔梅特，再次开始的机会。",
+                           "* 再次出发。新生，即是新的希望。\n  这是再次开始的机会。",
                            "/UNLOCKR",
                            "* 「R」的内联逻辑已恢复。",
                            "* 你迈步走入魔宫入口的台阶……",

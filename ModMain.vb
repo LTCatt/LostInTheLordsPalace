@@ -168,7 +168,7 @@ Public Module ModMain
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If EquipArmor = Input OrElse EquipWeapon = Input Then
                                     SetText(FrmMain.TextInputResult, "\RED错误：你已装备该物品！")
-                                    PlaySound("Error.mp3", 0.25)
+                                    PlaySound("Error.mp3", 0.35)
                                 Else
                                     If GetEquipIsWeapon(Input) Then
                                         EquipWeapon = Input
@@ -188,7 +188,7 @@ Public Module ModMain
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If ItemCount(Input) = 0 Then
                                     SetText(FrmMain.TextInputResult, "\RED错误：该道具槽位为空！")
-                                    PlaySound("Error.mp3", 0.25)
+                                    PlaySound("Error.mp3", 0.35)
                                 Else
                                     UseItem(Input)
                                 End If
@@ -203,7 +203,7 @@ Public Module ModMain
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If Mp < GetMagicCost(Input) Then
                                     SetText(FrmMain.TextInputResult, "\RED错误：你的法力值不足！")
-                                    PlaySound("Error.mp3", 0.25)
+                                    PlaySound("Error.mp3", 0.35)
                                 Else
                                     UseMagic(Input)
                                 End If
@@ -214,7 +214,7 @@ Public Module ModMain
                         End Select
                 End Select
                 SetText(FrmMain.TextInputResult, "\RED错误：指令未知或无效，请输入屏幕上以黄色显示的指令！")
-                PlaySound("Error.mp3", 0.25)
+                PlaySound("Error.mp3", 0.35)
         End Select
     End Sub
 

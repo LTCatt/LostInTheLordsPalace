@@ -116,7 +116,7 @@ Public Class MainWindow
         ElseIf RealKey.Length = 1 Then
             If DisabledKey.Contains(RealKey) AndAlso Not e.KeyboardDevice.IsKeyDown(Key.RightCtrl) Then
                 SetText(FrmMain.TextInputResult, "\RED错误：内联逻辑已损坏！")
-                PlaySound("Error.mp3", 0.25)
+                PlaySound("Error.mp3", 0.35)
             Else
                 '成功输入
                 SetText(FrmMain.TextInputResult, "\DARKGRAY等待玩家输入指令。")
