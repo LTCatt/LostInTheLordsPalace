@@ -25,7 +25,7 @@ Public Module ModMusic2
                                              If MusicInheritProgress Then MusicPlayer2.Position = RawPosition
                                          End If
                                          '渐变音量
-                                         MusicPlayer2.Volume = MusicPlayer2.Volume * 0.997 + MusicVolume * 0.003
+                                         MusicPlayer2.Volume = MusicPlayer2.Volume * 0.997 + MusicVolume * 1.5 * 0.003
                                          '循环播放
                                          If MusicPlayer2.Position + New TimeSpan(0, 0, 0, 0, 20) >= MusicPlayer2.NaturalDuration Then
                                              MusicPlayer2.Position = New TimeSpan(0, 0, 0, 0)

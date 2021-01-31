@@ -113,7 +113,7 @@ GotPlayer:
     Public Sub PlaySound(FileName As String, Optional Volume As Double = 1, Optional Balance As Double = 0)
         Dim FilePath As String = Path & "Sounds\" & FileName
         If Not File.Exists(FilePath) Then Throw New FileNotFoundException("未找到音频文件（" & FilePath & "）")
-        SoundQueueList.Enqueue(New SoundQueue With {.Volume = Volume, .FilePath = FilePath})
+        SoundQueueList.Enqueue(New SoundQueue With {.Volume = Volume * 2, .FilePath = FilePath})
     End Sub
 
 End Module

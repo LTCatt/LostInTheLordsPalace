@@ -11,11 +11,11 @@ Imports System.Windows
 
 '查看程序集特性的值
 
-<Assembly: AssemblyTitle("GGJ2021")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("魔宫迷途")>
+<Assembly: AssemblyDescription("龙腾猫跃 - GGJ 2021 作品")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("GGJ2021")>
-<Assembly: AssemblyCopyright("Copyright ©  2021")>
+<Assembly: AssemblyProduct("魔宫迷途")>
+<Assembly: AssemblyCopyright("Copyright © 龙腾猫跃 2021")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(false)>
 

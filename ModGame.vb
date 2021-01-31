@@ -19,7 +19,8 @@
     Public Function HurtMonster(Id As Integer, Damage As Integer, Type As DamageType, IgnoreDefence As Boolean)
         Dim Mul = GetMonsterInv(MonsterType(Id), Type)
         Damage = Math.Max(If(Mul = 0, 0, 1), Mul * (Damage - If(IgnoreDefence, 0, GetMonsterDef(MonsterType(Id)))))
-        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul = 0.3, "收效甚微，", If(Mul = 0, Type.ToString & "免疫！", "")))
+        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul = 0.2, Type.ToString & "抗性！", If(Mul = 0, Type.ToString & "免疫！", "")))
+        If ExtraDisc = "" AndAlso Damage = 1 Then ExtraDisc = "未突破防御！"
         '实际扣血
         MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
         '返回结果
@@ -27,10 +28,10 @@
     End Function
     Public Function HurtPlayer(Damage As Integer, Type As DamageType)
         '获取抗性
-        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.3, If(ExtraCold > 0 AndAlso Type = DamageType.火焰, 0.3, 1))
+        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.2, If(ExtraCold > 0 AndAlso Type = DamageType.火焰, 0.2, 1))
         Damage = Math.Max(If(Mul = 0, 0, 1), Damage * Mul)
         If Damage = 2 Then Damage = 1
-        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul < 1, "收效甚微，", ""))
+        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul < 1, Type.ToString & "抗性！", ""))
         '实际扣血
         Hp = Math.Max(0, Hp - Damage)
         '受伤动画
@@ -86,8 +87,8 @@
         SetText(FrmMain.TextActionButtom, If(Screen <> Screens.Empty, GetKeyText("RST") & " 重置\n\n", "") & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk(True).ToString.PadLeft(4, " ") & If(ExtraAtk > 0, "\GREEN+" & ExtraAtk.ToString.PadLeft(3, ""), "") & vbCrLf &
-                                    "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef(True).ToString.PadLeft(4, " ") & If(ExtraDef > 0, "\GREEN+" & ExtraDef.ToString.PadLeft(3, ""), ""))
-        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level) & If(ExtraCold > 0, "\n\AQUA冷饮 " & ExtraCold.ToString.PadLeft(2, " "), ""))
+                                    "     " & If(ExtraCold > 0, "\AQUA冷饮 " & ExtraCold.ToString.PadLeft(2, " "), "     ") & "   \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef(True).ToString.PadLeft(4, " ") & If(ExtraDef > 0, "\GREEN+" & ExtraDef.ToString.PadLeft(3, ""), ""))
+        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level))
         '主要部分
         Select Case Screen
             Case Screens.Empty

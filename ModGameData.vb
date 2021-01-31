@@ -39,9 +39,9 @@
             Case 3
                 Return "召唤熊熊燃烧的陨石坠落地面，对全体敌人造成250点火焰伤害。"
             Case 4
-                Return "在敌人的压迫下激发斗志，恢复相当于当前HP四分之一的MP。"
+                Return "在敌人的压迫下激发斗志，恢复相当于当前HP百分之30的MP。"
             Case 5
-                Return "当前回合ATK提升400，效果可叠加。施展此法术不会使回合结束。"
+                Return "当前回合ATK提升300。施展此法术不会使回合结束。"
             Case 6
                 Return "当前回合DEF提升500，且恢复400点HP。"
             Case 7
@@ -53,15 +53,15 @@
             Case 1
                 Return 550
             Case 2
-                Return 520
+                Return 410
             Case 3
                 Return 230
             Case 4
                 Return 0
             Case 5
-                Return 150
+                Return 180
             Case 6
-                Return 170
+                Return 160
             Case 7
                 Return 80
         End Select
@@ -71,7 +71,7 @@
             ScreenReturn = Screen
             Screen = Screens.Select
             ScreenData = "MAGIC2"
-            ScreenTitle = "晦暗之触的"
+            ScreenTitle = "暗夜魅影的"
         ElseIf Id = 7 Then
             ScreenReturn = Screen
             Screen = Screens.Select
@@ -135,12 +135,16 @@
                 Exit Sub
             Case 4
                 Screen = Screens.Combat
-                Dim Delta As Integer = Hp / 4 'MonsterName.Count * 150
+                Dim Delta As Integer = Hp * 0.3 'MonsterName.Count * 150
                 Mp = Math.Min(MpMax, Mp + Delta)
                 RawText += "  你的MP恢复了" & Delta & "！"
             Case 5
-                RawText += "  你感觉自己的肌肉中充盈着力量。"
-                ExtraAtk += 400
+                If ExtraAtk = 0 Then
+                    RawText += "  你感觉自己的肌肉中充盈着力量。"
+                Else
+                    RawText += "  恶鬼之力的效果不能在一回合中叠加。"
+                End If
+                ExtraAtk = 300
                 StartChat({RawText}, False, False)
                 Exit Sub
             Case 6
@@ -154,7 +158,7 @@
                 HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
                 HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
                 HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
-                RawText += "  " & Result(1) & "四次攻击共使" & MonsterName(Target) & "受到了" & (Result(0) * 4) & "点伤害！"
+                RawText += "  " & Result(1) & "4次攻击共使" & MonsterName(Target) & "受到了" & (Result(0) * 4) & "点伤害！"
         End Select
         StartChat({RawText, "/TURNEND"}, True, False)
     End Sub
@@ -256,15 +260,15 @@
     Public Function GetEquipDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+1700。"
+                Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+1200。"
             Case 2
-                Return "失落科技与魔法结合的至高护甲。ATK+400，DEF+1800。"
+                Return "失落科技与魔法结合的至高护甲。ATK+500，DEF+1800。"
             Case 3
-                Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
+                Return "使用世界上最坚固的金属打造而成的护甲。DEF+1200。"
             Case 4
-                Return "矮人族的至高杰作。ATK+800，造成光耀伤害。"
+                Return "矮人族的至高杰作。ATK+800，将伤害属性变为光耀。"
             Case 5
-                Return "用秘银精制的刺剑。ATK+600，让你的隐匿检定带有优势。"
+                Return "用秘银精制的刺剑，让你的行动悄无声息。ATK+600。"
             Case 6
                 Return "缠满倒刺的魔法链甲。DEF+300，反弹受到的一半伤害。"
             Case 7
@@ -292,9 +296,9 @@
     Public Function GetEquipAtk(Id As Integer) As Integer
         Select Case Id
             Case 1
-                Return 1700
+                Return 1200
             Case 2
-                Return 400
+                Return 500
             Case 3
                 Return 0
             Case 4
@@ -341,7 +345,7 @@
                 Return 700
             Case "火1"
                 Return 400
-            Case "魔王"
+            Case "魔王1", "魔王2"
                 Return 6666
             Case "苦力怕1"
                 Return 20
@@ -365,8 +369,8 @@
                 Return 400
             Case "火1"
                 Return 300
-            Case "魔王"
-                Return 2900
+            Case "魔王1", "魔王2"
+                Return 2400
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -389,8 +393,8 @@
                 Return 0
             Case "火1"
                 Return 0
-            Case "魔王"
-                Return 1800
+            Case "魔王1", "魔王2"
+                Return 1700
             Case "苦力怕1"
                 Return 0
             Case "苦力怕2"
@@ -412,18 +416,18 @@
     Public Function GetMonsterInv(Name As String, Type As DamageType) As Double
         Select Case Name
             Case "骷髅1"
-                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.3, 1))
+                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.2, 1))
             Case "骷髅2"
-                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.3, 1))
+                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.2, 1))
             Case "骑士1"
-                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.3, 1))
+                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.2, 1))
             Case "骑士2"
-                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.3, 1))
+                Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0.2, 1))
             Case "冰1"
                 Return If(Type = DamageType.火焰, 2, If(Type = DamageType.冷冻 OrElse Type = DamageType.物理, 0, 1))
             Case "火1"
                 Return If(Type = DamageType.冷冻, 2, If(Type = DamageType.火焰 OrElse Type = DamageType.物理, 0, 1))
-            Case "魔王"
+            Case "魔王1", "魔王2"
                 Return If(Type = DamageType.光耀, 2, If(Type = DamageType.黯蚀, 0, 1))
             Case "苦力怕1"
                 Return 1
@@ -454,7 +458,7 @@
                 Return "在至净的凝冰里孕育的魂灵。"
             Case "火1"
                 Return "从炼狱的真火中成长的精魄。"
-            Case "魔王"
+            Case "魔王1", "魔王2"
                 Return "极致邪恶与极致黑暗的化身，万事万物的最终之敌。"
             Case "苦力怕1"
                 If Sp = 1 Then
@@ -497,34 +501,75 @@
                 PerformMonsterAttack(Id, "喷射出一道冰柱！", DamageType.冷冻, IgnoreDef:=True)
             Case "火1"
                 PerformMonsterAttack(Id, "将四周化作火海！", DamageType.火焰, IgnoreDef:=True)
-            Case "魔王"
+            Case "魔王2"
+                MonsterSp(Id) += 1
+                Select Case MonsterSp(Id) Mod 10000
+                    Case 2, 12, 22, 32, 42, 52
+                        '准备清空 MP
+                        MusicChange("Win.mp3", 0, False)
+                        StartChat({"* 魔王张开双臂，蓝色的光点渐渐从你体内渗出……", "/TURNEND"}, True, False)
+                    Case 3, 13, 23, 33, 43, 53
+                        '进行清空 MP
+                        Mp = 0
+                        StartChat({"* 随着蓝色光点渗出，你感觉一阵头晕目眩。\n  你失去了所有MP！", "/TURNEND"}, True, False)
+                    Case 5, 16, 28, 35, 46, 58
+                        '准备火焰攻击
+                        StartChat({"* 耀眼的橙色光点如星光一般在整个厅堂闪耀……", "/TURNEND"}, True, False)
+                    Case 6, 17, 29, 36, 47, 49
+                        '进行火焰攻击
+                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 60)
+                    Case 8, 18, 26, 38, 48, 56
+                        '准备重击
+                        StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
+                    Case 9, 19, 27, 39, 49, 57
+                        '进行重击
+                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 60 + 700)
+                    Case 10, 14, 20, 24, 30, 40, 44, 50, 54, 59, 62, 65, 68, 71, 74
+                        '加强攻击力
+                        MonsterSp(Id) += 10000
+                        StartChat({"* 魔王集中精力，汇聚无边虚空中的能量补充之前的消耗……\n  魔王的攻击变得更强了！", "/TURNEND"}, True, False)
+                    Case Else
+                        '普通攻击
+                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 60)
+                End Select
+            Case "魔王1"
                 MonsterSp(Id) += 1
                 Select Case MonsterSp(Id)
-                    Case 1, 3
-                        PerformMonsterAttack(Id, "抬起手，一道黑光闪过……", DamageType.黯蚀)
                     Case 2
+                        '准备清空 MP
+                        StartChat({"* 魔王张开双臂，蓝色的光点渐渐从你体内渗出……", "/TURNEND"}, True, False)
+                    Case 3
+                        '进行清空 MP
                         Mp = 0
-                        StartChat({"* " & MonsterName(Id) & "的双眼闪过摄人的紫光，\n  你的MP被抽光了！", "/TURNEND"}, True, False)
-                    Case 4
-                        FrmMain.PixelLevel = 2
-                        StartChat({"* " & MonsterName(Id) & "似乎在酝酿着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
+                        StartChat({"* 随着蓝色光点渗出，你感觉一阵头晕目眩。\n  你失去了所有MP！", "/TURNEND"}, True, False)
                     Case 5
+                        '准备重击
+                        StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
+                    Case 6
+                        '进行重击
+                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + 100 + 700)
+                    Case 8
+                        FrmMain.PixelLevel = 2
+                        StartChat({"* 魔王高举起双臂，大声吟唱着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
+                    Case 9
                         FrmMain.PixelLevel = 3
                         MusicChange2("Boss 2.mp3", 0, True)
-                        StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。",
+                        StartChat({"* 周围的空气仿佛都凝固了。",
+                           "* 一圈无形的波纹荡漾，席卷了你的全身。",
                            "/LOCK0124579RBIGDWXKL",
                            "* 在你眼里，似乎整个世界都在崩坏……",
                            "* 一切都在离你远去。",
                            "* 似乎有哪里不对。",
-                           "* 波纹慢慢扩散……",
-                           "* 一些你熟悉的事物似乎正在从你的身上被剥离。",
+                           "* 波纹还在慢慢扩散……",
+                           "* 一些你熟悉的事物似乎正在从你的身上剥离。",
                            "* 知识，概念……",
                            "* 抽象的，难以理解的，超形上学的……",
                            "* ……",
                            "* 你到底失去了什么？",
                            "/WIN"}, True, True)
                     Case Else
-                        Throw New Exception("未知的行动轮：" & MonsterSp(Id))
+                        '普通攻击
+                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + 200)
                 End Select
             Case "苦力怕1"
                 If MonsterSp(Id) = 1 Then
@@ -574,9 +619,9 @@
             Case 100
                 Return "魔宫入口"
             Case 101
-                Return "魔王房间前"
+                Return "魔王宫殿前"
             Case 102
-                Return "魔王房间"
+                Return "魔王宫殿"
             Case 1
                 Return "魔宫入口？"
             Case 2
@@ -598,23 +643,23 @@
             Case 23
                 Return "元素之厅3"
             Case 31
-                Return "魔王房间前"
+                Return "魔王宫殿前"
             Case 32
-                Return "魔王房间"
+                Return "魔王宫殿"
         End Select
     End Function
     Public Function GetLevelIntros(Id As Integer) As String()
         Select Case Id
             Case 100
-                Return {"* 你早已为了今天做好了准备，\n  两只骷髅对已经到达99级的你来说毫无威胁。",
+                Return {"* 你早已为今天做好了准备，\n  两只骷髅对已经到达99级的你来说毫无威胁。",
                         "* 无论发生什么，都无法阻挠你击败魔王的决心。",
-                        "* 你已经站在了魔宫的入口。\n  魔王，大家的一生之敌，如今已近在眼前。",
+                        "* 你已经站在了魔宫的入口。\n  魔王，万物之恶的集合体，如今已近在眼前。",
                         "* 你早已决定不再犹豫。",
                         "* 你还在等待什么？"}
             Case 101
                 MusicChange("Boss 1.mp3", 0.2, True)
-                Return {"* 魔物们从四面八方涌来，阻拦你奔向魔王房间的脚步。",
-                        "* 离魔王的房间只差最后一步。",
+                Return {"* 魔物们从四面八方涌来，阻拦你奔向魔王宫殿的脚步。",
+                        "* 离魔王的宫殿只差最后一步。",
                         "* 这些怪物对早已身经百战的你而言，根本不值一提。",
                         "* 你此前所经受的漫长磨练终于将走到尽头。",
                         "* 是时候为一切画下句号了。"}
@@ -622,14 +667,15 @@
                 MusicChange("Boss 1.mp3", 0, True)
                 MusicChange2("Boss 2.mp3", 0.2, True)
                 Return {"* 你终于来到了魔王的面前。",
-                        "* 宛如实质的黑暗在你的四周涌现。",
-                        "* 传闻魔王可以操纵一切，魔力、能量，甚至是……",
-                        "* 这不可能。\n  你不再愿去回想那些恐怖的传说。",
-                        "* 魔王高举双手，大声诵念着你从未听过的咒文……"}
+                        "* 只要在这最后一战中取胜……",
+                        "* 传闻魔王可以操纵一切能量，魔力、火焰、黑暗，甚至是……",
+                        "* 你不再回想那些恐怖的传说。",
+                        "* 黑暗在你的四周不断翻腾。"}
             Case 1
                 MusicChange("Main 1.mp3", 0.02, True)
                 Return {"* 你似乎回到了起点。",
-                        "* 遗忘？还是剥离？这就是魔王的能力吗？"}
+                        "* 遗忘？还是剥离？这就是魔王的能力吗？",
+                        "* ………………"}
             Case 2
                 MusicChange("Main 1.mp3", 0.05, True)
                 Return {"* 三具骷髅已经将你包围。",
@@ -676,21 +722,33 @@
             Case 22
                 MusicChange("Boss 1.mp3", 0, False)
                 MusicChange2("Main 2.mp3", 0.2, True)
-                'TODO : 剧情没写
-                Return {"", "", "", "", ""}
+                Return {"* 其他骑士也追进了元素之厅。",
+                        "* 普通的护甲无法抵御纯粹的烈焰。",
+                        "* 骑士在元素的光团之中闪避腾挪，朝你冲来。",
+                        "* 精灵们在你的周身飞舞。",
+                        "* 混乱的元素在空中飞荡。"}
             Case 23
-                'TODO : 剧情没写
-                Return {"", "", "", "", ""}
+                Return {"* 你举起武器，指向你的敌人。",
+                        "* 根据此前的记忆，再往前不远就是魔王宫殿。",
+                        "* 绝不能在这里倒下。",
+                        "* 在这里耽误得越久，情况就会变得越危险……",
+                        "* 你压抑着内心的急迫。"}
             Case 31
                 MusicChange("Boss 1.mp3", 0.2, True)
                 MusicChange2("Main 2.mp3", 0, True)
-                'TODO : 剧情没写
-                Return {"", "", "", "", ""}
+                Return {"* 没有怪物能够阻拦你的脚步。",
+                        "* 骷骨，利剑，马蹄，烈焰。",
+                        "* 剑戟划破空气，发出破空的风声。",
+                        "* 魔物们正从四处前来。没有犹豫的时间了。",
+                        "* 勇气与希望存于你的心间。"}
             Case 32
                 MusicChange("Boss 1.mp3", 0, True)
                 MusicChange2("Boss 2.mp3", 0.2, True)
-                'TODO : 剧情没写
-                Return {"", "", "", "", ""}
+                Return {"* 你终于再次站到了魔王的面前。",
+                        "* 魔王看上去比此前虚弱了几分，\n  使用那样的法术果然对他造成了巨大的负担……",
+                        "* 但他操纵元素的威能仍在。",
+                        "* 这就是最终的一战。",
+                        "* 无限的勇气在你的心头涌现。"}
         End Select
     End Function
     Public Function GetLevelMonsters(Id As Integer) As String()
@@ -700,7 +758,7 @@
             Case 101
                 Return {"冰1", "骑士1", "骑士1", "骑士2", "骷髅2"}
             Case 102
-                Return {"魔王"}
+                Return {"魔王1"}
             Case 1
                 Return {"骷髅1", "骷髅1"}
             Case 2
@@ -723,6 +781,8 @@
                 Return {"骑士2", "火1", "火1", "冰1"}
             Case 31
                 Return {"火1", "骑士1", "骑士1", "骑士2", "骷髅2"}
+            Case 32
+                Return {"魔王2"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -755,6 +815,8 @@
                 Return {"暗黑骑士", "烈火精灵", "烈焰精灵", "寒冰精灵"}
             Case 31
                 Return {"烈焰精灵", "暗黑剑士", "漆黑剑士", "漆黑骑士", "粗骨骷髅战士"}
+            Case 32
+                Return {"魔王"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
@@ -770,7 +832,8 @@
             Case 100
                 StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你在魔宫之中飞速穿梭，一只只怪物在你的剑下飞灰烟灭。",
-                           "* 魔王的房间已经近在咫尺。",
+                           "* 没有怪物能够阻拦你的脚步。",
+                           "* 魔王的宫殿终于已近在咫尺。",
                            "* 这片大地所承受的苦难终要走向尽头。",
                            "/LEVEL101"}, True, False)
             Case 101
@@ -799,6 +862,7 @@
             Case 2
                 StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你决定重新踏上魔宫之旅。",
+                           "* 这样强大的法术必然不能连续使用，\n  现在就是打败魔王的最佳机会。",
                            "* 再次出发。新生，即是新的希望。\n  那是重新开始的机会。",
                            "/UNLOCKR",
                            "* 「R」的内联逻辑已恢复。",
@@ -836,8 +900,9 @@
                            "* 但总会有人前赴后继。",
                            "/LEVEL12"}, True, False)
             Case 12
-                'TODO : 剧情没写
                 StartChat({"* 恭喜获胜！你获得了3915XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
+                           "* 随着战马与骑士一一倒下，走廊中变得一片死寂。",
+                           "* 如果要纠正错误，这也是不可避免的事情。",
                            "/UNLOCKX",
                            "* 「X」的内联逻辑已恢复。",
                            "* 你继续前进，迈步走进了元素之厅。",
@@ -848,27 +913,58 @@
                            "* 强大的法术会让人沉醉在力量之中，最终迷失自我。",
                            "/LOCK1259BWKL", "/UNLOCK7",
                            "* 「7」的内联逻辑已恢复。",
-                           "* 因此才需要保持本心。",
+                           "* 不能沉醉于力量，必须保持本心。",
+                           "* 此时，马蹄声从你的身后传来……",
                            "/LEVEL22"}, True, False)
             Case 22
-                'TODO : 剧情没写
                 StartChat({"* 恭喜获胜！你获得了2830XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
+                           "* 根本没有给你喘息的机会，\n  又一匹战马直冲而来。",
+                           "* 元素的光团也闪耀着向你飞来。",
+                           "* 你无比渴望再次挥动你的武器，\n  找回你强大的力量……",
                            "/UNLOCKK",
                            "* 「K」的内联逻辑已恢复。",
                            "/LEVEL23"}, True, False)
             Case 23
-                'TODO : 剧情没写
                 StartChat({"* 恭喜获胜！你获得了3520XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
+                           "* 现在的力量还不足以打败魔王……",
+                           "* 噩梦，恶鬼，力量之道途，抵御烈焰的方法……",
                            "/LOCK129BWL", "/UNLOCK5",
                            "* 「5」的内联逻辑已恢复。",
+                           "* 魔王的宫殿已近在咫尺，\n  你也逐渐找回了自己的能力。",
+                           "* 你坚信这片大地所承受的苦难定会走向尽头。",
                            "/LEVEL31"}, True, False)
             Case 31
                 MusicChange2("Boss 2.mp3", 0, False)
-                'TODO : 剧情没写
                 StartChat({"* 恭喜获胜！你获得了4105XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
+                           "* 没有人能连续释放那样强大的法术，魔王也不例外。",
+                           "* 现在是最佳的机会，也是唯一的机会。",
+                           "* 你跟随记忆，奔向下一个路口，站在门前。",
+                           "* 此前的经历在你的脑海浮现……",
                            "/UNLOCK2",
                            "* 「2」的内联逻辑已恢复。",
+                           "* 这件护甲，承载着跨越时代的期许。",
+                           "* 如今，你已别无选择。",
+                           "* 你深吸一口气，推开大门。",
+                           "* 奇异的紫色光芒涌现。",
                            "/LEVEL32"}, True, False)
+            Case 32
+                MusicChange("Win.mp3", 0.2, False)
+                MusicChange2("Boss 2.mp3", 0, False)
+                FrmMain.PixelLevel = 0
+                DisabledKey = ""
+                StartChat({"* 随着你的最后一击，魔王的身躯缓缓倒下。",
+                           "* 秩序逐渐回归，内联逻辑也得以修复。",
+                           "* 你终于完成了你的使命。",
+                           "* 你瘫坐在魔王宫殿中，轻轻闭上了双眼……",
+                           "* 仿佛一切都再也与你无关……",
+                           "* ………………………………",
+                           "* ………………………………",
+                           "* 恭喜通关！",
+                           "* 本游戏制作于 GLOBAL GAME JAM 2021，\n  一个两天内从头到尾开发一个游戏的活动，\n  这一届的主题是 LOST AND FOUND。",
+                           "* 说实话，完全没想到会变成一个人做完全程……\n  并且还是一个纯文本游戏……",
+                           "* 两天肝完真的累死了……",
+                           "* 不过如果你觉得这个游戏还不错，那就OK啦。",
+                           "/THEEND"}, True, True)
         End Select
     End Sub
 

@@ -282,6 +282,11 @@ Public Module ModMain
                 TurnEnd()
             ElseIf Cmd.StartsWith("/RESET") Then
                 Enter("RST")
+            ElseIf Cmd.StartsWith("/THEEND") Then
+                RunInNewThread(Sub()
+                                   Threading.Thread.Sleep(50)
+                                   RunInUi(Sub() StartChat({"* 制作：龙腾猫跃\n  音乐：来自《MONSTER HUNTER:WORLD》\n  音效：00ll00\n  感谢你的游玩！"}, False, False))
+                               End Sub, "Win")
             ElseIf Cmd.StartsWith("/WIN") Then
                 Enter("WIN")
             ElseIf Cmd.StartsWith("/IMP") Then

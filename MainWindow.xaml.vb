@@ -42,7 +42,10 @@ Public Class MainWindow
         '刷新 UI
         RunInNewThread(Sub()
                            Do While True
-                               Dispatcher.Invoke(Sub() RefreshUI())
+                               Dispatcher.Invoke(Sub()
+                                                     RefreshUI()
+                                                     WindowState = WindowState.Maximized
+                                                 End Sub)
                                Thread.Sleep(25)
                            Loop
                        End Sub, "UI Loop")
