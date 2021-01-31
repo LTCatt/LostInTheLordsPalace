@@ -296,18 +296,18 @@ Public Module ModMain
             End If
             '处理文本
             Dim RawText As String = GetRawText(ChatContents.First)
-                FrmMain.TextChat.Text = RawText
-                FrmMain.TextChat.Tag = FrmMain.TextChat.Text
+            FrmMain.TextChat.Text = RawText
+            FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
             AniStart({
                      AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 55, 35)),
                      AaCode(Sub() If IsNowImportant Then AutoContinueChat = True, 1200 + RawText.Length * 20, True)
                 }, "Chat Content")
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
-                ChatContents.RemoveAt(0)
-            Else
-                '结束对话
-                AniStop("Chat Content")
+            ChatContents.RemoveAt(0)
+        Else
+            '结束对话
+            AniStop("Chat Content")
             EndChat()
         End If
     End Sub

@@ -33,9 +33,9 @@
     Public Function GetMagicDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "召唤熊熊燃烧的流星坠落地面，对全体敌人造成900点火焰伤害。"
+                Return "召唤熊熊燃烧的流星坠落地面，对全体敌人造成600点火焰伤害。"
             Case 2
-                Return "引导黑暗能量，对单个敌人造成1500点黯蚀伤害。"
+                Return "引导黑暗能量，对单个敌人造成1200点黯蚀伤害。"
             Case 3 '
                 Return "法术3描述"
             Case 4 '
@@ -85,7 +85,7 @@
                 Dim ChatList As New List(Of String)
                 '0-2
                 For i = 0 To Math.Min(2, MonsterHp.Count - 1)
-                    Dim Result = HurtMonster(i, 900, DamageType.Fire, True)
+                    Dim Result = HurtMonster(i, 600, DamageType.Fire, True)
                     RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
                 Next
                 ChatList.Add(RawText)
@@ -93,7 +93,7 @@
                 If MonsterHp.Count > 3 Then
                     RawText = ""
                     For i = 3 To MonsterHp.Count - 1
-                        Dim Result = HurtMonster(i, 900, DamageType.Fire, True)
+                        Dim Result = HurtMonster(i, 600, DamageType.Fire, True)
                         RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
                     Next
                     ChatList.Add("*" & RawText.Substring(1))
@@ -103,7 +103,7 @@
                 StartChat(ChatList.ToArray, True, False)
                 Exit Sub
             Case 2
-                Dim Result = HurtMonster(Target, 1500, DamageType.Dark, True)
+                Dim Result = HurtMonster(Target, 1200, DamageType.Dark, True)
                 RawText += "  " & Result(1) & MonsterName(Target) & "受到了" & Result(0) & "点伤害！"
             Case 3
             Case 4
@@ -363,7 +363,7 @@
             Case "骑士1"
                 Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0.5, 1))
             Case "魔王"
-                Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0.5, 1))
+                Return If(Type = DamageType.Light, 2, If(Type = DamageType.Dark, 0, 1))
             Case "苦力怕1"
                 Return 1
             Case "苦力怕2"
