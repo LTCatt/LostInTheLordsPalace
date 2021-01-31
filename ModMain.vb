@@ -251,21 +251,10 @@ Public Module ModMain
         FrmMain.TextChat.Tag = ""
         NextChat(False)
     End Sub
-    'Public Sub StartOrAddChat(Contents As String(), RequireEnsure As Boolean)
-    '    If EnterStatus = EnterStatuses.Chat AndAlso RequireEnsure Then
-    '        '都需要确认，追加
-    '        ChatContents.AddRange(Contents)
-    '    ElseIf EnterStatus = EnterStatuses.Chat AndAlso Not RequireEnsure Then
-    '        '正在进行更重要的对话，忽略
-    '    Else
-    '        '未进行对话
-    '        StartChat(Contents, RequireEnsure)
-    '    End If
-    'End Sub
     Public AutoContinueChat As Boolean = False
     Public ChatLevel As Integer = 0
     Public Sub NextChat(IsHandSkip As Boolean)
-        AutoContinueChat = False
+        If Not IsHandSkip Then AutoContinueChat = False
         If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
             '补全当前对话
             If Not IsNowImportant Then

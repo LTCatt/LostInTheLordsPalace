@@ -20,7 +20,7 @@ Public Class MainWindow
         SetText(TextInputResult, "\DARKGRAY等待玩家输入指令。")
         TextInputBox.Tag = ""
         '窗口自适应
-        Dim Size As Integer = Math.Floor(Math.Min((ActualHeight - WindowMargin * 2) / PanMain.Height, (ActualWidth - WindowMargin * 2) / PanMain.Width))
+        Dim Size As Integer = Math.Floor(Math.Min((SystemParameters.PrimaryScreenHeight - WindowMargin * 2) / PanMain.Height, (SystemParameters.PrimaryScreenWidth - WindowMargin * 2) / PanMain.Width))
         TransScale.ScaleX = Size
         TransScale.ScaleY = Size
         '闪烁计数与动画
@@ -70,7 +70,7 @@ Public Class MainWindow
                                            Pixelation = RandomInteger(-200, 400)
                                        End If
                                    Case 3
-                                       If RandomInteger(0, 19) < 5 Then
+                                       If RandomInteger(0, 19) < 6 Then
                                            Pixelation = RandomInteger(700, 900)
                                        Else
                                            Pixelation = RandomInteger(200, 700)
