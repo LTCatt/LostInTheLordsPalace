@@ -383,6 +383,7 @@
                         StartChat({"* " & MonsterName(Id) & "似乎在酝酿着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
                     Case 5
                         FrmMain.PixelLevel = 3
+                        MusicChange2("Prologue 2.mp3", 0.03, True)
                         StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。",
                            "/LOCK124579",
                            "* 在你眼里，似乎整个世界都在崩坏……",
@@ -469,21 +470,26 @@
                         "* 你早已决定不再犹豫。",
                         "* 你还在等待什么？"}
             Case 101
+                MusicChange("Prologue 1.mp3", 0.2, True)
                 Return {"* 所有怪物都在阻拦你奔向魔王房间的脚步。",
                         "* 离魔王的房间只差最后一步。",
                         "* 这些怪物对早已身经百战的你而言，根本不值一提。",
                         "* 你此前所经受的漫长磨练终于将走到尽头。",
                         "* 是时候为一切画下句号了。"}
             Case 102
+                MusicChange("Prologue 1.mp3", 0, True)
+                MusicChange2("Prologue 2.mp3", 0.2, True)
                 Return {"* 你终于来到了魔王的面前。",
                         "* 宛如实质的黑暗在你的四周涌现。",
                         "* 传闻魔王可以操纵一切，魔力、能量，甚至是……",
                         "* 这不可能。\n  你不再愿去回想那些恐怖的传说。",
                         "* 魔王高举双手，大声诵念着你从未听过的咒文……"}
             Case 1
+                MusicChange("Main 1.mp3", 0.1, True)
                 Return {"* 你似乎回到了起点。",
                         "* 遗忘？还是剥离？这就是魔王的能力吗？"}
             Case 2
+                MusicChange("Main 1.mp3", 0.2, True)
                 Return {"* 三具骷髅已经将你包围。",
                         "* 骷骨的响声宛如一首嘈杂的打击乐。",
                         "* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。",
@@ -569,6 +575,8 @@
                            "/LEVEL102"}, True, False)
             Case 102
                 FrmMain.PixelLevel = 1
+                MusicChange("Main 1.mp3", 0, False)
+                MusicChange2("Prologue 2.mp3", 0, False)
                 StartChat({"* ……",
                            "* …………",
                            "* ………………",

@@ -1,45 +1,45 @@
 ﻿Imports System.Threading
 
-Public Module ModMusic
+Public Module ModMusic2
 
-    Public MusicPlayer As MediaPlayer
+    Public MusicPlayer2 As MediaPlayer
     Private MusicThread As Thread
 
     Private IsInited As Boolean = False
-    Public Sub MusicStartRun()
+    Public Sub MusicStartRun2()
         If IsInited Then Exit Sub
         IsInited = True
         '初始化
         MusicThread = New Thread(Sub()
                                      '初始化 MediaPlayer
-                                     MusicPlayer = New MediaPlayer
-                                     MusicPlayer.Volume = 0
+                                     MusicPlayer2 = New MediaPlayer
+                                     MusicPlayer2.Volume = 0
                                      Do While True
                                          Thread.Sleep(15)
                                          '调整音乐
                                          If MusicName <> MusicNamePlaying Then
-                                             Dim RawPosition = MusicPlayer.Position
-                                             MusicPlayer.Open(New Uri(Path & "\Sounds\" & MusicName))
-                                             MusicPlayer.Play()
+                                             Dim RawPosition = MusicPlayer2.Position
+                                             MusicPlayer2.Open(New Uri(Path & "\Sounds\" & MusicName))
+                                             MusicPlayer2.Play()
                                              MusicNamePlaying = MusicName
-                                             If MusicInheritProgress Then MusicPlayer.Position = RawPosition
+                                             If MusicInheritProgress Then MusicPlayer2.Position = RawPosition
                                          End If
                                          '渐变音量
-                                         MusicPlayer.Volume = MusicPlayer.Volume * 0.998 + MusicVolume * 0.002
+                                         MusicPlayer2.Volume = MusicPlayer2.Volume * 0.998 + MusicVolume * 0.002
                                          '循环播放
-                                         If MusicPlayer.Position + New TimeSpan(0, 0, 0, 0, 20) >= MusicPlayer.NaturalDuration Then
-                                             MusicPlayer.Position = New TimeSpan(0, 0, 0, 0)
+                                         If MusicPlayer2.Position + New TimeSpan(0, 0, 0, 0, 20) >= MusicPlayer2.NaturalDuration Then
+                                             MusicPlayer2.Position = New TimeSpan(0, 0, 0, 0)
                                          End If
                                      Loop
                                  End Sub)
         MusicThread.Start()
     End Sub
 
-    Private MusicVolume As Double = 0.05
-    Private MusicName As String = "Prologue 1.mp3"
+    Private MusicVolume As Double = 0
+    Private MusicName As String = "Prologue 2.mp3"
     Private MusicInheritProgress As Boolean = False
     Private MusicNamePlaying As String = ""
-    Public Sub MusicChange(Name As String, Volume As Double, InheritProgress As Boolean)
+    Public Sub MusicChange2(Name As String, Volume As Double, InheritProgress As Boolean)
         MusicName = Name
         MusicVolume = Volume
         MusicInheritProgress = InheritProgress

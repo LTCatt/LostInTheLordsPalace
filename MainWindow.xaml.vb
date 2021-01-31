@@ -89,6 +89,7 @@ Public Class MainWindow
         '音频引擎
         SoundStartRun()
         MusicStartRun()
+        MusicStartRun2()
     End Sub
 
     '文本输入

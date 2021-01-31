@@ -291,8 +291,8 @@ Public Module ModMain
             FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 70, 25)),
-                     AaCode(Sub() If IsNowImportant Then AutoContinueChat = True, MathRange(RawText.Length * 80, 1200, 4000), True)
+                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 60, 25)),
+                     AaCode(Sub() If IsNowImportant Then AutoContinueChat = True, 1200 + RawText.Length * 20, True)
                 }, "Chat Content")
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
             ChatContents.RemoveAt(0)

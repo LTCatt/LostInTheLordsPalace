@@ -43,10 +43,6 @@ Public Module ModSound
         ''' </summary>
         Public FilePath As String
         ''' <summary>
-        ''' 声音绑定的控件。
-        ''' </summary>
-        Public Control As FrameworkElement
-        ''' <summary>
         ''' 是否已播放完成。
         ''' </summary>
         Public ReadOnly Property IsFinished As Boolean
@@ -61,8 +57,6 @@ Public Module ModSound
     Private Class SoundQueue
         Public FilePath As String
         Public Volume As Double
-        Public Balance As Double
-        Public Control As FrameworkElement = Nothing
     End Class
 
     Private IsSoundStartRun As Boolean = False
@@ -105,20 +99,12 @@ GotPlayer:
 
             '初始化并开始播放
             Entry.Player.Volume = Queue.Volume * VolumeMaster
-            Entry.Player.Balance = Queue.Balance
             Entry.Player.Position = New TimeSpan(0)
             Entry.FilePath = Queue.FilePath
             Entry.Volume = Queue.Volume
-            Entry.Control = Queue.Control
             Entry.Player.Play()
 
         Loop
-        ''更新音效位置
-        'For Each Sound In SoundList
-        '    If Sound.Control IsNot Nothing AndAlso Not Sound.IsFinished Then
-        '        Sound.Player.Balance = GetSoundPos(Sound.Control)
-        '    End If
-        'Next
     End Sub
 
     ''' <summary>
@@ -127,7 +113,7 @@ GotPlayer:
     Public Sub PlaySound(FileName As String, Optional Volume As Double = 1, Optional Balance As Double = 0)
         Dim FilePath As String = Path & "Sounds\" & FileName
         If Not File.Exists(FilePath) Then Throw New FileNotFoundException("未找到音频文件（" & FilePath & "）")
-        SoundQueueList.Enqueue(New SoundQueue With {.Balance = Balance, .Volume = Volume, .FilePath = FilePath})
+        SoundQueueList.Enqueue(New SoundQueue With {.Volume = Volume, .FilePath = FilePath})
     End Sub
 
 End Module
