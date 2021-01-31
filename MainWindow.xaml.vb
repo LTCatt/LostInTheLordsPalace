@@ -86,6 +86,9 @@ Public Class MainWindow
                                Thread.Sleep(30)
                            Loop
                        End Sub, "Shake")
+        '音频引擎
+        SoundStartRun()
+        MusicStartRun()
     End Sub
 
     '文本输入

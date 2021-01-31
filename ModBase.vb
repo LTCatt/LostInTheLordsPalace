@@ -5,6 +5,7 @@ Public Module ModBase
 #Region "随机"
 
     Private ReadOnly Random As New Random
+    Public Path As String = AppDomain.CurrentDomain.SetupInformation.ApplicationBase
 
     ''' <summary>
     ''' 随机选择其一。
