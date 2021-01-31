@@ -35,9 +35,9 @@
         Hp = Math.Max(0, Hp - Damage)
         '受伤动画
         If Damage > 1 Then
-            Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 2)
+            Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 3)
             FrmMain.RectHurt.Opacity = DeltaOpacity
-            AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, Damage / HpMax * 3500, Damage / HpMax * 1500, Ease:=New AniEaseInFluent(AniEasePower.Weak)), "Hurt Player")
+            AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, Damage / HpMax * 4500, Damage / HpMax * 1500, Ease:=New AniEaseInFluent(AniEasePower.Weak)), "Hurt Player")
         End If
         '返回结果
         Return {Damage, ExtraDisc}
@@ -224,7 +224,7 @@
         Dim Info As New List(Of String)
         For i = 1 To 7
             Info.Add(GetItemText(i,
-                                 GetMagicTitle(i).PadRight(9, " ") & If(GetMagicCost(i) > Mp, "\RED", "\BLUE") & GetMagicCost(i).ToString.PadLeft(3, " ") & "MP" & If(GetMagicCost(i) > Mp, " MP不足", ""),
+                                 GetMagicTitle(i).PadRight(9, " ") & If(GetMagicCost(i) > Mp, "\DARKRED", "\BLUE") & "MP " & GetMagicCost(i).ToString.PadLeft(4, " "),
                                  "\DARKGRAY" & GetMagicDesc(i)))
         Next
         Return Join(Info.ToArray, vbCrLf)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized" WindowStyle="None" Background="Gray" Cursor="None" UseLayoutRounding="False" SnapsToDevicePixels="False">
+        Title="GGJ2021 龙腾猫跃" WindowState="Maximized" WindowStyle="None" Background="Gray" Cursor="None" UseLayoutRounding="False" SnapsToDevicePixels="False">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="1" />
@@ -20,7 +20,7 @@
         <Grid x:Name="PanBack" Background="Black">
             <Grid.Effect>
                 <!--<DropShadowEffect Color="Gray" Opacity="0.7" ShadowDepth="2" BlurRadius="3" />-->
-                <ee:MagnifyEffect Amount="0.06" InnerRadius="0" OuterRadius="1" />
+                <ee:MagnifyEffect Amount="0.09" InnerRadius="0" OuterRadius="1" />
             </Grid.Effect>
             <Rectangle x:Name="RectHurt" Opacity="0">
                 <Rectangle.Fill>
@@ -31,6 +31,7 @@
                 </Rectangle.Fill>
             </Rectangle>
             <Grid x:Name="PanBack2">
+                <Image Source="Images/Backgrounds/Hall.png" Stretch="UniformToFill" IsHitTestVisible="False" Opacity="0.9" />
                 <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                     <Grid.RenderTransform>
                         <ScaleTransform x:Name="TransScale" />

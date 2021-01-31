@@ -153,5 +153,8 @@
   <ItemGroup>
     <Resource Include="Images\Backgrounds\Line.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backgrounds\Hall.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

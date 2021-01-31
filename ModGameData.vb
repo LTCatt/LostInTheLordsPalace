@@ -15,17 +15,17 @@
     Public Function GetMagicTitle(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "流星爆"
+                Return "真银风暴"
             Case 2
-                Return "晦暗之触"
+                Return "暗夜魅影"
             Case 3
-                Return "法术3"
+                Return "天坠之火"
             Case 4
-                Return "法术4"
+                Return "乌萨战吼"
             Case 5
-                Return "法术5"
+                Return "恶鬼之力"
             Case 6
-                Return "法术6"
+                Return "教条力场"
             Case 7
                 Return "法术7名称"
         End Select
@@ -33,17 +33,17 @@
     Public Function GetMagicDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "召唤熊熊燃烧的流星坠落地面，对全体敌人造成600点火焰伤害。"
+                Return "刮起一阵银灰色的利刃风暴，对全体敌人造成600点物理伤害。"
             Case 2
                 Return "引导黑暗能量，对单个敌人造成1200点黯蚀伤害。"
-            Case 3 '
-                Return "法术3描述"
-            Case 4 '
-                Return "法术4描述"
+            Case 3
+                Return "召唤熊熊燃烧的陨石坠落地面，对全体敌人造成250点火焰伤害。"
+            Case 4
+                Return "在敌人的压迫下激发斗志，恢复当前HP三分之一的MP。"
             Case 5
-                Return "法术5描述"
-            Case 6 '
-                Return "法术6描述"
+                Return "当前回合ATK提升500，效果可叠加。施展此法术不会使回合结束。"
+            Case 6
+                Return "当前回合DEF提升400，效果可叠加。施展此法术不会使回合结束。"
             Case 7
                 Return "法术7描述"
         End Select
@@ -51,19 +51,19 @@
     Public Function GetMagicCost(Id As Integer) As Integer
         Select Case Id
             Case 1
-                Return 260
+                Return 600
             Case 2
-                Return 190
+                Return 540
             Case 3
-                Return 30
+                Return 220
             Case 4
-                Return 50
+                Return 0
             Case 5
-                Return 100
+                Return 270
             Case 6
                 Return 200
             Case 7
-                Return 900
+                Return 999
         End Select
     End Function
     Public Sub UseMagic(Id As Integer)
@@ -77,15 +77,15 @@
         End If
     End Sub
     Public Sub PerformMagic(Id As Integer, Target As Integer)
-        Screen = Screens.Combat
         Mp -= GetMagicCost(Id)
         Dim RawText As String = "* 你施展了" & GetMagicTitle(Id) & "！\n"
         Select Case Id
             Case 1
+                Screen = Screens.Combat
                 Dim ChatList As New List(Of String)
                 '0-2
                 For i = 0 To Math.Min(2, MonsterHp.Count - 1)
-                    Dim Result = HurtMonster(i, 600, DamageType.Fire, True)
+                    Dim Result = HurtMonster(i, 600, DamageType.Melee, True)
                     RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
                 Next
                 ChatList.Add(RawText)
@@ -93,7 +93,7 @@
                 If MonsterHp.Count > 3 Then
                     RawText = ""
                     For i = 3 To MonsterHp.Count - 1
-                        Dim Result = HurtMonster(i, 600, DamageType.Fire, True)
+                        Dim Result = HurtMonster(i, 600, DamageType.Melee, True)
                         RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
                     Next
                     ChatList.Add("*" & RawText.Substring(1))
@@ -103,12 +103,46 @@
                 StartChat(ChatList.ToArray, True, False)
                 Exit Sub
             Case 2
+                Screen = Screens.Combat
                 Dim Result = HurtMonster(Target, 1200, DamageType.Dark, True)
                 RawText += "  " & Result(1) & MonsterName(Target) & "受到了" & Result(0) & "点伤害！"
             Case 3
+                Screen = Screens.Combat
+                Dim ChatList As New List(Of String)
+                '0-2
+                For i = 0 To Math.Min(2, MonsterHp.Count - 1)
+                    Dim Result = HurtMonster(i, 250, DamageType.Fire, True)
+                    RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                Next
+                ChatList.Add(RawText)
+                '3-6
+                If MonsterHp.Count > 3 Then
+                    RawText = ""
+                    For i = 3 To MonsterHp.Count - 1
+                        Dim Result = HurtMonster(i, 250, DamageType.Fire, True)
+                        RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                    Next
+                    ChatList.Add("*" & RawText.Substring(1))
+                End If
+                '输出
+                ChatList.Add("/TURNEND")
+                StartChat(ChatList.ToArray, True, False)
+                Exit Sub
             Case 4
+                Screen = Screens.Combat
+                Dim Delta As Integer = Hp / 3 'MonsterName.Count * 150
+                Mp = Math.Min(MpMax, Mp + Delta)
+                RawText += "  你的MP恢复了" & Delta & "！"
             Case 5
+                RawText += "  你感觉自己的肌肉中充盈着力量。"
+                ExtraAtk += 500
+                StartChat({RawText}, False, False)
+                Exit Sub
             Case 6
+                RawText += "  一道无形的屏障环绕在你的周身。"
+                ExtraDef += 400
+                StartChat({RawText}, False, False)
+                Exit Sub
             Case 7
         End Select
         StartChat({RawText, "/TURNEND"}, True, False)
@@ -213,7 +247,7 @@
             Case 1
                 Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+2800。"
             Case 2
-                Return "失落科技与魔法结合的究极护甲。ATK+300，DEF+1700。"
+                Return "失落科技与魔法结合的究极护甲。ATK+300，DEF+1800。"
             Case 3
                 Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
             Case 4
@@ -267,7 +301,7 @@
             Case 1
                 Return 0
             Case 2
-                Return 1700
+                Return 1800
             Case 3
                 Return 1200
             Case 4
@@ -309,7 +343,7 @@
             Case "骑士1"
                 Return 2000
             Case "魔王"
-                Return 3100
+                Return 2900
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -422,6 +456,7 @@
                            "* 一些你熟悉的事物似乎正在从你的身上被剥离。",
                            "* 知识，概念……",
                            "* 抽象的，难以理解的，超形上学的……",
+                           "* ……",
                            "* 你到底失去了什么？",
                            "/WIN"}, True, True)
                     Case Else
@@ -612,7 +647,7 @@
                            "/LEVEL1"}, True, True)
             Case 1
                 StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
-                           "* 顷刻间，那些骷髅刚才造成的伤痕已经消失不见。",
+                           "* 顷刻间，骷髅方才造成的伤痕已经消失不见。",
                            "* 守护……防御……",
                            "* 在沉思中，你回想起了你来到这里的初衷。",
                            "/UNLOCKD",
@@ -622,7 +657,7 @@
             Case 2
                 StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你决定重新踏上魔宫之旅。",
-                           "* 再次出发。新生，即是新的希望。\n  这是再次开始的机会。",
+                           "* 再次出发。新生，即是新的希望。\n  再次开始的机会。",
                            "/UNLOCKR",
                            "* 「R」的内联逻辑已恢复。",
                            "* 你迈步走入魔宫入口的台阶……",
@@ -643,8 +678,8 @@
                            "/LEVEL5"}, True, False)
             Case 5
                 StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
-                           "* 你离开了黑火药之厅。\n  在你的前方，是元素与魔法的领域。",
-                           "* 但这并不是法术应当被使用的地方。",
+                           "* 你离开了黑火药之厅。",
+                           "* 在你的前方，是元素与魔法的领域。",
                            "/UNLOCKA",
                            "* 「A」的内联逻辑已恢复。",
                            "* 没有下一关了。",
