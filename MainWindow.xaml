@@ -25,13 +25,13 @@
             <Rectangle x:Name="RectHurt" Opacity="0">
                 <Rectangle.Fill>
                     <RadialGradientBrush>
-                        <GradientStop Color="#20FF0000" Offset="0"/>
-                        <GradientStop Color="Red" Offset="1.2"/>
+                        <GradientStop Color="#60FF0000" Offset="0"/>
+                        <GradientStop Color="Red" Offset="1"/>
                     </RadialGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
             <Grid x:Name="PanBack2">
-                <Image Source="Images/Backgrounds/Hall.png" Stretch="UniformToFill" IsHitTestVisible="False" Opacity="0.8" />
+                <Image Source="Images/Backgrounds/Hall.png" Stretch="UniformToFill" IsHitTestVisible="False" Opacity="0.9" />
                 <Grid x:Name="PanMain" Width="48" Height="27" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                     <Grid.RenderTransform>
                         <ScaleTransform x:Name="TransScale" />
@@ -71,6 +71,6 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Image x:Name="ImgLine" Source="Images/Backgrounds/Line.png" Stretch="UniformToFill" d:IsHidden="True" IsHitTestVisible="False" Opacity="0.5" Margin="0,-40" />
+        <Image x:Name="ImgLine" Source="Images/Backgrounds/Line.png" Stretch="UniformToFill" d:IsHidden="True" IsHitTestVisible="False" Opacity="0.3" Margin="0,-40" />
     </Grid>
 </Window>

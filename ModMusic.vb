@@ -35,7 +35,7 @@ Public Module ModMusic
         MusicThread.Start()
     End Sub
 
-    Private MusicVolume As Double = 0.05
+    Private MusicVolume As Double = 0.02
     Private MusicName As String = "Prologue 1.mp3"
     Private MusicInheritProgress As Boolean = False
     Private MusicNamePlaying As String = ""

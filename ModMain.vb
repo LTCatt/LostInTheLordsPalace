@@ -26,6 +26,9 @@ Public Module ModMain
             ElseIf Inline.StartsWith("ORANGE") Then
                 TargetColor = New MyColor(255, 128, 0)
                 Delta = 6
+            ElseIf Inline.StartsWith("DIMRED") Then
+                TargetColor = New MyColor(170, 0, 0)
+                Delta = 6
             ElseIf Inline.StartsWith("DARKRED") Then
                 TargetColor = New MyColor(100, 0, 0)
                 Delta = 7
@@ -45,7 +48,7 @@ Public Module ModMain
                 TargetColor = New MyColor(160, 160, 160)
                 Delta = 4
             ElseIf Inline.StartsWith("DARKGRAY") Then
-                TargetColor = New MyColor(100, 100, 100)
+                TargetColor = New MyColor(90, 90, 90)
                 Delta = 8
             Else
                 TargetColor = New MyColor(255, 255, 255)
@@ -65,10 +68,16 @@ Public Module ModMain
                 Target.Inlines.Add(New Run(StrConv(RealString, VbStrConv.Wide)) With {.Foreground = TargetColor})
             Else
                 '有禁用字，逐个添加
+                Dim RightPart As String = ""
                 For Each Letter In RealString
                     If Letter = vbCr Then Continue For
                     If Letter = vbLf Then Letter = vbCrLf
                     If DisabledKey.Contains(Letter) Then
+                        '清理 RightPart
+                        If RightPart <> "" Then
+                            Target.Inlines.Add(New Run(StrConv(RightPart, VbStrConv.Wide)) With {.Foreground = TargetColor})
+                            RightPart = ""
+                        End If
                         '修改字符与颜色
                         Dim RealTargetColor As MyColor
                         If Inline.StartsWith("YELLOW") Then
@@ -80,9 +89,14 @@ Public Module ModMain
                         End If
                         Target.Inlines.Add(New Run(StrConv(Letter, VbStrConv.Wide)) With {.Foreground = RealTargetColor})
                     Else
-                        Target.Inlines.Add(New Run(StrConv(Letter, VbStrConv.Wide)) With {.Foreground = TargetColor})
+                        RightPart += Letter
                     End If
                 Next
+                '清理 RightPart
+                If RightPart <> "" Then
+                    Target.Inlines.Add(New Run(StrConv(RightPart, VbStrConv.Wide)) With {.Foreground = TargetColor})
+                    RightPart = ""
+                End If
             End If
         Next
     End Sub
@@ -115,6 +129,11 @@ Public Module ModMain
                     StartChat({"* 伊尔梅特的祝福已生效。\n  创伤已被抚平，时光已被重置。"}, False, False)
                     Exit Sub
                 ElseIf Input.StartsWith("TP ") Then
+                    '存档
+                    ItemCountLast = ItemCount
+                    EquipWeaponLast = EquipWeapon
+                    EquipArmorLast = EquipArmor
+                    '传送
                     Level = Input.Replace("TP ", "")
                     StartLevel(Level)
                     Exit Sub
