@@ -934,7 +934,10 @@ NextAni:
                 'End If
                 '设置文本
                 If Ani.Obj.GetType.Name = "TextBlock" Then
-                    Ani.Obj.Text = NewText
+                    If Ani.Obj.Text <> NewText Then
+                        Ani.Obj.Text = NewText
+                        PlaySound("Click.mp3", 0.05)
+                    End If
                 Else
                     Ani.Obj.Context = NewText
                 End If

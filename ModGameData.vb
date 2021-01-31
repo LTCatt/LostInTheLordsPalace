@@ -383,14 +383,15 @@
                         StartChat({"* " & MonsterName(Id) & "似乎在酝酿着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
                     Case 5
                         FrmMain.PixelLevel = 3
-                        MusicChange2("Prologue 2.mp3", 0.03, True)
+                        MusicChange2("Prologue 2.mp3", 0, True)
                         StartChat({"* 一圈无形的波纹荡漾，席卷了你的全身。",
                            "/LOCK124579",
                            "* 在你眼里，似乎整个世界都在崩坏……",
                            "* 一切都在离你远去。",
                            "* 似乎有哪里不对。",
                            "/LOCKRBIGDWXKLA",
-                           "* 一些你熟悉的事物似乎正在从你的身上被剥离……",
+                           "* 波纹慢慢扩散……",
+                           "* 一些你熟悉的事物似乎正在从你的身上被剥离。",
                            "* 知识，概念……",
                            "* 抽象的，难以理解的，超形上学的……",
                            "* 你到底失去了什么？",
@@ -576,7 +577,6 @@
             Case 102
                 FrmMain.PixelLevel = 1
                 MusicChange("Main 1.mp3", 0, False)
-                MusicChange2("Prologue 2.mp3", 0, False)
                 StartChat({"* ……",
                            "* …………",
                            "* ………………",

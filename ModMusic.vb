@@ -25,7 +25,7 @@ Public Module ModMusic
                                              If MusicInheritProgress Then MusicPlayer.Position = RawPosition
                                          End If
                                          '渐变音量
-                                         MusicPlayer.Volume = MusicPlayer.Volume * 0.998 + MusicVolume * 0.002
+                                         MusicPlayer.Volume = MusicPlayer.Volume * 0.9975 + MusicVolume * 0.0025
                                          '循环播放
                                          If MusicPlayer.Position + New TimeSpan(0, 0, 0, 0, 20) >= MusicPlayer.NaturalDuration Then
                                              MusicPlayer.Position = New TimeSpan(0, 0, 0, 0)
