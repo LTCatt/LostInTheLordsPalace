@@ -81,6 +81,7 @@
 
     '刷新 UI
     Public Sub RefreshUI()
+        If AutoContinueChat Then NextChat(False)
         SetText(FrmMain.TextInputBox, If(EnterStatus = EnterStatuses.Chat, "", ">" & FrmMain.TextInputBox.Tag & If(FrmMain.IsHalfSec, "_", "")))
         SetText(FrmMain.TextActionButtom, If(Screen <> Screens.Empty, GetKeyText("RST") & " 重置\n\n", "") & GetKeyText("ALT+F4") & "\n    退出游戏")
         '状态栏

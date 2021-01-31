@@ -97,7 +97,7 @@ Public Class MainWindow
         If RealKey = "SPACE" Then RealKey = " "
         '按下任意按键
         If EnterStatus = EnterStatuses.Chat Then
-            NextChat()
+            NextChat(True)
             Exit Sub
         End If
         '主输入状态

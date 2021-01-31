@@ -556,17 +556,17 @@
         Screen = Screens.Empty
         Select Case Id
             Case 100
-                StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你在魔宫之中飞速穿梭，一只只怪物在你的剑下飞灰烟灭。",
                            "* 魔王的房间已经近在咫尺。",
                            "* 这片大地所承受的苦难终要走向尽头。",
-                           "/LEVEL101"}, True, True)
+                           "/LEVEL101"}, True, False)
             Case 101
-                StartChat({"* 恭喜获胜！你获得了3855XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了3855XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你迈步走向下一个路口，推开大门……",
                            "* 奇异的紫色光芒涌现。",
                            "* 这一刻，你知道你漫长的旅程终于走到了终点。",
-                           "/LEVEL102"}, True, True)
+                           "/LEVEL102"}, True, False)
             Case 102
                 FrmMain.PixelLevel = 1
                 StartChat({"* ……",
@@ -575,44 +575,44 @@
                            "* 当你再次睁开眼……",
                            "/LEVEL1"}, True, True)
             Case 1
-                StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了620XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 顷刻间，那些骷髅刚才造成的伤痕已经消失不见。",
                            "* 守护……防御……",
                            "* 在沉思中，你回想起了你来到这里的初衷。",
                            "/UNLOCKD",
                            "* 「D」的内联逻辑已恢复。",
                            "* 你抬起头……",
-                           "/LEVEL2"}, True, True)
+                           "/LEVEL2"}, True, False)
             Case 2
-                StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了1205XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你决定重新踏上魔宫之旅。",
                            "* 再次出发。新生，即是新的希望。\n  伊尔梅特，再次开始的机会。",
                            "/UNLOCKR",
                            "* 「R」的内联逻辑已恢复。",
                            "* 你迈步走入魔宫入口的台阶……",
-                           "/LEVEL3"}, True, True)
+                           "/LEVEL3"}, True, False)
             Case 3
-                StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了860XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 所幸，你的行囊还没有因为爆炸损坏。",
                            "/UNLOCKI",
                            "* 「I」的内联逻辑已恢复。",
                            "* 你刚整理好行囊，就听到了嗞啦作响的电弧声。",
-                           "/LEVEL4"}, True, True)
+                           "/LEVEL4"}, True, False)
             Case 4
-                StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了1755XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 但凡能再多一点助力，刚才的战斗也不至如此艰辛。",
                            "/UNLOCK4",
                            "* 「4」的内联逻辑已恢复。",
                            "* 看上去你走到了黑火药之厅的尽头。",
-                           "/LEVEL5"}, True, True)
+                           "/LEVEL5"}, True, False)
             Case 5
-                StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！",
+                StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你离开了黑火药之厅。\n  在你的前方，是元素与魔法的领域。",
                            "* 但这并不是法术应当被使用的地方。",
                            "/UNLOCKA",
                            "* 「A」的内联逻辑已恢复。",
                            "* 没有下一关了。",
-                           "* 真的没有下一关了。"}, True, True)
+                           "* 真的没有下一关了。"}, True, False)
         End Select
     End Sub
 

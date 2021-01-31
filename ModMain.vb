@@ -230,7 +230,7 @@ Public Module ModMain
         End If
         FrmMain.TextChat.Text = ""
         FrmMain.TextChat.Tag = ""
-        NextChat()
+        NextChat(False)
     End Sub
     'Public Sub StartOrAddChat(Contents As String(), RequireEnsure As Boolean)
     '    If EnterStatus = EnterStatuses.Chat AndAlso RequireEnsure Then
@@ -243,29 +243,16 @@ Public Module ModMain
     '        StartChat(Contents, RequireEnsure)
     '    End If
     'End Sub
-    Public Sub NextChat()
+    Public AutoContinueChat As Boolean = False
+    Public Sub NextChat(IsHandSkip As Boolean)
+        AutoContinueChat = False
         If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
             '补全当前对话
             If Not IsNowImportant Then
                 AniStop("Chat Content")
                 FrmMain.TextChat.Text = FrmMain.TextChat.Tag
             End If
-        ElseIf ChatContents.Count > 0 AndAlso Not ChatContents(0).StartsWith("/") Then
-            '下一句对话
-            If EnterStatus = EnterStatuses.Chat Then SetText(FrmMain.TextInputResult, "\DARKGRAY请按任意键继续。")
-            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, If(IsNowImportant, New MyColor(0, 255, 255), New MyColor(255, 255, 255)), New MyColor(100, 100, 100))
-            '处理文本
-            Dim RawText As String = GetRawText(ChatContents.First) & If(IsNowImportant, "    ", "")
-            FrmMain.TextChat.Text = RawText
-            FrmMain.TextChat.Tag = FrmMain.TextChat.Text
-            '播放动画
-            AniStop("Chat Content")
-            AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 40, 25))
-                }, "Chat Content")
-            FrmMain.TextChat.Text = "" '防止动画结束前闪现
-            ChatContents.RemoveAt(0)
-        ElseIf ChatContents.Count > 0 Then
+        ElseIf ChatContents.Count > 0 AndAlso ChatContents(0).StartsWith("/") Then
             '执行命令
             AniStop("Chat Content")
             Dim Cmd = ChatContents(0)
@@ -277,15 +264,38 @@ Public Module ModMain
                 Enter("RST")
             ElseIf Cmd.StartsWith("/WIN") Then
                 Enter("WIN")
+            ElseIf Cmd.StartsWith("/IMP") Then
+                IsNowImportant = Cmd.Replace("/IMP", "")
+                NextChat(False)
             ElseIf Cmd.StartsWith("/LOCK") Then
                 DisabledKey &= Cmd.Replace("/LOCK", "")
-                NextChat()
+                NextChat(False)
             ElseIf Cmd.StartsWith("/UNLOCK") Then
                 DisabledKey = DisabledKey.Replace(Cmd.Replace("/UNLOCK", ""), "")
-                NextChat()
+                NextChat(False)
             ElseIf Cmd.StartsWith("/LEVEL") Then
                 Enter(Cmd.Replace("/LEVEL", "TP "))
             End If
+        ElseIf IsNowImportant AndAlso IsHandSkip Then
+            '禁止手动继续自动剧情
+            Exit Sub
+        ElseIf ChatContents.Count > 0 Then
+            '下一句对话
+            If EnterStatus = EnterStatuses.Chat Then
+                SetText(FrmMain.TextInputResult, If(IsNowImportant, "\DARKGRAY剧情将自动播放。", "\DARKGRAY请按任意键继续。"))
+            End If
+            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, If(IsNowImportant, New MyColor(0, 255, 255), New MyColor(255, 255, 255)), New MyColor(100, 100, 100))
+            '处理文本
+            Dim RawText As String = GetRawText(ChatContents.First)
+            FrmMain.TextChat.Text = RawText
+            FrmMain.TextChat.Tag = FrmMain.TextChat.Text
+            '播放动画
+            AniStart({
+                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 70, 25)),
+                     AaCode(Sub() If IsNowImportant Then AutoContinueChat = True, MathRange(RawText.Length * 80, 1200, 4000), True)
+                }, "Chat Content")
+            FrmMain.TextChat.Text = "" '防止动画结束前闪现
+            ChatContents.RemoveAt(0)
         Else
             '结束对话
             AniStop("Chat Content")
