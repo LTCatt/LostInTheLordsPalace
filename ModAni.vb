@@ -939,7 +939,11 @@ NextAni:
                 If Ani.Obj.GetType.Name = "TextBlock" Then
                     If Ani.Obj.Text <> NewText Then
                         Ani.Obj.Text = NewText
-                        PlaySound("Click.mp3", If(ChatLevel = 2, 0.1, 0.06))
+                        If ChatLevel = 2 Then
+                            PlaySound("Click 1.mp3", 0.12)
+                        Else
+                            PlaySound("Click 2.mp3", 0.08)
+                        End If
                     End If
                 Else
                     Ani.Obj.Context = NewText

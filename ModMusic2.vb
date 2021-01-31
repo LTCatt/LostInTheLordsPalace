@@ -36,7 +36,7 @@ Public Module ModMusic2
     End Sub
 
     Private MusicVolume As Double = 0
-    Private MusicName As String = "Prologue 2.mp3"
+    Private MusicName As String = "Boss 2.mp3"
     Private MusicInheritProgress As Boolean = False
     Private MusicNamePlaying As String = ""
     Public Sub MusicChange2(Name As String, Volume As Double, InheritProgress As Boolean)

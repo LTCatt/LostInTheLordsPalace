@@ -19,7 +19,7 @@
     Public Function HurtMonster(Id As Integer, Damage As Integer, Type As DamageType, IgnoreDefence As Boolean)
         Dim Mul = GetMonsterInv(MonsterType(Id), Type)
         Damage = Math.Max(If(Mul = 0, 0, 1), Mul * (Damage - If(IgnoreDefence, 0, GetMonsterDef(MonsterType(Id)))))
-        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul = 0.5, "收效甚微，", If(Mul = 0, "免疫！", "")))
+        Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul = 0.3, "收效甚微，", If(Mul = 0, Type.ToString & "免疫！", "")))
         '实际扣血
         MonsterHp(Id) = Math.Max(0, MonsterHp(Id) - Damage)
         '返回结果
@@ -27,7 +27,7 @@
     End Function
     Public Function HurtPlayer(Damage As Integer, Type As DamageType)
         '获取抗性
-        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.Fire, 0.5, If(ExtraWarm > 0 AndAlso Type = DamageType.Ice, 0.5, 1))
+        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.3, If(ExtraWarm > 0 AndAlso Type = DamageType.冷冻, 0.3, 1))
         Damage = Math.Max(If(Mul = 0, 0, 1), Damage * Mul)
         If Damage = 2 Then Damage = 1
         Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul < 1, "收效甚微，", ""))
@@ -208,7 +208,7 @@
             Case "ATK"
                 '攻击怪物
                 Screen = Screens.Combat
-                Dim Result = HurtMonster(Id, GetRealAtk(), If(EquipWeapon = 4, DamageType.Light, DamageType.Melee), False)
+                Dim Result = HurtMonster(Id, GetRealAtk(), If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
                 StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！", "/TURNEND"}, True, False)
             Case "ITEM4"
                 '飞刀
@@ -216,6 +216,9 @@
             Case "MAGIC2"
                 '晦暗之触
                 PerformMagic(2, Id)
+            Case "MAGIC7"
+                '绝影
+                PerformMagic(7, Id)
         End Select
     End Sub
 
