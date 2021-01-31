@@ -784,8 +784,11 @@ Public Module ModAni
                                AniLastTick = GetTimeTick()
                                '执行动画
                                RunInUiWait(Sub()
-                                               AniCount = 0
-                                               AniTimer(DeltaTime * AniSpeed)
+                                               Try
+                                                   AniCount = 0
+                                                   AniTimer(DeltaTime * AniSpeed)
+                                               Catch
+                                               End Try
                                            End Sub)
 Sleeper:
                                '控制 FPS

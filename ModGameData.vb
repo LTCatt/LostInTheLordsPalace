@@ -549,17 +549,18 @@
                         "* 这不可能。\n  你不再愿去回想那些恐怖的传说。",
                         "* 魔王高举双手，大声诵念着你从未听过的咒文……"}
             Case 1
-                MusicChange("Main 1.mp3", 0.1, True)
+                MusicChange("Main 1.mp3", 0.05, True)
                 Return {"* 你似乎回到了起点。",
                         "* 遗忘？还是剥离？这就是魔王的能力吗？"}
             Case 2
-                MusicChange("Main 1.mp3", 0.2, True)
+                MusicChange("Main 1.mp3", 0.1, True)
                 Return {"* 三具骷髅已经将你包围。",
                         "* 骷骨的响声宛如一首嘈杂的打击乐。",
                         "* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。",
                         "* 你忍耐着肉体的痛楚。",
                         "* 骨头喀拉作响。"}
             Case 3
+                MusicChange("Main 1.mp3", 0.2, True)
                 Return {"* 前方是火药与爆炸之厅。",
                         "* 移动的坟墓正在靠近……",
                         "* 倒计时已经数到了「1」。",

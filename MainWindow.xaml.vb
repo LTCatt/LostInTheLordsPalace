@@ -67,7 +67,7 @@ Public Class MainWindow
                                            Pixelation = RandomInteger(-200, 400)
                                        End If
                                    Case 3
-                                       If RandomInteger(0, 19) < 3 Then
+                                       If RandomInteger(0, 19) < 5 Then
                                            Pixelation = RandomInteger(700, 900)
                                        Else
                                            Pixelation = RandomInteger(200, 700)
