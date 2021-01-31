@@ -39,31 +39,31 @@
             Case 3
                 Return "召唤熊熊燃烧的陨石坠落地面，对全体敌人造成250点火焰伤害。"
             Case 4
-                Return "在敌人的压迫下激发斗志，恢复相当于当前HP三分之一的MP。"
+                Return "在敌人的压迫下激发斗志，恢复相当于当前HP四分之一的MP。"
             Case 5
                 Return "当前回合ATK提升400，效果可叠加。施展此法术不会使回合结束。"
             Case 6
-                Return "当前回合DEF提升500，且恢复200点HP。"
+                Return "当前回合DEF提升500，且恢复400点HP。"
             Case 7
-                Return "在法力的推动下，以三分之一的ATK进行四次连续攻击。"
+                Return "在魔力的推动下，以三分之一的ATK进行四次连续攻击。"
         End Select
     End Function
     Public Function GetMagicCost(Id As Integer) As Integer
         Select Case Id
             Case 1
-                Return 600
+                Return 550
             Case 2
-                Return 540
+                Return 520
             Case 3
                 Return 230
             Case 4
                 Return 0
             Case 5
-                Return 210
+                Return 150
             Case 6
                 Return 170
             Case 7
-                Return 90
+                Return 80
         End Select
     End Function
     Public Sub UseMagic(Id As Integer)
@@ -135,7 +135,7 @@
                 Exit Sub
             Case 4
                 Screen = Screens.Combat
-                Dim Delta As Integer = Hp / 3 'MonsterName.Count * 150
+                Dim Delta As Integer = Hp / 4 'MonsterName.Count * 150
                 Mp = Math.Min(MpMax, Mp + Delta)
                 RawText += "  你的MP恢复了" & Delta & "！"
             Case 5
@@ -144,9 +144,10 @@
                 StartChat({RawText}, False, False)
                 Exit Sub
             Case 6
+                Screen = Screens.Combat
                 RawText += "  一道无形的屏障环绕在你的周身。"
                 ExtraDef += 500
-                Hp = Math.Min(HpMax, Hp + 200)
+                Hp = Math.Min(HpMax, Hp + 400)
             Case 7
                 Screen = Screens.Combat
                 Dim Result = HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
@@ -170,7 +171,7 @@
             Case 4
                 Return "飞刀"
             Case 5
-                Return "热饮"
+                Return "冷饮"
             Case 6
                 Return "回复药·G"
             Case 7
@@ -186,11 +187,11 @@
             Case 3
                 Return "可解除中毒状态的蓝色药剂。"
             Case 4
-                Return "对单个敌人造成固定15点物理伤害。"
+                Return "对单个敌人造成50点物理伤害。"
             Case 5
-                Return "获得5回合冷冻伤害抗性。"
+                Return "获得10回合火焰伤害抗性。"
             Case 6
-                Return "可回复750HP的秘制草药。"
+                Return "可回复800HP的秘制草药。"
             Case 7
                 Return "能让你提升到下一等级的珍贵药剂。"
         End Select
@@ -219,14 +220,14 @@
             Case 3
                 RawText += "  但你目前并没有中毒。"
             Case 4
-                Dim Result = HurtMonster(Target, 15, DamageType.物理, True)
+                Dim Result = HurtMonster(Target, 50, DamageType.物理, True)
                 RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！"
             Case 5
-                ExtraWarm = 5
-                RawText += "  一股暖流浸润着你的五脏六腑。"
+                ExtraCold = 10
+                RawText += "  一阵凉意浸透了你的五脏六腑。"
             Case 6
-                Hp = Math.Min(Hp + 750, HpMax)
-                RawText += "  你的HP恢复了750点！"
+                Hp = Math.Min(Hp + 800, HpMax)
+                RawText += "  你的HP恢复了800点！"
             Case 7
                 RawText += "  你目前已经到达了最高等级，无法升级。"
         End Select
@@ -255,9 +256,9 @@
     Public Function GetEquipDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+1800。"
+                Return "精灵一族的传奇长剑，必须有强大的灵魂才可握持。ATK+1700。"
             Case 2
-                Return "失落科技与魔法结合的究极护甲。ATK+300，DEF+1800。"
+                Return "失落科技与魔法结合的至高护甲。ATK+400，DEF+1800。"
             Case 3
                 Return "使用最坚固的金属打造而成的护甲。DEF+1200，免疫暴击。"
             Case 4
@@ -291,9 +292,9 @@
     Public Function GetEquipAtk(Id As Integer) As Integer
         Select Case Id
             Case 1
-                Return 1800
+                Return 1700
             Case 2
-                Return 300
+                Return 400
             Case 3
                 Return 0
             Case 4
@@ -357,13 +358,13 @@
             Case "骷髅2"
                 Return 800
             Case "骑士1"
-                Return 1700
+                Return 1770
             Case "骑士2"
                 Return 1550
             Case "冰1"
                 Return 400
             Case "火1"
-                Return 400
+                Return 300
             Case "魔王"
                 Return 2900
             Case "苦力怕1"
@@ -377,9 +378,9 @@
     Public Function GetMonsterDef(Name As String) As Integer
         Select Case Name
             Case "骷髅1"
-                Return 100
+                Return 300
             Case "骷髅2"
-                Return 200
+                Return 600
             Case "骑士1"
                 Return 1150
             Case "骑士2"
@@ -488,7 +489,7 @@
                         StartChat({"* " & MonsterName(Id) & "正在准备冲刺……", "/TURNEND"}, True, False)
                     Case 3
                         MonsterSp(Id) = 0
-                        PerformMonsterAttack(Id, "驱使起战马，全力向你发起冲锋！", DamageType.物理, GetMonsterAtk(MonsterType(Id)) + 500)
+                        PerformMonsterAttack(Id, "驱使起战马，全力向你发起冲锋！", DamageType.物理, GetMonsterAtk(MonsterType(Id)) + 700)
                     Case Else
                         Throw New Exception("未知的行动轮：" & MonsterSp(Id))
                 End Select
@@ -612,7 +613,7 @@
                         "* 你还在等待什么？"}
             Case 101
                 MusicChange("Boss 1.mp3", 0.2, True)
-                Return {"* 所有怪物都在阻拦你奔向魔王房间的脚步。",
+                Return {"* 魔物们从四面八方涌来，阻拦你奔向魔王房间的脚步。",
                         "* 离魔王的房间只差最后一步。",
                         "* 这些怪物对早已身经百战的你而言，根本不值一提。",
                         "* 你此前所经受的漫长磨练终于将走到尽头。",
@@ -668,7 +669,7 @@
                 MusicChange("Main 1.mp3", 0, True)
                 MusicChange2("Main 2.mp3", 0.1, True)
                 Return {"* 两团光球从空中向你飞来。",
-                        "* 几乎凝为实体的法力在四周撒下炫目的辉光。",
+                        "* 几乎凝为实体的魔力在四周撒下炫目的辉光。",
                         "* 烤冰淇淋的气味。",
                         "* 元素精灵并没有物理实体，\n  因此如果攻击不包含能量就很难奏效。",
                         "* 冰火交加。"}
@@ -697,7 +698,7 @@
             Case 100
                 Return {"骷髅1", "骷髅1"}
             Case 101
-                Return {"骷髅1", "骷髅2", "骷髅2", "骑士1"}
+                Return {"冰1", "骑士1", "骑士1", "骑士2", "骷髅2"}
             Case 102
                 Return {"魔王"}
             Case 1
@@ -721,7 +722,7 @@
             Case 23
                 Return {"骑士2", "火1", "火1", "冰1"}
             Case 31
-                Return {"火1", "火1", "骑士2", "骑士1", "骑士1", "骷髅2"}
+                Return {"火1", "骑士1", "骑士1", "骑士2", "骷髅2"}
         End Select
     End Function
     Public Function GetLevelMonstersName(Id As Integer) As String()
@@ -729,7 +730,7 @@
             Case 100
                 Return {"骷髅士兵", "骷髅卫兵"}
             Case 101
-                Return {"骷髅士兵", "粗骨骷髅士兵", "粗骨骷髅卫士", "暗黑剑士"}
+                Return {"寒冰精灵", "暗黑剑士", "漆黑剑士", "漆黑骑士", "粗骨骷髅战士"}
             Case 102
                 Return {"魔王"}
             Case 1
@@ -743,7 +744,7 @@
             Case 5
                 Return {"爬行冢", "闪电爬行冢", "雷电爬行冢", "高压爬行冢", "爬行墓"}
             Case 11
-                Return {"暗黑剑士", "漆黑剑士"}
+                Return {"暗黑剑士", "玄墨剑士"}
             Case 12
                 Return {"暗黑剑士", "暗黑骑士", "漆黑骑士"}
             Case 21
@@ -753,7 +754,7 @@
             Case 23
                 Return {"暗黑骑士", "烈火精灵", "烈焰精灵", "寒冰精灵"}
             Case 31
-                Return {"烈火精灵", "烈焰精灵", "漆黑骑士", "暗黑剑士", "漆黑剑士", "粗骨骷髅战士"}
+                Return {"烈焰精灵", "暗黑剑士", "漆黑剑士", "漆黑骑士", "粗骨骷髅战士"}
         End Select
     End Function
     Public Sub PerformLevelWin(Id As Integer)
@@ -817,10 +818,10 @@
                            "* 「4」的内联逻辑已恢复。",
                            "* 看上去你走到了黑火药之厅的尽头。",
                            "/LEVEL5"}, True, False)
-            Case 5 '总结 LOCK
+            Case 5
                 StartChat({"* 恭喜获胜！你获得了2090XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 离开黑火药之厅，\n  再往前走不远，就是元素与魔法的领域。",
-                           "* 法力涌动，法术也能成为你的助力。",
+                           "* 魔力涌动，法术也能成为你的助力。",
                            "/LOCK012579BWXKL", "/UNLOCKG",
                            "* 「G」的内联逻辑已恢复。",
                            "* 但在到达元素之厅前，似乎还得解决一些麻烦……",
@@ -845,7 +846,7 @@
                 StartChat({"* 恭喜获胜！你获得了720XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 你略微缓了口气。",
                            "* 强大的法术会让人沉醉在力量之中，最终迷失自我。",
-                           "/UNLOCK7",
+                           "/LOCK1259BWKL", "/UNLOCK7",
                            "* 「7」的内联逻辑已恢复。",
                            "* 因此才需要保持本心。",
                            "/LEVEL22"}, True, False)
@@ -858,7 +859,7 @@
             Case 23
                 'TODO : 剧情没写
                 StartChat({"* 恭喜获胜！你获得了3520XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
-                           "/UNLOCK5",
+                           "/LOCK129BWL", "/UNLOCK5",
                            "* 「5」的内联逻辑已恢复。",
                            "/LEVEL31"}, True, False)
             Case 31

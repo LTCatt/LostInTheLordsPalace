@@ -11,7 +11,7 @@
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 100
     Public Turn As Integer = 0
-    Public ExtraWarm As Integer = 0
+    Public ExtraCold As Integer = 0
     '怪物数据
     Public MonsterType As New List(Of String), MonsterName As New List(Of String), MonsterHp As New List(Of Integer), MonsterSp As New List(Of Integer)
 
@@ -27,7 +27,7 @@
     End Function
     Public Function HurtPlayer(Damage As Integer, Type As DamageType)
         '获取抗性
-        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.3, If(ExtraWarm > 0 AndAlso Type = DamageType.冷冻, 0.3, 1))
+        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.3, If(ExtraCold > 0 AndAlso Type = DamageType.火焰, 0.3, 1))
         Damage = Math.Max(If(Mul = 0, 0, 1), Damage * Mul)
         If Damage = 2 Then Damage = 1
         Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul < 1, "收效甚微，", ""))
@@ -35,9 +35,9 @@
         Hp = Math.Max(0, Hp - Damage)
         '受伤动画
         If Damage > 1 Then
-            Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 4)
+            Dim DeltaOpacity As Double = Math.Min(1, Damage / HpMax * 2)
             FrmMain.RectHurt.Opacity = DeltaOpacity
-            AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, Damage / HpMax * 4500, Damage / HpMax * 1500, Ease:=New AniEaseInFluent(AniEasePower.Weak)), "Hurt Player")
+            AniStart(AaOpacity(FrmMain.RectHurt, -DeltaOpacity, Damage / HpMax * 6000, Damage / HpMax * 1500, Ease:=New AniEaseInFluent(AniEasePower.Weak)), "Hurt Player")
         End If
         '返回结果
         Return {Damage, ExtraDisc}
@@ -63,7 +63,7 @@
         ItemCount = ItemCountLast
         EquipWeapon = EquipWeaponLast
         EquipArmor = EquipArmorLast
-        ExtraAtk = 0 : ExtraDef = 0 : ExtraWarm = 0
+        ExtraAtk = 0 : ExtraDef = 0 : ExtraCold = 0
         Hp = HpMax : Mp = MpMax
         '初始化怪物数据
         MonsterTurnPerformed = Nothing
@@ -87,7 +87,7 @@
         '状态栏
         SetText(FrmMain.TextStatus, "勇者   LV 99   \REDHP " & Hp.ToString.PadLeft(4, " ") & "/" & HpMax.ToString.PadLeft(4, " ") & "\WHITE   ATK " & GetRealAtk(True).ToString.PadLeft(4, " ") & If(ExtraAtk > 0, "\GREEN+" & ExtraAtk.ToString.PadLeft(3, ""), "") & vbCrLf &
                                     "             \BLUEMP " & Mp.ToString.PadLeft(4, " ") & "/" & MpMax.ToString.PadLeft(4, " ") & "\WHITE   DEF " & GetRealDef(True).ToString.PadLeft(4, " ") & If(ExtraDef > 0, "\GREEN+" & ExtraDef.ToString.PadLeft(3, ""), ""))
-        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level) & If(ExtraWarm > 0, "\n\ORANGE热饮 " & ExtraWarm, ""))
+        SetText(FrmMain.TextStatusRight, "\GRAY" & GetLevelName(Level) & If(ExtraCold > 0, "\n\AQUA冷饮 " & ExtraCold.ToString.PadLeft(2, " "), ""))
         '主要部分
         Select Case Screen
             Case Screens.Empty
@@ -163,7 +163,7 @@
         Next
         '下一回合
         MonsterTurnPerformed = Nothing
-        ExtraAtk = 0 : ExtraDef = 0 : If ExtraWarm > 0 Then ExtraWarm -= 1
+        ExtraAtk = 0 : ExtraDef = 0 : If ExtraCold > 0 Then ExtraCold -= 1
         Turn += 1
         StartChat({GetLevelIntros(Level)(Math.Min(4, Turn))}, False, False)
     End Sub
@@ -189,6 +189,7 @@
             Info.Add(GetItemText("ABCDEFG".ToCharArray()(i),
                                  MonsterName(i).PadRight(9, " ") & "\REDHP " & MonsterHp(i).ToString.PadLeft(4, " "),
                                  "\DARKGRAY" & GetMonsterDesc(MonsterType(i), MonsterSp(i))).Replace("KEY", "WHITE").Replace("YELLOW", "WHITE"))
+            '& "        \DARKGRAYDEF " & GetMonsterDef(MonsterType(i)).ToString.PadLeft(4, " ")
         Next
         Return If(Join(Info.ToArray, vbCrLf), "")
     End Function

@@ -221,7 +221,7 @@ Public Module ModMain
                         Select Case Input
                             Case "1", "2", "3", "4", "5", "6", "7"
                                 If Mp < GetMagicCost(Input) Then
-                                    SetText(FrmMain.TextInputResult, "\RED错误：你的法力值不足！")
+                                    SetText(FrmMain.TextInputResult, "\RED错误：你的魔力值不足！")
                                     PlaySound("Error.mp3", 0.35)
                                 Else
                                     UseMagic(Input)
