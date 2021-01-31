@@ -244,6 +244,7 @@ Public Module ModMain
     '    End If
     'End Sub
     Public AutoContinueChat As Boolean = False
+    Public ChatLevel As Integer = 0
     Public Sub NextChat(IsHandSkip As Boolean)
         AutoContinueChat = False
         If FrmMain.TextChat.Text <> FrmMain.TextChat.Tag Then
@@ -281,24 +282,32 @@ Public Module ModMain
             Exit Sub
         ElseIf ChatContents.Count > 0 Then
             '下一句对话
-            If EnterStatus = EnterStatuses.Chat Then
-                SetText(FrmMain.TextInputResult, If(IsNowImportant, "\DARKGRAY剧情将自动播放。", "\DARKGRAY请按任意键继续。"))
+            If EnterStatus = EnterStatuses.Chat AndAlso IsNowImportant Then
+                ChatLevel = 2
+                SetText(FrmMain.TextInputResult, "\DARKGRAY剧情将自动播放。")
+                FrmMain.TextChat.Foreground = New MyColor(0, 255, 255)
+            ElseIf EnterStatus = EnterStatuses.Chat Then
+                ChatLevel = 1
+                SetText(FrmMain.TextInputResult, "\DARKGRAY请按任意键继续。")
+                FrmMain.TextChat.Foreground = New MyColor(255, 255, 255)
+            Else
+                ChatLevel = 0
+                FrmMain.TextChat.Foreground = New MyColor(100, 100, 100)
             End If
-            FrmMain.TextChat.Foreground = If(EnterStatus = EnterStatuses.Chat, If(IsNowImportant, New MyColor(0, 255, 255), New MyColor(255, 255, 255)), New MyColor(100, 100, 100))
             '处理文本
             Dim RawText As String = GetRawText(ChatContents.First)
-            FrmMain.TextChat.Text = RawText
-            FrmMain.TextChat.Tag = FrmMain.TextChat.Text
+                FrmMain.TextChat.Text = RawText
+                FrmMain.TextChat.Tag = FrmMain.TextChat.Text
             '播放动画
             AniStart({
-                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 60, 25)),
+                     AaTextAppear(FrmMain.TextChat, Time:=If(IsNowImportant, 55, 35)),
                      AaCode(Sub() If IsNowImportant Then AutoContinueChat = True, 1200 + RawText.Length * 20, True)
                 }, "Chat Content")
             FrmMain.TextChat.Text = "" '防止动画结束前闪现
-            ChatContents.RemoveAt(0)
-        Else
-            '结束对话
-            AniStop("Chat Content")
+                ChatContents.RemoveAt(0)
+            Else
+                '结束对话
+                AniStop("Chat Content")
             EndChat()
         End If
     End Sub

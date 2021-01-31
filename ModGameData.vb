@@ -1,6 +1,6 @@
 ﻿Public Module ModGameData
 
-    '伤害
+    '伤害类型
     Public Enum DamageType
         Melee
         Distance
@@ -11,13 +11,13 @@
         Absolute
     End Enum
 
-    '法术
+    '法术（总 MP 638）
     Public Function GetMagicTitle(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "法术1"
+                Return "流星爆"
             Case 2
-                Return "法术2"
+                Return "晦暗之触"
             Case 3
                 Return "法术3"
             Case 4
@@ -33,9 +33,9 @@
     Public Function GetMagicDesc(Id As Integer) As String
         Select Case Id
             Case 1
-                Return "法术1描述"
+                Return "召唤熊熊燃烧的流星坠落地面，对全体敌人造成高额物理伤害。"
             Case 2
-                Return "法术2描述"
+                Return "引导黑暗能量，对单个敌人造成极高黯蚀伤害。"
             Case 3
                 Return "法术3描述"
             Case 4
@@ -51,7 +51,7 @@
     Public Function GetMagicCost(Id As Integer) As Integer
         Select Case Id
             Case 1
-                Return 10
+                Return 260
             Case 2
                 Return 20
             Case 3
@@ -75,6 +75,7 @@
         Dim RawText As String = "* 你施展了" & GetMagicTitle(Id) & "！"
         Select Case Id
             Case 1
+
             Case 2
             Case 3
             Case 4
