@@ -57,6 +57,10 @@
     End Function
     Public Function StartLevel(Id As Integer) As Integer
         Screen = Screens.Combat
+        If Id = 102 Then
+            MusicChange("Boss 1.mp3", 0, True) '3
+            MusicChange2("Boss 2.mp3", 0.2, True) '2
+        End If
         StartChat({GetLevelIntros(Id)(0)}, False, False)
         FrmMain.TextTitle.Opacity = 1 : AniStop("Title Opacity")
         '重置存档

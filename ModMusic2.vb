@@ -2,7 +2,7 @@
 
 Public Module ModMusic2
 
-    Public MusicPlayer2 As MediaPlayer
+    Private MusicPlayer2 As MediaPlayer
     Private MusicThread As Thread
 
     Private IsInited As Boolean = False

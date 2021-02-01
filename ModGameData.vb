@@ -269,7 +269,7 @@
             Case 4
                 Return "矮人族的至高杰作。ATK+800，将伤害属性变为光耀。"
             Case 5
-                Return "用秘银精制的刺剑，让你的行动悄无声息。ATK+600。"
+                Return "用秘银精制的刺剑。ATK+600，让你的隐匿检定带有优势。"
             Case 6
                 Return "缠满倒刺的魔法链甲。DEF+300，反弹受到的一半伤害。"
             Case 7
@@ -371,7 +371,7 @@
             Case "火1"
                 Return 300
             Case "魔王1", "魔王2"
-                Return 2400
+                Return 2450
             Case "苦力怕1"
                 Return 2150
             Case "苦力怕2"
@@ -518,25 +518,26 @@
                         StartChat({"* 耀眼的橙色光点如星光一般在整个厅堂闪耀……", "/TURNEND"}, True, False)
                     Case 6, 17, 29, 36, 47, 49
                         '进行火焰攻击
-                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=1.5 * (GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 70))
+                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=1.5 * (GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 120))
                     Case 8, 18, 26, 38, 48, 56
                         '准备重击
                         StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
                     Case 9, 19, 27, 39, 49, 57
                         '进行重击
-                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 70 + 800)
-                    Case 10, 14, 20, 24, 30, 40, 44, 50, 54, 59, 62, 65, 68, 71, 74
+                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 120 + 800)
+                    Case 10, 20, 30, 40, 50, 59, 62, 65, 68, 71, 74
                         '加强攻击力
                         MonsterSp(Id) += 10000
                         StartChat({"* 魔王集中精力，汇聚无边虚空中的能量补充之前的消耗……\n  魔王的攻击变得更强了！", "/TURNEND"}, True, False)
                     Case Else
                         '普通攻击
-                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 70)
+                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 120)
                 End Select
             Case "魔王1"
                 MonsterSp(Id) += 1
                 Select Case MonsterSp(Id)
                     Case 2
+                        MusicChange("Boss 3.mp3", 0, True) '4
                         '准备清空 MP
                         StartChat({"* 魔王张开双臂，蓝色的光点渐渐从你体内渗出……", "/TURNEND"}, True, False)
                     Case 3
@@ -550,11 +551,13 @@
                         '进行重击
                         PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + 100 + 800)
                     Case 8
+                        MusicChange2("Boss 2.mp3", 0, True) '3
+                        MusicChange("Boss 3.mp3", 0.4, True) '5
                         FrmMain.PixelLevel = 2
-                        StartChat({"* 魔王高举起双臂，大声吟唱着什么。\n  一阵强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
+                        StartChat({"* 魔王高举起双臂，大声吟唱着刺耳的咒文。", "* 一股无形的风在宫殿中呼啸。", "* 强烈的不安在你的心中涌现。", "/TURNEND"}, True, False)
                     Case 9
                         FrmMain.PixelLevel = 3
-                        MusicChange2("Boss 2.mp3", 0, True)
+                        MusicChange("Boss 3.mp3", 0.05, True) '6
                         StartChat({"* 周围的空气仿佛都凝固了。",
                            "* 一圈无形的波纹荡漾，席卷了你的全身。",
                            "/LOCK0124579RBIGDWXKL",
@@ -658,27 +661,25 @@
                         "* 你早已决定不再犹豫。",
                         "* 你还在等待什么？"}
             Case 101
-                MusicChange("Boss 1.mp3", 0.2, True)
+                MusicChange("Boss 1.mp3", 0.2, True) '2
                 Return {"* 魔物们从四面八方涌来，阻拦你奔向魔王宫殿的脚步。",
                         "* 离魔王的宫殿只差最后一步。",
                         "* 这些怪物对早已身经百战的你而言，根本不值一提。",
                         "* 你此前所经受的漫长磨练终于将走到尽头。",
                         "* 是时候为一切画下句号了。"}
             Case 102
-                MusicChange("Boss 1.mp3", 0, True)
-                MusicChange2("Boss 2.mp3", 0.2, True)
                 Return {"* 你终于来到了魔王的面前。",
                         "* 只要在这最后一战中取胜……",
                         "* 传闻魔王可以操纵一切能量，魔力、火焰、黑暗，甚至是……",
                         "* 你不再回想那些恐怖的传说。",
                         "* 黑暗在你的四周不断翻腾。"}
             Case 1
-                MusicChange("Main 1.mp3", 0.02, True)
+                MusicChange("Main 1.mp3", 0, False)
                 Return {"* 你似乎回到了起点。",
                         "* 遗忘？还是剥离？这就是魔王的能力吗？",
                         "* ………………"}
             Case 2
-                MusicChange("Main 1.mp3", 0.05, True)
+                MusicChange("Main 1.mp3", 0.1, True)
                 Return {"* 三具骷髅已经将你包围。",
                         "* 骷骨的响声宛如一首嘈杂的打击乐。",
                         "* 骷髅们在用颅骨思考为什么勇者一直不进行攻击。",
@@ -845,7 +846,7 @@
                            "/LEVEL102"}, True, False)
             Case 102
                 FrmMain.PixelLevel = 1
-                MusicChange("Main 1.mp3", 0, False)
+                MusicChange("Boss 3.mp3", 0, True) '7
                 StartChat({"* ……",
                            "* …………",
                            "* ………………",
