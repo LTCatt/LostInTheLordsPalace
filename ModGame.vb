@@ -7,7 +7,7 @@
     Public Mp As Integer = 1, MpMax As Integer = 638
     Public BaseAtk As Integer = 505, ExtraAtk As Integer = 0
     Public BaseDef As Integer = 276, ExtraDef As Integer = 0
-    Public ItemCount As Integer() = {0, 1, 2, 5, 96, 43, 73, 4}
+    Public ItemCount As Integer() = {0, 1, 2, 5, 95, 43, 83, 4}
     Public EquipWeapon As Integer = 1, EquipArmor As Integer = 2
     Public Level As Integer = 100
     Public Turn As Integer = 0
@@ -28,7 +28,7 @@
     End Function
     Public Function HurtPlayer(Damage As Integer, Type As DamageType)
         '获取抗性
-        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.2, If(ExtraCold > 0 AndAlso Type = DamageType.火焰, 0.2, 1))
+        Dim Mul = If(EquipArmor = 7 AndAlso Type = DamageType.火焰, 0.2, 1) * If(ExtraCold > 0 AndAlso Type = DamageType.火焰, 0.2, 1)
         Damage = Math.Max(If(Mul = 0, 0, 1), Damage * Mul)
         If Damage = 2 Then Damage = 1
         Dim ExtraDisc As String = If(Mul > 1 AndAlso Damage > 1, "效果拔群，", If(Mul < 1, Type.ToString & "抗性！", ""))

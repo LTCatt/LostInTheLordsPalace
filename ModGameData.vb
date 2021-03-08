@@ -39,7 +39,7 @@
             Case 3
                 Return "召唤熊熊燃烧的陨石坠落地面，对全体敌人造成250点火焰伤害。"
             Case 4
-                Return "在敌人的压迫下激发斗志，恢复相当于当前HP百分之30的MP。"
+                Return "在敌人的压迫下激发斗志，恢复百分之40的MP。"
             Case 5
                 Return "当前回合ATK提升300。施展此法术不会使回合结束。"
             Case 6
@@ -135,7 +135,7 @@
                 Exit Sub
             Case 4
                 Screen = Screens.Combat
-                Dim Delta As Integer = Hp * 0.3 'MonsterName.Count * 150
+                Dim Delta As Integer = MpMax * 0.4 'MonsterName.Count * 150
                 Mp = Math.Min(MpMax, Mp + Delta)
                 RawText += "  你的MP恢复了" & Delta & "！"
             Case 5
@@ -370,7 +370,9 @@
                 Return 400
             Case "火1"
                 Return 300
-            Case "魔王1", "魔王2"
+            Case "魔王1"
+                Return 2400
+            Case "魔王2"
                 Return 2450
             Case "苦力怕1"
                 Return 2150
@@ -504,34 +506,35 @@
                 PerformMonsterAttack(Id, "将四周化作火海！", DamageType.火焰, IgnoreDef:=True)
             Case "魔王2"
                 MonsterSp(Id) += 1
+                '-MM-FF-A- MM--SS-FF-A- MM-SS-FFA- -SSMM--FFA- MMSS-A- FFMM-SSA- MM--SSSSA- 
                 Select Case MonsterSp(Id) Mod 10000
-                    Case 2, 12, 22, 32, 42, 52
+                    Case 2, 10, 22, 35, 43, 52, 59, 69
                         '准备清空 MP
                         MusicChange("Win.mp3", 0, False)
                         StartChat({"* 魔王张开双臂，蓝色的光点渐渐从你体内渗出……", "/TURNEND"}, True, False)
-                    Case 3, 13, 23, 33, 43, 53
+                    Case 3, 11, 23, 36, 44, 53, 60, 70
                         '进行清空 MP
                         Mp = 0
                         StartChat({"* 随着蓝色光点渗出，你感觉一阵头晕目眩。\n  你失去了所有MP！", "/TURNEND"}, True, False)
-                    Case 5, 16, 28, 35, 46, 58
+                    Case 5, 17, 28, 39, 50
                         '准备火焰攻击
                         StartChat({"* 耀眼的橙色光点如星光一般在整个厅堂闪耀……", "/TURNEND"}, True, False)
-                    Case 6, 17, 29, 36, 47, 49
+                    Case 6, 18, 29, 40, 51
                         '进行火焰攻击
-                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=1.5 * (GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 120))
-                    Case 8, 18, 26, 38, 48, 56
-                        '准备重击
-                        StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
-                    Case 9, 19, 27, 39, 49, 57
-                        '进行重击
-                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 120 + 800)
-                    Case 10, 20, 30, 40, 50, 59, 62, 65, 68, 71, 74
+                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=1.5 * (GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 140))
+                    Case 8, 20, 30, 41, 48, 57, 67, 72, 81
                         '加强攻击力
                         MonsterSp(Id) += 10000
-                        StartChat({"* 魔王集中精力，汇聚无边虚空中的能量补充之前的消耗……\n  魔王的攻击变得更强了！", "/TURNEND"}, True, False)
+                        StartChat({"* 魔王集中精力，汇聚无边虚空中的能量补充之前的消耗。\n  魔王的攻击变得更强了！\n* 魔王已经强化了" & Math.Floor(MonsterSp(Id) / 10000) & "次……", "/TURNEND"}, True, False)
+                    Case 14, 25, 33, 45, 55, 63, 65, 76, 79
+                        '准备重击
+                        StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
+                    Case 15, 26, 34, 46, 56, 64, 66, 77, 80
+                        '进行重击
+                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 140 + 850)
                     Case Else
                         '普通攻击
-                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 120)
+                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 140)
                 End Select
             Case "魔王1"
                 MonsterSp(Id) += 1
@@ -549,7 +552,7 @@
                         StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
                     Case 6
                         '进行重击
-                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + 100 + 800)
+                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + 1000)
                     Case 8
                         MusicChange2("Boss 2.mp3", 0, True) '3
                         MusicChange("Boss 3.mp3", 0.4, True) '5
@@ -895,7 +898,7 @@
             Case 11
                 StartChat({"* 恭喜获胜！你获得了1880XP！\n  洛山达的祝福已生效，你的HP与MP已全部恢复！", "/IMPTrue",
                            "* 为什么会有那么多人愿意向魔王卖命？\n  难道他们真的认为魔王能给他们什么好处？",
-                           "* 那一切不过都是徒劳的。毫无价值。",
+                           "* 那一切不过都是徒劳的。毫无价值。\n* 他们什么都没有得到——就像你一样。",
                            "/UNLOCK0",
                            "* 「0」的内联逻辑已恢复。",
                            "* 魔王所承诺的权力与财富都只是他们的一厢情愿罢了。",
