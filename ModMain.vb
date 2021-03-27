@@ -130,7 +130,7 @@ Public Module ModMain
                     Exit Sub
                 ElseIf Input.StartsWith("TP ") Then
                     '存档
-                    ItemCountLast = ItemCount
+                    ItemCountLast = ItemCount.Clone
                     EquipWeaponLast = EquipWeapon
                     EquipArmorLast = EquipArmor
                     '传送

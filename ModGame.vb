@@ -45,7 +45,7 @@
     End Function
 
     '原始存档
-    Public ItemCountLast As Integer() = ItemCount
+    Public ItemCountLast As Integer() = ItemCount.Clone
     Public EquipWeaponLast As Integer = EquipWeapon, EquipArmorLast As Integer = EquipArmor
 
     '修改存档
@@ -65,7 +65,7 @@
         FrmMain.TextTitle.Opacity = 1 : AniStop("Title Opacity")
         '重置存档
         Turn = 0
-        ItemCount = ItemCountLast
+        ItemCount = ItemCountLast.Clone
         EquipWeapon = EquipWeaponLast
         EquipArmor = EquipArmorLast
         ExtraAtk = 0 : ExtraDef = 0 : ExtraCold = 0

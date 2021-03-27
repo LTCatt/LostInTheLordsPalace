@@ -570,6 +570,7 @@
                            "* 波纹还在慢慢扩散……",
                            "* 一些你熟悉的事物似乎正在从你的身上剥离。",
                            "* 知识，概念……",
+                           Text.Encoding.UTF8.GetString(Convert.FromBase64String("KiBLe3pqbm5uO2E3SH3igKbigKY=")),
                            "* 抽象的，难以理解的，超形上学的……",
                            "* ……",
                            "* 你到底失去了什么？",
@@ -826,7 +827,7 @@
     End Function
     Public Sub PerformLevelWin(Id As Integer)
         '存档
-        ItemCountLast = ItemCount
+        ItemCountLast = ItemCount.Clone
         EquipWeaponLast = EquipWeapon
         EquipArmorLast = EquipArmor
         '回血
@@ -964,6 +965,7 @@
                            "* 仿佛一切都再也与你无关……",
                            "* ………………………………",
                            "* ………………………………",
+                           Text.Encoding.UTF8.GetString(Convert.FromBase64String("KiBLe3pqbm5uO2E3SH3igKbigKY=")),
                            "* 恭喜通关！",
                            "* 本游戏制作于 GLOBAL GAME JAM 2021，\n  一个两天内从头到尾开发一个游戏的活动，\n  这一届的主题是 LOST AND FOUND。",
                            "* 说实话，完全没想到会变成一个人做完全程……\n  并且还是一个纯文本游戏……",
