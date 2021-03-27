@@ -394,6 +394,13 @@ Public Module ModBase
 #End Region
 
     ''' <summary>
+    ''' 返回一个枚举对应的字符串。
+    ''' </summary>
+    ''' <param name="EnumData">一个已经实例化的枚举类型。</param>
+    Public Function GetStringFromEnum(EnumData As [Enum]) As String
+        Return [Enum].GetName(EnumData.GetType, EnumData)
+    End Function
+    ''' <summary>
     ''' 将元素与 List 的混合体拆分为元素组。
     ''' </summary>
     Public Function GetFullList(data As IList) As ArrayList

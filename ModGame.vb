@@ -215,7 +215,7 @@
                 '攻击怪物
                 Screen = Screens.Combat
                 Dim Result = HurtMonster(Id, GetRealAtk(), If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
-                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！", "/TURNEND"}, True, False)
+                StartChat({"* 你用" & GetEquipTitle(EquipWeapon) & "砍向了" & MonsterName(Id) & "！\n  " & Result(1) & "造成了" & Result(0) & "点" & If(EquipWeapon = 4, "光耀", "物理") & "伤害！", "/TURNEND"}, True, False)
             Case "ITEM4"
                 '飞刀
                 PerformItem(4, Id)

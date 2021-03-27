@@ -91,7 +91,7 @@
                 '0-2
                 For i = 0 To Math.Min(2, MonsterHp.Count - 1)
                     Dim Result = HurtMonster(i, 600, DamageType.物理, True)
-                    RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                    RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点物理伤害！\n"
                 Next
                 ChatList.Add(RawText)
                 '3-6
@@ -99,7 +99,7 @@
                     RawText = ""
                     For i = 3 To MonsterHp.Count - 1
                         Dim Result = HurtMonster(i, 600, DamageType.物理, True)
-                        RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                        RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点物理伤害！\n"
                     Next
                     ChatList.Add("*" & RawText.Substring(1))
                 End If
@@ -110,14 +110,14 @@
             Case 2
                 Screen = Screens.Combat
                 Dim Result = HurtMonster(Target, 1200, DamageType.黯蚀, True)
-                RawText += "  " & Result(1) & MonsterName(Target) & "受到了" & Result(0) & "点伤害！"
+                RawText += "  " & Result(1) & MonsterName(Target) & "受到了" & Result(0) & "点黯蚀伤害！"
             Case 3
                 Screen = Screens.Combat
                 Dim ChatList As New List(Of String)
                 '0-2
                 For i = 0 To Math.Min(2, MonsterHp.Count - 1)
                     Dim Result = HurtMonster(i, 250, DamageType.火焰, True)
-                    RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                    RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点火焰伤害！\n"
                 Next
                 ChatList.Add(RawText)
                 '3-6
@@ -125,7 +125,7 @@
                     RawText = ""
                     For i = 3 To MonsterHp.Count - 1
                         Dim Result = HurtMonster(i, 250, DamageType.火焰, True)
-                        RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点伤害！\n"
+                        RawText += "  " & Result(1) & MonsterName(i) & "受到了" & Result(0) & "点火焰伤害！\n"
                     Next
                     ChatList.Add("*" & RawText.Substring(1))
                 End If
@@ -159,7 +159,7 @@
                 HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
                 HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
                 HurtMonster(Target, GetRealAtk() / 3, If(EquipWeapon = 4, DamageType.光耀, DamageType.物理), False)
-                RawText += "  " & Result(1) & "4次攻击共使" & MonsterName(Target) & "受到了" & (Result(0) * 4) & "点伤害！"
+                RawText += "  " & Result(1) & "4次攻击共使" & MonsterName(Target) & "受到了" & (Result(0) * 4) & "点" & If(EquipWeapon = 4, "光耀", "物理") & "伤害！"
         End Select
         StartChat({RawText, "/TURNEND"}, True, False)
     End Sub
@@ -225,7 +225,7 @@
             Case 3
                 RawText += "  但你目前并没有中毒。"
             Case 4
-                Dim Result = HurtMonster(Target, 50, DamageType.物理, True)
+                Dim Result = HurtMonster(Target, 50, DamageType.真实, True)
                 RawText = "* 你向" & MonsterName(Target) & "投出了飞刀！\n  " & Result(1) & "造成了" & Result(0) & "点伤害！"
             Case 5
                 ExtraCold = 10
@@ -521,20 +521,20 @@
                         StartChat({"* 耀眼的橙色光点如星光一般在整个厅堂闪耀……", "/TURNEND"}, True, False)
                     Case 6, 18, 29, 40, 51
                         '进行火焰攻击
-                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=1.5 * (GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 140))
+                        PerformMonsterAttack(Id, "一声喝下，漫天光点化为了无边无际的烈焰！", DamageType.火焰, IgnoreDef:=True, CustomAttack:=1.5 * (GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 100))
                     Case 8, 20, 30, 41, 48, 57, 67, 72, 81
                         '加强攻击力
                         MonsterSp(Id) += 10000
-                        StartChat({"* 魔王集中精力，汇聚无边虚空中的能量补充之前的消耗。\n  魔王的攻击变得更强了！\n* 魔王已经强化了" & Math.Floor(MonsterSp(Id) / 10000) & "次……", "/TURNEND"}, True, False)
+                        StartChat({"* 魔王集中精力，汇聚无边虚空中的能量补充之前的消耗。\n  攻击似乎变得更强了！\n* 魔王已经强化了" & Math.Floor(MonsterSp(Id) / 10000) & "次……", "/TURNEND"}, True, False)
                     Case 14, 25, 33, 45, 55, 63, 65, 76, 79
                         '准备重击
                         StartChat({"* 宛如实质的黑暗牵扯成丝线涌向魔王，\n  在他的手中缓缓凝结……", "/TURNEND"}, True, False)
                     Case 15, 26, 34, 46, 56, 64, 66, 77, 80
                         '进行重击
-                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 140 + 850)
+                        PerformMonsterAttack(Id, "手中汇聚出由无尽黑暗编织的巨矛，向你闪电般掷去！", DamageType.物理, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 100 + 850)
                     Case Else
                         '普通攻击
-                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.黯蚀, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 140)
+                        PerformMonsterAttack(Id, "抬起右手，一道黑光闪过……", DamageType.物理, CustomAttack:=GetMonsterAtk(MonsterType(Id)) + MonsterSp(Id) / 10000 * 100)
                 End Select
             Case "魔王1"
                 MonsterSp(Id) += 1
@@ -611,7 +611,7 @@
     Private Sub PerformMonsterAttack(Id As Integer, Desc As String, Type As DamageType, Optional CustomAttack As Integer = -1, Optional IgnoreDef As Boolean = False)
         Dim Damage As Integer = Math.Max(1, If(CustomAttack > 0, CustomAttack, GetMonsterAtk(MonsterType(Id))) - If(IgnoreDef, 0, GetRealDef()))
         Dim Result = HurtPlayer(Damage, Type)
-        Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  " & Result(1) & "你受到了" & Result(0) & "点伤害！"
+        Dim BaseText As String = "* " & MonsterName(Id) & Desc & "\n  " & Result(1) & "你受到了" & Result(0) & "点" & GetStringFromEnum(Type) & "伤害！"
         If EquipArmor = 6 AndAlso Type <> DamageType.爆炸 Then
             '荆棘
             Dim BackDamage As Integer = Result(0) / 2
@@ -744,7 +744,7 @@
                 MusicChange2("Main 2.mp3", 0, True)
                 Return {"* 没有怪物能够阻拦你的脚步。",
                         "* 骷骨，利剑，马蹄，烈焰。",
-                        "* 剑戟划破空气，发出破空的风声。",
+                        "* 如果能尽快解决掉一部分敌人，就能占据优势了……",
                         "* 魔物们正从四处前来。没有犹豫的时间了。",
                         "* 勇气与希望存于你的心间。"}
             Case 32
